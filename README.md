@@ -1,4 +1,4 @@
-# Backrooms: Liminal Adventure
+# Backrooms Exploration
 This is a Fabric 1.18.1 mod adding the Backrooms to Minecraft.
 
 \[I'm going to finish this README later.\]
