@@ -1,0 +1,96 @@
+plugins {
+	id 'fabric-loom' version '0.10-SNAPSHOT'
+	id 'maven-publish'
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+archivesBaseName = project.archives_base_name
+version = project.mod_version
+group = project.maven_group
+
+repositories {
+
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://ladysnake.jfrog.io/artifactory/mods'
+		content {
+			includeGroup 'io.github.ladysnake'
+			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+		}
+	}
+
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/'
+	}
+	maven {
+		name = 'Jitpack'
+		url = 'https://jitpack.io/'
+	}
+	maven {
+		name = 'synchlabs'
+		url = 'https://github.com/Synchlabs/ExdimapiREPO'
+	}
+	maven {
+		url "https://maven.shedaniel.me/"
+	}
+	maven {
+		url 'https://server.bbkr.space/artifactory/libs-release/'
+	}
+}
+
+dependencies {
+	implementation 'org.jetbrains:annotations:20.1.0'
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	//modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	//includeMod "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	//includeMod "io.github.fablabsmc:bannerpp:${project.bannerpp_version}"
+	includeMod "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
+}
+
+def includeMod(String dep) {
+	dependencies.modImplementation(dep)
+	dependencies.include(dep)
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = "UTF-8"
+	it.options.release = 16
+}
+
+java {
+	withSourcesJar()
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archivesBaseName}"}
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifact(remapJar) {
+				builtBy remapJar
+			}
+			artifact(sourcesJar) {
+				builtBy remapSourcesJar
+			}
+		}
+	}
+}
