@@ -12,7 +12,7 @@ This mod, by itself will add Levels 0-TBD of the Backrooms to Minecraft. These w
 
 ### Addon system
 
-\[TODO\]
+This mod will have a system for addon mods to integrate with this mod and add new Levels, and possibly even alter or replace existing Levels. Anyone will be free to develop an addon for this mod, as long as they comply with the LGPL-v3.0 license terms of this mod.
 
 
 ## Building and Running
