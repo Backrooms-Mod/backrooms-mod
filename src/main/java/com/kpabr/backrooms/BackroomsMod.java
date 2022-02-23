@@ -1,8 +1,8 @@
-package net.ludocrypt.example;
+package com.kpabr.backrooms;
 
 import net.fabricmc.api.ModInitializer;
 
-public class ExampleMod implements ModInitializer {
+public class BackroomsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {

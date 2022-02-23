@@ -14,16 +14,16 @@
   },
 
   "license": "LGPLv3",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/backroomsexploration/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.ludocrypt.modid.ModId"
+      "com.kpabr.backrooms.BackroomsMod"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "backroomsexploration.mixins.json"
   ],
 
   "depends": {
