@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"down": "backrooms:block/cork_tile",
+		"up": "backrooms:block/cork_tile",
+		"north": "backrooms:block/cork_tile_south",
+		"east": "backrooms:block/cork_tile_south",
+		"south": "backrooms:block/cork_tile_south",
+		"west": "backrooms:block/cork_tile_south",
+		"particle": "backrooms:block/cork_tile"
+	}
+}

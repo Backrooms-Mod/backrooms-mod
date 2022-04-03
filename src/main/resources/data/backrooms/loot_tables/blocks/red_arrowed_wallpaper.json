@@ -1,0 +1,45 @@
+    {
+      "type": "minecraft:block",
+      "pools": [
+        {
+          "rolls": 1,
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "backrooms:plasterwall"
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ]
+        },
+        {
+          "rolls": 1,
+          "entries": [
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:paper",
+              "weight": 1,
+              "functions": [
+            	{
+            		"function": "minecraft:apply_bonus",
+  					"enchantment": "minecraft:fortune",
+ 					 "formula": "minecraft:ore_drops"
+            	}
+        	]
+            },
+            {
+              "type": "empty",
+              "weight": 9
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ]
+        }
+      ]
+    }

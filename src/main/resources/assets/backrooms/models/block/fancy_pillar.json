@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "backrooms:block/fancy_pillar_top",
+		"side": "backrooms:block/fancy_pillar"
+	}
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BBB",
+    " C ",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:bread"
+    },
+    "C": {
+      "item": "backrooms:cement"
+    }
+  },
+  "result": {
+    "item": "backrooms:cement_sandwich",
+    "count": 3
+  }
+}

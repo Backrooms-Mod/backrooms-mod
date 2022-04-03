@@ -1,35 +1,44 @@
 {
-  "schemaVersion": 1,
-  "id": "backroomsexploration",
-  "version": "${version}",
-
-  "name": "Backrooms Exploration",
-  "description": "Noclip out of reality in the wrong areas.",
-  "authors": [
-    "Valiec2019","Melon"
-  ],
-  "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
-  },
-
-  "license": "LGPLv3",
-  "icon": "assets/backroomsexploration/icon.png",
-
-  "environment": "*",
-  "entrypoints": {
-    "main": [
-      "com.kpabr.backrooms.BackroomsMod"
-    ]
-  },
-  "mixins": [
-    "backroomsexploration.mixins.json"
-  ],
-
-  "depends": {
-    "fabricloader": ">=0.11.3",
-    "fabric": "*",
-    "minecraft": "1.18.x",
-    "java": ">=16"
-  }
+	"schemaVersion": 1,
+	"id": "backrooms",
+	"version": "${version}",
+	"name": "The Backrooms",
+	"description": "The urban legend of The Backrooms, in Minecraft!",
+	"authors": [
+		"Synchlabs"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-backrooms",
+		"sources": "https://github.com/Synchlabs/The-Backrooms",
+		"issues": "https://github.com/Synchlabs/The-Backrooms/issues"
+	},
+	"license": "LGPLv3",
+	"icon": "assets/backrooms/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.kpabr.backrooms.BackroomsMod"
+		],
+		"client": [
+			"com.kpabr.backrooms.client.BackroomsClient"
+		],
+		"exdimapi": [
+			"com.kpabr.backrooms.BackroomsMod"
+		],
+		"exskyapi": [
+			"com.kpabr.backrooms.client.BackroomsClient"
+		],
+		"mm:early_risers": [
+			"com.kpabr.backrooms.init.BackroomsEarlyRisers"
+		]
+	},
+	"mixins": [
+		"backrooms.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.11.6",
+		"fabric": "*",
+		"minecraft": "1.17.x",
+		"java": ">=16"
+	}
 }

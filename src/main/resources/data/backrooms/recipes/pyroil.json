@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "backrooms:firesalt"
+  },
+  "result": "backrooms:pyroil",
+  "experience": 0.15,
+  "cookingtime": 200
+}

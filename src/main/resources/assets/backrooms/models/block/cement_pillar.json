@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "backrooms:block/cement_pillar_top",
+		"side": "backrooms:block/cement_pillar"
+	}
+}

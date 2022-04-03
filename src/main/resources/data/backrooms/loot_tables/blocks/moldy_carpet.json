@@ -1,0 +1,37 @@
+    {
+      "type": "minecraft:block",
+      "pools": [
+        {
+          "rolls": 1,
+          "entries": [
+            {
+              "type": "minecraft:alternatives",
+              "children": [
+                {
+              "type": "minecraft:item",
+              "name": "backrooms:moldy_carpet",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "item": "minecraft:shears"
+                  }
+                }
+              ]
+            },
+
+            {
+              "type": "minecraft:item",
+              "name": "backrooms:moist_carpet"
+            }
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            }
+          ]
+        }
+      ]
+    }
