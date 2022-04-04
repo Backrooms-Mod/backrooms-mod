@@ -15,6 +15,7 @@ import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PortalSpawnerBlockEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.PillarBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -66,8 +67,8 @@ public class BackroomsBlocks {
 	public static final Block RED_DOTTED_WALLPAPER = add("red_dotted_wallpaper", new Block(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_BLANK_WALLPAPER = add("red_blank_wallpaper", new Block(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block FANCY_PILLAR = add("fancy_pillar", new Block(FabricBlockSettings.copyOf(PLASTERWALL)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_PILLAR = add("cement_pillar", new Block(FabricBlockSettings.copyOf(Blocks.STONE).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(PLASTERWALL)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
