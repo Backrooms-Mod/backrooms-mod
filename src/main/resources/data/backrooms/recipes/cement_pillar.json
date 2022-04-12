@@ -1,9 +1,8 @@
 {
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "###",
-        "###",
-	"###"
+        "#",
+        "#"
     ],
     "key": {
         "#": {
@@ -11,7 +10,7 @@
         }
     },
     "result": {
-        "item": "backrooms:cement_tiles",
-        "count": 9
+        "item": "backrooms:cement_pillar",
+        "count": 2
     }
 }
