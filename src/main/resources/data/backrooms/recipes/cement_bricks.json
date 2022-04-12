@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "##",
+        "##"
+    ],
+    "key": {
+        "#": {
+            "item": "backrooms:cement"
+        }
+    },
+    "result": {
+        "item": "backrooms:cement_bricks",
+        "count": 4
+    }
+}
