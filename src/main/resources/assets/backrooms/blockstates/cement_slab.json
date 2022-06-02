@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "backrooms:block/cement_slab"
+    },
+    "type=double": {
+      "model": "backrooms:block/cement"
+    },
+    "type=top": {
+      "model": "backrooms:block/cement_slab_top"
+    }
+  }
+}

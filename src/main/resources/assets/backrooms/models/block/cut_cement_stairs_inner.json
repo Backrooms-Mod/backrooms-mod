@@ -1,0 +1,8 @@
+{
+	"parent": "block/inner_stairs",
+	"textures": {
+		"bottom": "backrooms:block/cut_cement",
+		"top": "backrooms:block/cut_cement",
+		"side": "backrooms:block/cut_cement"
+	}
+}

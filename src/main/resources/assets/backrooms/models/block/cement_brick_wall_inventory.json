@@ -1,0 +1,6 @@
+{
+	"parent": "block/wall_inventory",
+	"textures": {
+		"wall": "backrooms:block/cement_bricks"
+	}
+}
