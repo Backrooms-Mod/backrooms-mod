@@ -16,6 +16,8 @@ import net.minecraft.util.registry.Registry;
 
 public class BackroomsMod implements ModInitializer {
 
+	static public String ModId = "backrooms";
+
 	@Override
 	public void onInitialize() {
 		Registry.register(Registry.CHUNK_GENERATOR, id("maze_chunk"), MazeChunkGenerator.CODEC);

@@ -89,7 +89,6 @@ public class BackroomsBlocks {
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
-
 	private static <B extends Block, T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.put(id, blockEntity);
