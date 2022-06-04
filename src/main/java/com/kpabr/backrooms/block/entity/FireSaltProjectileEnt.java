@@ -3,6 +3,7 @@ package com.kpabr.backrooms.block.entity;
 import com.kpabr.backrooms.client.BackroomsClient;
 import com.kpabr.backrooms.init.BackroomsItems;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
+import com.kpabr.backrooms.init.BackroomsSounds;
 import com.kpabr.backrooms.items.FireSalt;
 import com.kpabr.backrooms.util.EntitySpawnPacket;
 import net.fabricmc.api.EnvType;
@@ -19,6 +20,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -66,10 +68,10 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         Entity entity = entityHitResult.getEntity();
 
 
-        entity.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, 100, 1);// plays a sound for the entity hit only
+        world.playSound(null, entity.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
         entity.setOnFire(true);
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), 4.0f);
-        this.world.createExplosion(this, entity.getBlockX(), entity.getBlockY() + 0.5, entity.getBlockZ(), 1f, true, Explosion.DestructionType.BREAK);
+        this.world.createExplosion(this, entity.getBlockX(), entity.getBlockY() + 0.5, entity.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
     }
 
 
@@ -77,7 +79,8 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         super.onCollision(hitResult);
         if (!this.world.isClient) { // checks if the world is client
             this.world.sendEntityStatus(this, (byte)3); // particles
-            this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 1f, true, Explosion.DestructionType.BREAK);
+            world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
+            this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
             this.kill();
         }
 
