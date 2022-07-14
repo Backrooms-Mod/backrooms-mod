@@ -9,6 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class PyroilLineBlockEntity extends BlockEntity {
+
+    private long Timer = 10L;
     public PyroilLineBlockEntity(BlockPos pos, BlockState state) {
         super(BackroomsBlocks.PYREOIL_LINE_BLOCK_ENTITY, pos, state);
     }
@@ -21,7 +23,9 @@ public class PyroilLineBlockEntity extends BlockEntity {
     public static void tick(World world, BlockPos pos, BlockState state, PyroilLineBlockEntity blockEntity) {
     if(isAroundFire(world, pos)){
         if(world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.AIR || world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.CAVE_AIR || world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.VOID_AIR){
-            world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
+            if(--blockEntity.Timer <= 0L){
+                world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
+            }
         }
     }
     }

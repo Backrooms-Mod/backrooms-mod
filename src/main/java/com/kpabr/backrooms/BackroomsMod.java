@@ -2,13 +2,8 @@ package com.kpabr.backrooms;
 
 import java.util.Map;
 
+import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
-import com.kpabr.backrooms.init.BackroomsBiomes;
-import com.kpabr.backrooms.init.BackroomsBlocks;
-import com.kpabr.backrooms.init.BackroomsFeatures;
-import com.kpabr.backrooms.init.BackroomsGroups;
-import com.kpabr.backrooms.init.BackroomsItems;
-import com.kpabr.backrooms.init.BackroomsLoomPatterns;
 import com.kpabr.backrooms.world.Level0;
 import com.kpabr.backrooms.world.chunk.MazeChunkGenerator;
 import net.minecraft.util.Identifier;
@@ -27,6 +22,7 @@ public class BackroomsMod implements ModInitializer {
 		BackroomsBiomes.init();
 		BackroomsBlocks.init();
 		BackroomsGroups.init();
+		BackroomsFlammableBlocks.init();
 	}
 
 	/*@Override
