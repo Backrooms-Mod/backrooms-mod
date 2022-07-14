@@ -2,8 +2,8 @@ package com.kpabr.backrooms.init;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
+import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -14,12 +14,7 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PortalSpawnerBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.block.WallBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -89,6 +84,9 @@ public class BackroomsBlocks {
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).breakByTool(FabricToolTags.PICKAXES).materialColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
+
+	public  static final Block PYROIL = add("pyroil", new Pyroil(FabricBlockSettings.of(Material.METAL)), ItemGroup.BUILDING_BLOCKS);
+	public static final BlockEntityType<PyroilLineBlockEntity> PYREOIL_LINE_BLOCK_ENTITY= add("pyroil", FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
 	private static <B extends Block, T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.put(id, blockEntity);

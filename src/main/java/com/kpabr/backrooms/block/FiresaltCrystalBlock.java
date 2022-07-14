@@ -1,15 +1,12 @@
 package com.kpabr.backrooms.block;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -23,7 +20,12 @@ import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Random;
+
 public class FiresaltCrystalBlock extends Block {
+
+    public static BlockPos pos;
+
     public FiresaltCrystalBlock(FabricBlockSettings fabricBlockSettings) {
         super(fabricBlockSettings);
     }
