@@ -19,7 +19,7 @@ public class ComputerBlockEntity extends BlockEntity {
     public ComputerBlockEntity(BlockPos pos, BlockState state) {
         super(BackroomsBlocks.COMPUTER_BLOCK_ENTITY, pos, state);
     }
-    
+
 
     public static void tick(World world, BlockPos pos, BlockState state, ComputerBlockEntity blockEntity) {
         if(world.isReceivingRedstonePower(pos)) {

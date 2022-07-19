@@ -21,7 +21,7 @@ public class FireSalt extends Item {
         if (!world.isClient) {
             FireSaltProjectileEnt FireSaltEnt = new FireSaltProjectileEnt(world, user);
             FireSaltEnt.setItem(itemStack);
-            FireSaltEnt.setProperties(user, user.getPitch(), user.getYaw(), 0.0F, 0.5F, 1.0F);
+            FireSaltEnt.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
             world.spawnEntity(FireSaltEnt);
         }
         user.incrementStat(Stats.USED.getOrCreateStat(this));
