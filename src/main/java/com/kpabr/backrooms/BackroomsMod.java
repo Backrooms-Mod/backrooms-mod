@@ -1,12 +1,7 @@
 package com.kpabr.backrooms;
 
-<<<<<<< Updated upstream
 import java.util.Map;
 
-=======
-import com.kpabr.backrooms.config.BackroomsConfig;
-import com.kpabr.backrooms.init.*;
->>>>>>> Stashed changes
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBiomes;
 import com.kpabr.backrooms.init.BackroomsBlocks;
@@ -25,28 +20,13 @@ public class BackroomsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-<<<<<<< Updated upstream
 		Registry.register(Registry.CHUNK_GENERATOR, id("maze_chunk"), MazeChunkGenerator.CODEC);
 		BackroomsLoomPatterns.init();
 		BackroomsFeatures.init();
 		BackroomsItems.init();
 		BackroomsBiomes.init();
-=======
-		BackroomsConfig.init();
-		LOGGER.info("Loaded config");
->>>>>>> Stashed changes
 		BackroomsBlocks.init();
 		BackroomsGroups.init();
-<<<<<<< Updated upstream
-=======
-		LOGGER.info("Loaded groups");
-		BackroomsItems.init();
-		LOGGER.info("Loaded items");
-		BackroomsLevels.init();
-
-
-
->>>>>>> Stashed changes
 	}
 
 	/*@Override
