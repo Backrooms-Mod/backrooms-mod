@@ -10,16 +10,16 @@ import net.minecraft.block.entity.BlockEntityType;
 
 public class PortalSpawnerBlockEntity extends BlockEntity {
 
-    public PortalSpawnerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
+	public PortalSpawnerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+	}
 
-    public PortalSpawnerBlockEntity(BlockPos pos, BlockState state) {
-        super(BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY, pos, state);
-    }
+	public PortalSpawnerBlockEntity(BlockPos pos, BlockState state) {
+		super(BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY, pos, state);
+	}
 
-    public static void tick(World world, BlockPos pos, BlockState state, PortalSpawnerBlockEntity blockEntity) {
-        world.setBlockState(pos, Blocks.AIR.getDefaultState());
-    }
+	public static void tick(World world, BlockPos pos, BlockState state, PortalSpawnerBlockEntity blockEntity) {
+		world.setBlockState(pos, Blocks.AIR.getDefaultState());
+	}
 
 }

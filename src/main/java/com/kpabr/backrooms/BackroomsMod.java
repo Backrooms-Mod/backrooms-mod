@@ -1,30 +1,43 @@
 package com.kpabr.backrooms;
 
+
+import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
+import com.kpabr.backrooms.init.BackroomsBlocks;
+import com.kpabr.backrooms.init.BackroomsGroups;
+import com.kpabr.backrooms.init.BackroomsItems;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class BackroomsMod implements ModInitializer {
-	// This logger is used to write text to the console and the log file.
-	// It is considered best practice to use your mod id as the logger's name.
-	// That way, it's clear which mod wrote info, warnings, and errors.
+
 	static public String ModId = "backrooms";
 	public static final Logger LOGGER = LoggerFactory.getLogger("backrooms");
 
 	@Override
 	public void onInitialize() {
+		BackroomsConfig.init();
+		LOGGER.info("Loaded config");
 		BackroomsBlocks.init();
 		LOGGER.info("Loaded blocks");
 		BackroomsGroups.init();
 		LOGGER.info("Loaded groups");
 		BackroomsItems.init();
 		LOGGER.info("Loaded items");
-
+		BackroomsLevels.init();
+		LOGGER.info("Loaded levels");
 	}
+
+	/*@Override
+	public void registerModDimensions(Map<Identifier, ExtraDimension> registry) {
+		registry.put(Level0.LEVEL_0_ID, new Level0());
+	}*/
+
 	public static Identifier id(String id) {
 		return new Identifier("backrooms", id);
 	}
+
 }

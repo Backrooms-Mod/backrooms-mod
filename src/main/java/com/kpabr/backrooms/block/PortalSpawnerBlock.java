@@ -16,26 +16,26 @@ import org.jetbrains.annotations.Nullable;
 
 public class PortalSpawnerBlock extends Block implements BlockEntityProvider {
 
-    public PortalSpawnerBlock(Settings settings) {
-        super(settings);
-    }
+	public PortalSpawnerBlock(Settings settings) {
+		super(settings);
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new PortalSpawnerBlockEntity(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+		return new PortalSpawnerBlockEntity(pos, state);
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if(type == BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY) {
-            return (theWorld, blockPos, blockState, entity) -> PortalSpawnerBlockEntity.tick(theWorld, blockPos, blockState, (PortalSpawnerBlockEntity)(entity));
-        }
-        else
-        {
-            return null;
-        }
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+		if(type == BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY) {
+			return (theWorld, blockPos, blockState, entity) -> PortalSpawnerBlockEntity.tick(theWorld, blockPos, blockState, (PortalSpawnerBlockEntity)(entity));
+		}
+		else
+		{
+			return null;
+		}
+	}
 
 }

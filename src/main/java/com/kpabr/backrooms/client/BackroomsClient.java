@@ -23,15 +23,15 @@ import java.util.UUID;
 @SuppressWarnings("all")
 public class BackroomsClient implements ClientModInitializer {
 
-    public static final Identifier PacketID = new Identifier(BackroomsMod.ModId, "spawn_packet");
+	public static final Identifier PacketID = new Identifier(BackroomsMod.ModId, "spawn_packet");
 
-    @Override
-    public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
-                new FlyingItemEntityRenderer(context));
+	@Override
+	public void onInitializeClient() {
+		EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
+				new FlyingItemEntityRenderer(context));
 
-        BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
-    }
+		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
+	}
 
 
     /*public void receiveEntityPacket() {
