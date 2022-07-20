@@ -5,7 +5,6 @@ import com.kpabr.backrooms.init.BackroomsItems;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
 import com.kpabr.backrooms.init.BackroomsSounds;
 import com.kpabr.backrooms.items.FireSalt;
-import com.kpabr.backrooms.util.EntitySpawnPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.Entity;
@@ -45,10 +44,11 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
     protected Item getDefaultItem() {
         return BackroomsItems.FIRESALT;
     }
+
     @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() { // particles WIP
         ItemStack itemStack = this.getItem();
-        return (ParticleEffect)(itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));  //placeholder
+        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));  //placeholder
     }
 
     @Environment(EnvType.CLIENT)
@@ -56,7 +56,7 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
 
-            for(int i = 0; i < 8; ++i) {
+            for (int i = 0; i < 8; ++i) {
                 this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
             }
         }
@@ -78,15 +78,16 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.world.isClient) { // checks if the world is client
-            this.world.sendEntityStatus(this, (byte)3); // particles
+            this.world.sendEntityStatus(this, (byte) 3); // particles
             world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
             this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
             this.kill();
         }
 
     }
-    @Override
+   /* @Override
     public Packet createSpawnPacket() {
-        return EntitySpawnPacket.create(this, BackroomsClient.PacketID);
+        return this.createSpawnPacket();
     }
+    */
 }

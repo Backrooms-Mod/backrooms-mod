@@ -21,6 +21,9 @@
   "entrypoints": {
     "main": [
       "com.kpabr.backrooms.BackroomsMod"
+    ],
+    "client": [
+      "com.kpabr.backrooms.client.BackroomsClient"
     ]
   },
   "mixins": [

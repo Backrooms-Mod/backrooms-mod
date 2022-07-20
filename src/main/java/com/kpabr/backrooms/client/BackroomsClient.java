@@ -2,7 +2,6 @@ package com.kpabr.backrooms.client;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
-import com.kpabr.backrooms.util.EntitySpawnPacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
@@ -28,14 +27,14 @@ public class BackroomsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->		//projectile rendering, when porting it to 1.18 just remove .INSTANCE
+        EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
                 new FlyingItemEntityRenderer(context));
-        receiveEntityPacket();
+
         BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
     }
 
 
-    public void receiveEntityPacket() {
+    /*public void receiveEntityPacket() {
         //packets
         ClientSidePacketRegistry.INSTANCE.register(PacketID, (ctx, byteBuf) -> {
             EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
@@ -60,4 +59,5 @@ public class BackroomsClient implements ClientModInitializer {
             });
         });
     }
+    */
 }
