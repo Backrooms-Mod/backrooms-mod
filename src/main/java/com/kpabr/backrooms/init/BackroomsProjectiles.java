@@ -24,4 +24,7 @@ public class BackroomsProjectiles implements ModInitializer { //placeholder
     @Override
     public void onInitialize() {
     }
+    public static void init() {
+
+    }
 }
