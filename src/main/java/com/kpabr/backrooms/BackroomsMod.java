@@ -32,6 +32,7 @@ public class BackroomsMod implements ModInitializer {
 		BackroomsLevels.init();
 		LOGGER.info("Loaded levels");
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
+		LOGGER.info("Everything is loaded !");
 
 	}
 

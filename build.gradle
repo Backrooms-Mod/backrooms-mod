@@ -38,10 +38,11 @@ repositories {
 	}
 	maven {
 		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+	mavenCentral()
 }
 
 dependencies {
-	implementation 'org.jetbrains:annotations:20.1.0'
+	implementation 'org.jetbrains:annotations:23.0.0'
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
