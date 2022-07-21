@@ -1,12 +1,14 @@
 package com.kpabr.backrooms;
 
 
+import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
+import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.slf4j.Logger;
@@ -29,6 +31,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded items");
 		BackroomsLevels.init();
 		LOGGER.info("Loaded levels");
+		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
+
 	}
 
 	/*@Override

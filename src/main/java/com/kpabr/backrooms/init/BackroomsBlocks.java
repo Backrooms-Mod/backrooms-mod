@@ -84,7 +84,8 @@ public class BackroomsBlocks {
 	public static final Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(PLASTERWALL)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
-
+	public static final Block TABLE = add("table", new Block(FabricBlockSettings.copyOf(Blocks.OAK_WOOD).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block SNOWY_GLASS = add("snowy_glass", new SkyboxGlassBlock(FabricBlockSettings.copyOf(Blocks.GLASS)), ItemGroup.DECORATIONS);
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).materialColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);

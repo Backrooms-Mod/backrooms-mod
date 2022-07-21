@@ -29,7 +29,7 @@ public class BackroomsClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
 				new FlyingItemEntityRenderer(context));
-
+		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.SNOWY_GLASS);
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
 	}
 

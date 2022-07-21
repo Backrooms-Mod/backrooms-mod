@@ -1,11 +1,24 @@
 {
 	"required": true,
 	"minVersion": "0.8",
-	"package": "com.kpabr.backrooms.mixin",
+	"package": "com.kpabr.backrooms.mixins",
 	"compatibilityLevel": "JAVA_16",
 	"mixins": [
+
 	],
 	"client": [
+		"BackgroundRendererMixin",
+		"BlockRenderManagerMixin",
+		"ChunkBuilderBuiltChunkRebuildTaskMixin",
+		"ChunkBuilderChunkDataMixin",
+		"GameRendererAccessor",
+		"GameRendererMixin",
+		"ItemRendererMixin",
+		"MinecraftClientAccessor",
+		"RenderLayerAccessor",
+		"SoundManagerAccessor",
+		"WorldRendererChunkInfoAccessor",
+		"WorldRendererMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

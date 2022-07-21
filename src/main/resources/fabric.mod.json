@@ -16,7 +16,6 @@
 
 	"license": "LGPLv3",
 	"icon": "assets/backrooms/icon.png",
-
 	"environment": "*",
 	"entrypoints": {
 		"main": [
@@ -26,6 +25,7 @@
 			"com.kpabr.backrooms.client.BackroomsClient"
 		]
 	},
+	"accessWidener": "backrooms.accesswidener",
 	"mixins": [
 		"backrooms.mixins.json"
 	],

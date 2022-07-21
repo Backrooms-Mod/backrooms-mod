@@ -9,7 +9,9 @@ targetCompatibility = JavaVersion.VERSION_17
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
-
+loom {
+	accessWidenerPath = file("src/main/resources/backrooms.accesswidener")
+}
 repositories {
 	maven {
 		name = 'TerraformersMC'
