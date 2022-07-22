@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
+import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -40,7 +41,10 @@ public class BackroomsBlocks {
 	public static final BlockEntityType<PortalSpawnerBlockEntity> PORTAL_SPAWNER_BLOCK_ENTITY = add("portal_spawner", FabricBlockEntityTypeBuilder.create(PortalSpawnerBlockEntity::new, PORTAL_SPAWNER_BLOCK).build(null));
 
 	public static final Block PLASTERWALL = add("plasterwall", new PlasterwallBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block OFFICE_WALL = add("office_wall", new PlasterwallBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
+	//
+	// guys fix this, really
+	//
+	// public static final Block OFFICE_WALL = add("office_wall", new PlasterwallBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CORK_TILE = add("cork_tile", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CEILING = add("fake_ceiling", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.WHITE).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FLUORESCENT_LIGHT = add("fluorescent_light", new FluorescentLightBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_LAMP).ticksRandomly().requiresTool().materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
@@ -76,6 +80,9 @@ public class BackroomsBlocks {
 	public static final Block COMPUTER = add("computer", new ComputerBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> COMPUTER_BLOCK_ENTITY = add("computer", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 
+	public static final Block PYROIL = add("pyroil", new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil", FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
+
 	public static final Block RED_PATTERNED_WALLPAPER = add("red_patterned_wallpaper", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_STRIPED_WALLPAPER = add("red_striped_wallpaper", new Block(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
 
@@ -87,8 +94,8 @@ public class BackroomsBlocks {
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block TABLE = add("table", new TableBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
-
-	public static final Block CHAIR = add("chair", new ChairBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+	//no just no
+	//public static final Block CHAIR = add("chair", new ChairBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> CHAIR_BLOCK_ENTITY = add("chair", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 	public static final Block SNOWY_GLASS = add("snowy_glass", new SkyboxGlassBlock(FabricBlockSettings.copyOf(Blocks.GLASS)), ItemGroup.DECORATIONS);
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);

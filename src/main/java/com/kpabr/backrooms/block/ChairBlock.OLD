@@ -20,6 +20,8 @@ import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import org.jetbrains.annotations.Nullable;
 
+//guys srsly fix this
+
 public class ChairBlock extends HorizontalFacingBlock implements BlockEntityProvider {
 
     public static final BooleanProperty LIT = Properties.LIT;
@@ -46,6 +48,9 @@ public class ChairBlock extends HorizontalFacingBlock implements BlockEntityProv
         return new ComputerBlockEntity(pos, state);
     }
 
+
+
+    //why
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
