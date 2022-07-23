@@ -23,6 +23,15 @@ public class BackroomsMod implements ModInitializer {
 		BackroomsBlocks.init();
 		BackroomsGroups.init();
 		BackroomsFlammableBlocks.init();
+<<<<<<< Updated upstream
+=======
+		LOGGER.info("loaded FIRE");
+		BackroomsEntities.init();
+		LOGGER.info("loaded your nightmares");
+		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
+		LOGGER.info("Everything is loaded !");
+
+>>>>>>> Stashed changes
 	}
 
 	/*@Override

@@ -29,6 +29,12 @@ repositories {
 	maven {
 		url 'https://server.bbkr.space/artifactory/libs-release/'
 	}
+<<<<<<< Updated upstream
+=======
+	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+
+	mavenCentral()
+>>>>>>> Stashed changes
 }
 
 dependencies {
@@ -38,6 +44,14 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+<<<<<<< Updated upstream
+=======
+	modImplementation "io.github.ladysnake:satin:${satin_version}"
+	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.51'
+
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.config_version}"
+	includeMod "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
+>>>>>>> Stashed changes
 
 	includeMod "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
 	includeMod "io.github.fablabsmc:bannerpp:${project.bannerpp_version}"
