@@ -1,14 +1,20 @@
 package com.kpabr.backrooms.entity.goals;
 
 import com.kpabr.backrooms.entity.living.HoundLivingEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.pathing.Path;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.EnumSet;
 
@@ -74,16 +80,25 @@ public class HoundRunningGoal extends Goal {
         }
     }
 
-    public void IsInPlayerVicinity(){
+    public void IsInPlayerVicinity() {
         LivingEntity livingEntity = this.mob.getTarget();
-        if(path != null && path.getLength() < 4){
-            if(this.mob instanceof HoundLivingEntity){
-                ((HoundLivingEntity) this.mob).setIsinvicinityofplayer(true);
+        if (livingEntity != null) {
+            Vec3d pos1 = this.mob.getPos();
+            Vec3d pos2 = livingEntity.getPos();
+            double distance = pos1.distanceTo(pos2);
+            if (path != null && distance < 20) {
+                if (this.mob instanceof HoundLivingEntity) {
+                    if (!((HoundLivingEntity) this.mob).IsInVicinity() == true) {
+                        ((HoundLivingEntity) this.mob).setIsinvicinityofplayer(true);
+                    }
+                }
+                this.mob.getNavigation().setSpeed(runspeed);
+            } else {
+                if (this.mob instanceof HoundLivingEntity) {
+                    ((HoundLivingEntity) this.mob).setIsinvicinityofplayer(false);
+                }
+                this.mob.getNavigation().setSpeed(speed);
             }
-            this.mob.getNavigation().startMovingTo(livingEntity, this.runspeed);
-        }
-        else{
-            this.mob.getNavigation().startMovingTo(livingEntity, this.speed);
         }
     }
 
