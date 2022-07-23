@@ -35,6 +35,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded levels");
 		BackroomsFlammableBlocks.init();
 		LOGGER.info("loaded FIRE");
+		BackroomsEntities.init();
+		LOGGER.info("loaded your nightmares");
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
 

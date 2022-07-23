@@ -1,6 +1,8 @@
 package com.kpabr.backrooms.client;
 
 import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.entity.renderer.living.HoundEntityRenderer;
+import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -31,6 +33,7 @@ public class BackroomsClient implements ClientModInitializer {
 				new FlyingItemEntityRenderer(context));
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.SNOWY_GLASS);
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
+		EntityRendererRegistry.INSTANCE.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
 	}
 
 
