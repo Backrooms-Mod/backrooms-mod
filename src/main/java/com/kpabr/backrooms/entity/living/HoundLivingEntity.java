@@ -42,6 +42,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
     @Override
     protected void initDataTracker(){
+        super.initDataTracker();
         this.dataTracker.startTracking(ISINVICINITYOFPLAYER, false);
         this.dataTracker.startTracking(ATTACKING, false);
     }
