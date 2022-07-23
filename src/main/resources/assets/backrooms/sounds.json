@@ -3,31 +3,5 @@
     "sounds": [
       "backrooms:firesalt_land"
     ]
-
-  },"music.communal_corridors": {
-  "sounds": [
-    {
-      "name": "backrooms:music/communal_corridors/polar",
-      "weight": 3,
-      "stream": true
-    },
-    {
-      "name": "backrooms:music/communal_corridors/pelt",
-      "weight": 2,
-      "stream": true
-    },
-    {
-      "name": "backrooms:music/communal_corridors/the_colds",
-      "stream": true
-    }
-  ]
-},
-  "biome.communal_corridors.loop": {
-    "sounds": [
-      {
-        "name": "backrooms:ambient/communal_corridors/loop",
-        "stream": true
-      }
-    ]
   }
 }

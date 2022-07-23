@@ -17,7 +17,7 @@
       "item.backrooms.red_blank_pattern.desc": "Red Blank Wallpaper",
       "item.backrooms.almond_water": "Almond Water",
       "item.backrooms.firesalt": "Firesalt",
-      "item.backrooms.pyroil": "Pyroil",
+      "block.backrooms.pyroil": "Pyroil",
       "block.backrooms.plasterwall": "Drywall",
       "block.backrooms.cork_tile": "Ceiling Tile",
       "block.backrooms.fluorescent_light": "Fluorescent Light",
@@ -46,8 +46,6 @@
       "block.backrooms.cut_cement_slab": "Cut Cement Slab",
       "block.backrooms.cut_cement_stairs": "Cut Cement Stair",
       "block.backrooms.cut_cement_wall": "Cut Cement Wall",
-      "block.backrooms.cement_brick_wall": "Cement Brick Wall",
-      "block.backrooms.cement_tile_wall": "Cement Tile Wall",
       "block.backrooms.cement_sandwich": "Cement Sandwich",
       "block.backrooms.red_patterned_wallpaper": "Red Patterned Wallpaper",
       "block.backrooms.red_striped_wallpaper": "Red Striped Wallpaper",
@@ -60,8 +58,5 @@
       "block.backrooms.firesalt_crystal": "Firesalt Crystal",
       "block.backrooms.fake_carpet": "Fake Carpet",
       "block.backrooms.fake_ceiling": "Fake Ceiling",
-      "block.backrooms.table": "Table",
-      "block.backrooms.computer": "Computer",
       "block.backrooms.fake_wall": "Fake Wall"
-
     }

@@ -1,0 +1,6 @@
+{
+    "parent": "backrooms:block/pyroil_side",
+    "textures": {
+        "line": "backrooms:block/pyroil_line0"
+    }
+}
