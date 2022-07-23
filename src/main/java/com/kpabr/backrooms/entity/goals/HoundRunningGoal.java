@@ -2,6 +2,7 @@ package com.kpabr.backrooms.entity.goals;
 
 import com.kpabr.backrooms.entity.living.HoundLivingEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;

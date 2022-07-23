@@ -1,8 +1,10 @@
 package com.kpabr.backrooms.entity.living;
 
 import com.kpabr.backrooms.entity.goals.HoundRunningGoal;
+import com.kpabr.backrooms.entity.goals.SubmissionGoal;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnReason;
@@ -53,7 +55,6 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     private double speed = 0.5f;
 
 
-
     private static final TrackedData<Boolean> ISINVICINITYOFPLAYER = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     private static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -67,7 +68,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
 
     @Override
-    protected void initDataTracker(){
+    protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(ISINVICINITYOFPLAYER, false);
         this.dataTracker.startTracking(ATTACKING, false);
@@ -75,30 +76,29 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     }
 
     @Override
-    public void tick(){
+    public void tick() {
         super.tick();
-        if(this.IsAttacking()){
-            if(--attacktimer <= 0L){
+        if (this.IsAttacking()) {
+            if (--attacktimer <= 0L) {
                 this.setIsAttacking(false);
                 this.attacktimer = 20L;
             }
         }
 
-        if(LookaroundtimerFOR != 0){
+        if (LookaroundtimerFOR != 0) {
             this.setVelocity(0, 0, 0);
             --LookaroundtimerFOR;
         }
 
-        if(--lookaroundtimerON <= 0) {
+        if (--lookaroundtimerON <= 0) {
             if (!this.IsLooking()) {
                 this.lookaroundtimerON = random.nextLong(6000L);
                 this.LookaroundtimerFOR = 50L;
                 this.setIsLooking(true);
             }
         }
-        if(this.IsLooking())
-        {
-            if(--lookaroundtimerOFF <= 0) {
+        if (this.IsLooking()) {
+            if (--lookaroundtimerOFF <= 0) {
                 this.setIsLooking(false);
                 this.lookaroundtimerOFF = 50L;
             }
@@ -116,12 +116,12 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if(IsLooking()){
+        if (IsLooking()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.look", false));
             return PlayState.CONTINUE;
         }
 
-        if(IsAttacking()){
+        if (IsAttacking()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.attack", false));
             return PlayState.CONTINUE;
         }
@@ -143,36 +143,44 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<HoundLivingEntity>(this, "controller", 0, this::predicate));
     }
+
     @Override
     public AnimationFactory getFactory() {
         return factory;
     }
+
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new RevengeGoal(this));
         this.goalSelector.add(1, new HoundRunningGoal(this, 0.5f, true, 1));
-        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 10.0f));
+        this.goalSelector.add(2, new SubmissionGoal(this, 200L));
+        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 20.0f));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.4f, 1));
 
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
     }
 
-    public void setIsinvicinityofplayer(boolean isinvicinityofplayer){
+    public void setIsinvicinityofplayer(boolean isinvicinityofplayer) {
         this.dataTracker.set(ISINVICINITYOFPLAYER, isinvicinityofplayer);
     }
-    public void setIsAttacking(boolean isAttacking){
+
+    public void setIsAttacking(boolean isAttacking) {
         this.dataTracker.set(ATTACKING, isAttacking);
     }
-    public void setIsLooking(boolean islooking){
+
+    public void setIsLooking(boolean islooking) {
         this.dataTracker.set(ISLOOKINGAROUND, islooking);
     }
-    public boolean IsInVicinity(){
+
+    public boolean IsInVicinity() {
         return this.dataTracker.get(ISINVICINITYOFPLAYER);
     }
-    public boolean IsAttacking(){
+
+    public boolean IsAttacking() {
         return this.dataTracker.get(ATTACKING);
     }
-    public boolean IsLooking(){
+
+    public boolean IsLooking() {
         return this.dataTracker.get(ISLOOKINGAROUND);
     }
 
@@ -181,3 +189,4 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         this.setIsAttacking(true);
     }
 }
+
