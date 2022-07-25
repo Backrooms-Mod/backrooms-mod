@@ -4,7 +4,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
-public class CommunalCorridorsBiome {
+public class TestLevelBiome {
     public static Biome create() {
         Biome.Builder biome = new Biome.Builder();
 
@@ -18,7 +18,7 @@ public class CommunalCorridorsBiome {
         biomeEffects.waterFogColor(13548960);
         biomeEffects.fogColor(13548960);
         biomeEffects.grassColor(13818488);
-        biomeEffects.loopSound(BackroomsSoundEvents.BIOME_LOOP_COMMUNAL_CORRIDORS);
+        //biomeEffects.loopSound(BackroomsSoundEvents.BIOME_LOOP_COMMUNAL_CORRIDORS);
         BiomeEffects effects = biomeEffects.build();
 
         biome.spawnSettings(spawnSettings.build());

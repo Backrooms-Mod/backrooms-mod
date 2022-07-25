@@ -38,20 +38,20 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
-    public static final Codec<CommunalCorridorsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
+public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
+    public static final Codec<TestLevelChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
             return chunkGenerator.biomeSource;
         }), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
             return chunkGenerator.worldSeed;
-        })).apply(instance, instance.stable(CommunalCorridorsChunkGenerator::new));
+        })).apply(instance, instance.stable(TestLevelChunkGenerator::new));
     });
 
 
     private long worldSeed;
 
-    public CommunalCorridorsChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("communal_corridors"), LiminalUtil.createMultiNoiseSampler());
+    public TestLevelChunkGenerator(BiomeSource biomeSource, long worldSeed) {
+        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("test_level"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
     }
 
@@ -62,7 +62,7 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new CommunalCorridorsChunkGenerator(this.biomeSource, seed);
+        return new TestLevelChunkGenerator(this.biomeSource, seed);
     }
 
     @Override
@@ -75,14 +75,14 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
                 for (int z = 0; z < 2; z++) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
                     if (random.nextDouble() < 0.2375625D) {
-                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_" + (random.nextInt(5) + 1));
+                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "test_level_" + (random.nextInt(5) + 1));
                     } else {
-                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "communal_corridors_decorated_" + (random.nextInt(22) + 1));
+                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "test_level_decorated_" + (random.nextInt(22) + 1));
                     }
                 }
             }
         } else {
-            generateNbt(region, chunkPos.getStartPos().add(0, 1, 0), "communal_corridors_decorated_big_" + (fullChunkRandom.nextInt(3) + 1));
+            generateNbt(region, chunkPos.getStartPos().add(0, 1, 0), "test_level_decorated_big_" + (fullChunkRandom.nextInt(3) + 1));
         }
 
         for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
@@ -96,9 +96,9 @@ public class CommunalCorridorsChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("communal_corridors", world, 1, 5);
-        store("communal_corridors_decorated", world, 1, 22);
-        store("communal_corridors_decorated_big", world, 1, 3);
+        store("test_level", world, 1, 5);
+        store("test_level_decorated", world, 1, 22);
+        store("test_level_decorated_big", world, 1, 3);
     }
 
     @Override

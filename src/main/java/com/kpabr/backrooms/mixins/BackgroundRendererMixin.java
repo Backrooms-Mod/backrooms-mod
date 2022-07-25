@@ -13,7 +13,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.BackgroundRenderer.FogType;
 import net.minecraft.client.render.Camera;
-import net.minecraft.util.math.MathHelper;
 
 @Mixin(BackgroundRenderer.class)
 public abstract class BackgroundRendererMixin {
@@ -21,7 +20,7 @@ public abstract class BackgroundRendererMixin {
 	@ModifyVariable(method = "render", at = @At(value = "STORE", ordinal = 2), index = 7)
 	private static float corners$modifySkyColor(float in) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world.getRegistryKey().equals(BackroomsLevels.COMMUNAL_CORRIDORS.getWorldKey())) {
+		if (client.world.getRegistryKey().equals(BackroomsLevels.TEST_LEVEL.getWorldKey())) {
 			return 1.0F;
 		}
 		return in;
