@@ -1,9 +1,10 @@
 {
     "replace": false,
     "values": [
-        "backrooms:cement_wall"
-        "backrooms:cut_cement_wall"
-        "backrooms:cement_brick_wall"
-        "backrooms:cement_tile_wall"
+        "backrooms:cement_wall",
+        "backrooms:cut_cement_wall",
+        "backrooms:cement_brick_wall",
+        "backrooms:cement_tile_wall",
+        "backrooms:pyroil"
     ]
 }
