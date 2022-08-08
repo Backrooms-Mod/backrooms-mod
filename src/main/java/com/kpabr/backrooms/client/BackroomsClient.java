@@ -6,8 +6,7 @@ import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -23,17 +22,17 @@ import net.minecraft.util.registry.Registry;
 import java.util.Map;
 import java.util.UUID;
 @SuppressWarnings("all")
-public class BackroomsClient implements ClientModInitializer {
+public class  BackroomsClient implements ClientModInitializer {
 
 	public static final Identifier PacketID = new Identifier(BackroomsMod.ModId, "spawn_packet");
 
 	@Override
 	public void onInitializeClient() {
-		EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
+		EntityRendererRegistry.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
 				new FlyingItemEntityRenderer(context));
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.SNOWY_GLASS);
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
-		EntityRendererRegistry.INSTANCE.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
+		EntityRendererRegistry.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
 	}
 
 

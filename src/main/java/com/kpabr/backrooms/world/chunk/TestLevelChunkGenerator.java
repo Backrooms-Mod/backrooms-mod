@@ -22,13 +22,14 @@ import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureSet;
+import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntryList;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
@@ -37,6 +38,7 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.noise.NoiseConfig;
 
 public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     public static final Codec<TestLevelChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
@@ -51,9 +53,11 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     private long worldSeed;
 
     public TestLevelChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("test_level"), LiminalUtil.createMultiNoiseSampler());
+        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, BackroomsMod.id("test_level"));
         this.worldSeed = worldSeed;
     }
+
+
 
     @Override
     protected Codec<? extends ChunkGenerator> getCodec() {
@@ -61,12 +65,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     }
 
     @Override
-    public ChunkGenerator withSeed(long seed) {
-        return new TestLevelChunkGenerator(this.biomeSource, seed);
-    }
-
-    @Override
-    public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+    public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureTemplateManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
         ChunkPos chunkPos = chunk.getPos();
         Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
 
@@ -117,7 +116,17 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     }
 
     @Override
-    public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world) {
+    public int getSeaLevel() {
+        return 0;
+    }
+
+    @Override
+    public int getMinimumY() {
+        return 0;
+    }
+
+    @Override
+    public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world, NoiseConfig noiseConfig) {
         return world.getTopY();
     }
 }

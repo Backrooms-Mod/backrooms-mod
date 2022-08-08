@@ -14,6 +14,7 @@ import net.ludocrypt.limlib.api.render.LiminalBaseEffects;
 import net.ludocrypt.limlib.api.sound.ReverbSettings;
 import net.minecraft.sound.MusicSound;
 import net.minecraft.tag.TagKey;
+import net.minecraft.util.math.intprovider.IntProvider;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
@@ -32,7 +33,7 @@ public class BackroomsLevels {
     //.of(new MusicSound(BackroomsSoundEvents.MUSIC_COMMUNAL_CORRIDORS, 3000, 8000, true))
 
     public static final LiminalEffects TEST_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
-    public static final LiminalWorld TEST_LEVEL = get("test_level", new LiminalWorld(BackroomsMod.id("test_level"), DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, BackroomsMod.id("test_level")), BackroomsMod.id("test_level"), 0.075F), (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) -> new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new TestLevelChunkGenerator(new FixedBiomeSource(biomeRegistry.getOrCreateEntry(BackroomsLevels.TEST_LEVEL_BIOME)), seed)), TEST_LEVEL_EFFECTS));
+    public static final LiminalWorld TEST_LEVEL = get("test_level", new LiminalWorld(BackroomsMod.id("test_level"), new DimensionType(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, BackroomsMod.id("test_level")), BackroomsMod.id("test_level"), 0.075F, new DimensionType.MonsterSettings(true, false,  1, 10)), (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) -> new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new TestLevelChunkGenerator(new FixedBiomeSource(biomeRegistry.getOrCreateEntry(BackroomsLevels.TEST_LEVEL_BIOME)), seed)), TEST_LEVEL_EFFECTS));
 
     public static void init() {
         get("test_level_chunk_generator", TestLevelChunkGenerator.CODEC);

@@ -38,6 +38,14 @@ repositories {
 	}
 	maven {
 		url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+
+	maven {
+		url 'https://api.modrinth.com/maven'
+		content {
+			includeGroup "maven.modrinth"
+		}
+	}
+
 	mavenCentral()
 }
 
@@ -49,7 +57,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modImplementation "io.github.ladysnake:satin:${satin_version}"
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.51'
+	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.19:3.1.12'
 
 	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.config_version}"
 	includeMod "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"

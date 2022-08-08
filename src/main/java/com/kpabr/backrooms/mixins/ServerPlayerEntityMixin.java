@@ -1,6 +1,8 @@
 package com.kpabr.backrooms.mixins;
 
 import com.kpabr.backrooms.BackroomsMod;
+import net.minecraft.network.encryption.PlayerPublicKey;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,8 +20,8 @@ import net.minecraft.world.World;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
-	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
-		super(world, pos, yaw, profile);
+	public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile, @Nullable PlayerPublicKey publicKey) {
+		super(world, pos, yaw, profile, publicKey);
 	}
 
 	@Inject(method = "tick", at = @At("TAIL"))

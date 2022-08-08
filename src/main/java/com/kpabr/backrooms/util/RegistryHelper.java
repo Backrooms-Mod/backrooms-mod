@@ -16,7 +16,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.decoration.painting.PaintingMotive;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -65,11 +64,6 @@ public class RegistryHelper {
     public static <E extends Entity, T extends EntityType<E>> T get(String id, T entity) {
         return Registry.register(Registry.ENTITY_TYPE, BackroomsMod.id(id), entity);
     }
-
-    public static <T extends PaintingMotive> T get(String id, T painting) {
-        return Registry.register(Registry.PAINTING_MOTIVE, BackroomsMod.id(id), painting);
-    }
-
     public static SoundEvent get(String id) {
         return get(id, new SoundEvent(BackroomsMod.id(id)));
     }

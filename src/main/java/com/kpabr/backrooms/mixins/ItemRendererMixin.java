@@ -107,7 +107,7 @@ public abstract class ItemRendererMixin implements ItemRendererAccess {
 			SkyboxShaders.quad((vec3f) -> bufferBuilder.vertex(vec3f.getX(), vec3f.getY(), vec3f.getZ()).next(), matrix, quad);
 		}
 		bufferBuilder.end();
-		BufferRenderer.draw(bufferBuilder);
+		BufferRenderer.drawWithShader(bufferBuilder);
 		RenderSystem.polygonOffset(0.0F, 0.0F);
 		RenderSystem.disablePolygonOffset();
 		modelViewStack.pop();
