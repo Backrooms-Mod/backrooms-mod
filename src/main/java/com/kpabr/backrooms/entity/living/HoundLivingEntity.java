@@ -152,7 +152,8 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new RevengeGoal(this));
-        this.goalSelector.add(1, new HoundRunningGoal(this, 0.5f, true, 1));
+        this.goalSelector.add(3, new MeleeAttackGoal(this, 0.4f, false));
+        this.goalSelector.add(1, new HoundRunningGoal(this, 1f, true, 1));
         this.goalSelector.add(2, new SubmissionGoal(this, 200L));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 20.0f));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.4f, 1));
