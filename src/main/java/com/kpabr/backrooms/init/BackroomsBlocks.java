@@ -46,8 +46,11 @@ public class BackroomsBlocks {
 	//
 	// public static final Block OFFICE_WALL = add("office_wall", new PlasterwallBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CORK_TILE = add("cork_tile", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block MOLDY_CORK_TILE = add("moldy_cork_tile", new MoldyTileBlock(FabricBlockSettings.copyOf(Blocks.BUDDING_AMETHYST).materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block TILEMOLD = add("tilemold", new TilemoldBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).materialColor(DyeColor.BROWN).strength(0F).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CEILING = add("fake_ceiling", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.WHITE).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FLUORESCENT_LIGHT = add("fluorescent_light", new FluorescentLightBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_LAMP).ticksRandomly().requiresTool().materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
+
 	public static final Block PATTERNED_WALLPAPER = add("patterned_wallpaper", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_WALL = add("fake_wall", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).materialColor(DyeColor.YELLOW).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block STRIPED_WALLPAPER = add("striped_wallpaper", new Block(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);

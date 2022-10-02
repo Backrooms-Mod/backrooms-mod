@@ -1,22 +1,7 @@
 {
 	"variants": {
-		"facing=up": {
-			"model": "backrooms:block/cork_tile_up"
-		},
-		"facing=down": {
-			"model": "backrooms:block/cork_tile_down"
-		},
-		"facing=south": {
-			"model": "backrooms:block/cork_tile_south"
-		},
-		"facing=north": {
-			"model": "backrooms:block/cork_tile_north"
-		},
-		"facing=east": {
-			"model": "backrooms:block/cork_tile_east"
-		},
-		"facing=west": {
-			"model": "backrooms:block/cork_tile_west"
+		"": {
+			"model": "backrooms:block/cork_tile"
 		}
 	}
 }

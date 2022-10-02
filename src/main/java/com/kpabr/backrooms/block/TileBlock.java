@@ -31,7 +31,7 @@ public class TileBlock extends Block {
 		BlockState hitState = world.getBlockState(pos.mutableCopy().move(ctx.getSide().getOpposite()));
 		Direction hit = ctx.getSide();
 		Direction look = ctx.getPlayerLookDirection();
-
+		//the code after this comment is rendered pointless by a new change. however, certain things may depend on it. clean up before final release.
 		if (hitState.isOf(this)) {
 			Direction stateFace = hitState.get(FACING);
 

@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "backrooms:block/crimson_wallpaper"
+		"all": "backrooms:block/moldy_cork_tile"
 	}
 }

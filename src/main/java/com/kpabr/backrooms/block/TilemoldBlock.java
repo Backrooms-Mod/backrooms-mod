@@ -2,6 +2,7 @@ package com.kpabr.backrooms.block;
 
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.AmethystClusterBlock;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -23,11 +24,8 @@ import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import org.jetbrains.annotations.Nullable;
 
-public class FiresaltCrystalBlock extends Block {
-    public FiresaltCrystalBlock(FabricBlockSettings fabricBlockSettings) {
-        super(fabricBlockSettings);
-    }
-    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
-        return VoxelShapes.cuboid(0.15, 0f, 0.15f, 0.85f, 0.5f, 0.85f);
-    }
+public class TilemoldBlock extends AmethystClusterBlock {
+	public TilemoldBlock(FabricBlockSettings fabricBlockSettings) {
+		super(1,0,fabricBlockSettings);
+	}
 }

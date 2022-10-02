@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "backrooms:tilemold_lump"
+  },
+  "result": "backrooms:baked_tilemold_lump",
+  "experience": 0.15,
+  "cookingtime": 200
+}

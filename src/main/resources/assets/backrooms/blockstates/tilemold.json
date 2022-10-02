@@ -1,0 +1,30 @@
+{
+	"variants": {
+		"facing=down": {
+			"model": "backrooms:block/tilemold",
+			"x": 180
+		},
+		"facing=east": {
+			"model": "backrooms:block/tilemold",
+			"x": 90,
+			"y": 90
+		},
+		"facing=north": {
+			"model": "backrooms:block/tilemold",
+			"x": 90
+		},
+		"facing=south": {
+			"model": "backrooms:block/tilemold",
+			"x": 90,
+			"y": 180
+		},
+		"facing=up": {
+			"model": "backrooms:block/tilemold"
+		},
+		"facing=west": {
+			"model": "backrooms:block/tilemold",
+			"x": 90,
+			"y": 270
+		}
+	}
+}

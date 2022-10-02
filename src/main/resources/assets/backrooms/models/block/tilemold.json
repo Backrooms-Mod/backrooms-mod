@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/rail",
+	"textures": {
+		"rail": "backrooms:block/tilemold"
+	}
+}
