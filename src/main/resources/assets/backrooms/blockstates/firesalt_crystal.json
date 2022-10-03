@@ -1,7 +1,30 @@
 {
 	"variants": {
-		"": {
+		"facing=down": {
+			"model": "backrooms:block/firesalt_crystal",
+			"x": 180
+		},
+		"facing=east": {
+			"model": "backrooms:block/firesalt_crystal",
+			"x": 90,
+			"y": 90
+		},
+		"facing=north": {
+			"model": "backrooms:block/firesalt_crystal",
+			"x": 90
+		},
+		"facing=south": {
+			"model": "backrooms:block/firesalt_crystal",
+			"x": 90,
+			"y": 180
+		},
+		"facing=up": {
 			"model": "backrooms:block/firesalt_crystal"
+		},
+		"facing=west": {
+			"model": "backrooms:block/firesalt_crystal",
+			"x": 90,
+			"y": 270
 		}
 	}
 }

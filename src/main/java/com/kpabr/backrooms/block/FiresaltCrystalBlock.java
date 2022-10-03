@@ -24,22 +24,4 @@ public class FiresaltCrystalBlock extends AmethystClusterBlock {
     public FiresaltCrystalBlock(FabricBlockSettings fabricBlockSettings) {
         super(8, 2, fabricBlockSettings);
     }
-    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context) {
-        Direction direction = (Direction)state.get(FACING);
-        switch (direction) {
-            case NORTH:
-                return this.northShape;
-            case SOUTH:
-                return this.southShape;
-            case EAST:
-                return this.eastShape;
-            case WEST:
-                return this.westShape;
-            case DOWN:
-                return this.downShape;
-            case UP:
-            default:
-                return this.upShape;
-        }
-    }
 }
