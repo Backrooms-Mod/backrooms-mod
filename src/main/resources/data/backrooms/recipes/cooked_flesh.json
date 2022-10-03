@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "backrooms:tainted_flesh"
+  },
+  "result": "backrooms:cooked_flesh",
+  "experience": 0.15,
+  "cookingtime": 200
+}
