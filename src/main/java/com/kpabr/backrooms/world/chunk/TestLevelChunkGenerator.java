@@ -69,25 +69,17 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
         ChunkPos chunkPos = chunk.getPos();
         Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
-
-        if (!(fullChunkRandom.nextDouble() < 0.31275D && fullChunkRandom.nextInt(8) == 0)) {
-            for (int x = 0; x < 2; x++) {
-                for (int z = 0; z < 2; z++) {
+        for (int y = 0; y < 1; y++) {
+            for (int x = 0; x < 4; x++) {
+                for (int z = 0; z < 4; z++) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
-                    if (random.nextDouble() < 0.2375625D) {
-                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "test_level_" + (random.nextInt(5) + 1));
-                    } else {
-                        generateNbt(region, chunkPos.getStartPos().add(x * 8, 1, z * 8), "test_level_decorated_" + (random.nextInt(22) + 1));
-                    }
+                    generateNbt(region, chunkPos.getStartPos().add(x * 4, 1, z * 4), "test_level_" + (random.nextInt(4) + 1));
                 }
             }
-        } else {
-            generateNbt(region, chunkPos.getStartPos().add(0, 1, 0), "test_level_decorated_big_" + (fullChunkRandom.nextInt(3) + 1));
         }
-
         for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
             for (int z = chunk.getPos().getStartZ(); z < chunk.getPos().getStartZ() + 16; z++) {
-                region.setBlockState(new BlockPos(x, 0, z), Blocks.OAK_PLANKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
 
