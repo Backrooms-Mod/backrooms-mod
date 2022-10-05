@@ -18,6 +18,7 @@ import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
@@ -68,17 +69,61 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
         ChunkPos chunkPos = chunk.getPos();
+        int startX = chunk.getPos().getStartX();
+        int startZ = chunk.getPos().getStartZ();
         Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
-        for (int y = 0; y < 1; y++) {
-            for (int x = 0; x < 4; x++) {
-                for (int z = 0; z < 4; z++) {
-                    Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + z));
-                    generateNbt(region, chunkPos.getStartPos().add(x * 4, 1, z * 4), "test_level_" + (random.nextInt(4) + 1));
+        for (int y = 5; y >= 0; y--) {
+            for (int x = 3; x >= 0; x--) {
+                for (int z = 3; z >= 0; z--) {
+                    Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y));
+                    int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2;
+                    if((wallType & 1) == 1){
+                        for(int i = 0; i < 3; i++){
+                            for(int j = 0; j < 4; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 6 * y + j, startZ + z * 4 + i), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
+                        }
+                    }
+                    if((wallType & 2) == 2){
+                        for(int i = 0; i < 3; i++){
+                            for(int j = 0; j < 4; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
+                        }
+                    }
+                    boolean pillar = false;
+                    if(x != 3){
+                        if(region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 6 * y, startZ + z * 4 + 3))!=Blocks.AIR.getDefaultState()){
+                            pillar = true;
+                        }
+                    }
+                    if(z != 3){
+                        if(region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4))!=Blocks.AIR.getDefaultState()){
+                            pillar = true;
+                        }
+                    }
+                    if(x == 3 && z == 3){
+                        pillar = true;
+                    }
+                    pillar = pillar||(random.nextFloat() < 0.2F);
+                    if(pillar || wallType != 0){
+                        for (int j = 0; j < 4; j++){
+                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                        }
+                    }
+                    for(int i = 0; i < 4; i++){
+                        for(int j = 0; j < 4; j++){
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                        }
+                    }
+                    region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
+                    //generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
         }
-        for (int x = chunk.getPos().getStartX(); x < chunk.getPos().getStartX() + 16; x++) {
-            for (int z = chunk.getPos().getStartZ(); z < chunk.getPos().getStartZ() + 16; z++) {
+        for (int x = startX; x < startX + 16; x++) {
+            for (int z = startZ; z < startZ + 16; z++) {
                 region.setBlockState(new BlockPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
@@ -88,9 +133,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("test_level", world, 1, 5);
-        store("test_level_decorated", world, 1, 22);
-        store("test_level_decorated_big", world, 1, 3);
+        store("backrooms", world, 0, 3);
     }
 
     @Override
