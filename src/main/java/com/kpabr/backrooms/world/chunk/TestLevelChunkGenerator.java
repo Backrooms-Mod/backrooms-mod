@@ -26,8 +26,10 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
@@ -71,7 +73,6 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
         ChunkPos chunkPos = chunk.getPos();
         int startX = chunk.getPos().getStartX();
         int startZ = chunk.getPos().getStartZ();
-        Random fullChunkRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), -69420));
         for (int y = 5; y >= 0; y--) {
             for (int x = 3; x >= 0; x--) {
                 for (int z = 3; z >= 0; z--) {
@@ -121,6 +122,25 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                     //generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
+            Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
+            if(fullFloorRandom.nextFloat() < 0.1F || true){
+                int x=fullFloorRandom.nextInt(3);
+                int z=fullFloorRandom.nextInt(3);
+                int roomNumber = (fullFloorRandom.nextInt(12) + 1);
+                if(fullFloorRandom.nextFloat() < 0.6F){
+                    roomNumber=0;
+                }
+                Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
+                BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
+                for(int i = 0; i < 7; i++){
+                    for(int j = 0; j < this.loadedStructures.get("backrooms_large_" + roomNumber).sizeY; j++){
+                        for(int k = 0; k < 7; k++){
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                        }
+                    }
+                }
+                generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), "backrooms_large_" + roomNumber, rotation);
+            }
         }
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) {
@@ -133,7 +153,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("backrooms", world, 0, 3);
+        store("backrooms_large", world, 0, 12);
     }
 
     @Override

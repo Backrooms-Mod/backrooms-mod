@@ -31,10 +31,10 @@
       "block.backrooms.striped_wallpaper": "Striped Wallpaper",
       "block.backrooms.dotted_wallpaper": "Dotted Wallpaper",
       "block.backrooms.blank_wallpaper": "Blank Wallpaper",
-      "block.backrooms.moist_carpet": "Moist Carpet",
-      "block.backrooms.moldy_carpet": "Moldy Carpet",
-      "block.backrooms.hotel_carpet": "Hotel Carpet",
-      "block.backrooms.bloody_carpet": "Bloody Carpet",
+      "block.backrooms.moist_carpet": "Moist Carpeting",
+      "block.backrooms.moldy_carpet": "Moldy Carpeting",
+      "block.backrooms.hotel_carpet": "Hotel Carpeting",
+      "block.backrooms.bloody_carpet": "Bloody Carpeting",
       "block.backrooms.cement": "Cement",
       "block.backrooms.cement_slab": "Cement Slab",
       "block.backrooms.cement_stairs": "Cement Stairs",
@@ -63,7 +63,7 @@
       "block.backrooms.fancy_pillar": "Fancy Pillar",
       "block.backrooms.firesalt_block": "Firesalt Block",
       "block.backrooms.firesalt_crystal": "Firesalt Crystal",
-      "block.backrooms.fake_carpet": "Fake Carpet",
+      "block.backrooms.fake_carpet": "Fake Carpeting",
       "block.backrooms.fake_ceiling": "Fake Ceiling",
       "block.backrooms.fake_wall": "Fake Wall"
     }
