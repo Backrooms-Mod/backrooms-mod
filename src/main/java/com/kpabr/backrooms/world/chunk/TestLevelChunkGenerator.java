@@ -142,6 +142,24 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                 generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), "backrooms_large_" + roomNumber, rotation);
             }
         }
+        for (int y = 5; y >= 0; y--) {
+            Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
+            for(int i=0;i<300;i++){
+                int x=fullFloorRandom.nextInt(16);
+                int z=fullFloorRandom.nextInt(16);
+                int x2=x+fullFloorRandom.nextInt(3)-1;
+                int z2=fullFloorRandom.nextInt(3)-1;
+                if(region.getBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z))==BackroomsBlocks.WOOLEN_CARPET.getDefaultState()){
+                    if(x2<0){x2=0;}
+                    if(x2>15){x2=15;}
+                    if(z2<0){z2=0;}
+                    if(z2>15){z2=15;}
+                    if(fullFloorRandom.nextFloat()<0.1F||region.getBlockState(new BlockPos(startX + x2, 1 + 6 * y, startZ + z2))==BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()){
+                        region.setBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z), BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                    }
+                }
+            }
+        }
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) {
                 region.setBlockState(new BlockPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), Block.FORCE_STATE, 0);
