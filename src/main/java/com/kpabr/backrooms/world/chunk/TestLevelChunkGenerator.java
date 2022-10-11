@@ -76,7 +76,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
         int startZ = chunk.getPos().getStartZ();
         //Create 5 floors, top to bottom.
         for (int y = 5; y >= 0; y--) {
-            //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of a floor, a ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
+            //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
             for (int x = 3; x >= 0; x--) {
                 for (int z = 3; z >= 0; z--) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y)); //Make a Random object controlling the generation of the section.
@@ -121,7 +121,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                             region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
-                    // Generate the floor and the ceiling.
+                    // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 4; i++){
                         for(int j = 0; j < 4; j++){
                             region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
