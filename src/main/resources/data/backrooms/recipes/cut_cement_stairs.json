@@ -7,11 +7,11 @@
   ],
   "key": {
     "#": {
-      "item": "backrooms:cement_bricks"
+      "item": "backrooms:cut_cement"
     }
   },
   "result": {
-    "item": "backrooms:cement_brick_stairs",
+    "item": "backrooms:cut_cement_stairs",
     "count": 4
   }
 }
