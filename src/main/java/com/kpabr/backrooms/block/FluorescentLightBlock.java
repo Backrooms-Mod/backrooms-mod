@@ -26,7 +26,7 @@ public class FluorescentLightBlock extends Block {
 
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (random.nextDouble() < 0.1) {
+		if (random.nextDouble() < 0.1D) {
 			world.setBlockState(pos, state.cycle(LIT));
 			for (Direction dir : Direction.values()) {
 				BlockPos blockPos = pos.offset(dir);
