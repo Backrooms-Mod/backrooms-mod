@@ -2,19 +2,19 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "backrooms:cement_tile_slab",
-      "backrooms:cement_tile_stairs",
-      "backrooms:cement_tile_wall"
+      "backrooms:cement_brick_slab",
+      "backrooms:cement_brick_stairs",
+      "backrooms:cement_brick_wall"
     ]
   },
   "criteria": {
-    "has_cement_tiles": {
+    "has_cement_bricks": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "backrooms:cement_tiles"
+              "backrooms:cement_bricks"
             ]
           }
         ]
@@ -23,7 +23,7 @@
   },
   "requirements": [
     [
-      "has_cement_tiles"
+      "has_cement_bricks"
     ]
   ]
 }
