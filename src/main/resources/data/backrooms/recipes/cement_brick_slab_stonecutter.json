@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "backrooms:cement_bricks"
+  },
+  "result": "backrooms:cement_brick_slab",
+  "count": 2
+}

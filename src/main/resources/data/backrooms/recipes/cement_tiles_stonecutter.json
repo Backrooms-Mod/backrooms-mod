@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "backrooms:cement"
+  },
+  "result": "backrooms:cement_tiles",
+  "count": 1
+}
