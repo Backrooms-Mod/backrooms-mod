@@ -1,0 +1,24 @@
+{
+    "replace": false,
+    "values": [
+        "backrooms:cork_tile",
+        "backrooms:firesalt_block",
+        "backrooms:firesalt_crystal",
+        "backrooms:cement",
+        "backrooms:cement_stab",
+        "backrooms:cement_stairs",
+        "backrooms:cement_wall",
+        "backrooms:cut_cement",
+        "backrooms:cut_cement_stab",
+        "backrooms:cut_cement_stairs",
+        "backrooms:cut_cement_wall",
+        "backrooms:cement_bricks",
+        "backrooms:cement_brick_stab",
+        "backrooms:cement_brick_stairs",
+        "backrooms:cement_brick_wall",
+        "backrooms:cement_tiles",
+        "backrooms:cement_tile_stab",
+        "backrooms:cement_tile_stairs",
+        "backrooms:cement_tile_wall"
+    ]
+}
