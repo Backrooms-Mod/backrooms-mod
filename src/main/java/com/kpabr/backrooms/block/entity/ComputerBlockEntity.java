@@ -23,12 +23,10 @@ public class ComputerBlockEntity extends BlockEntity {
 
     public static void tick(World world, BlockPos pos, BlockState state, ComputerBlockEntity blockEntity) {
         if(world.isReceivingRedstonePower(pos)) {
-            System.out.println("ON");
             world.setBlockState(pos, state.with(ComputerBlock.LIT, true));
         }
         else
         {
-            System.out.println("OFF");
             world.setBlockState(pos, state.with(ComputerBlock.LIT, false));
         }
     }
