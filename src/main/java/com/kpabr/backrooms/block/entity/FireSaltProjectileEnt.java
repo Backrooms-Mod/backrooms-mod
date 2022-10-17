@@ -7,6 +7,8 @@ import com.kpabr.backrooms.init.BackroomsSounds;
 import com.kpabr.backrooms.items.FireSalt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -21,6 +23,7 @@ import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
@@ -48,7 +51,7 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
     @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() { // particles WIP
         ItemStack itemStack = this.getItem();
-        return (ParticleEffect) (itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack));  //placeholder
+        return itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);  //placeholder
     }
 
     @Environment(EnvType.CLIENT)
@@ -77,7 +80,13 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!this.world.isClient) { // checks if the world is client
+        if (!this.world.isClient) { // checks if the world isn't client
+            if(hitResult instanceof BlockHitResult) {
+                BlockEntity entity = world.getBlockEntity(((BlockHitResult) hitResult).getBlockPos());
+                if(entity instanceof PyroilLineBlockEntity) {
+                    ((PyroilLineBlockEntity) entity).wasShotByFiresalt = true;
+                }
+            }
             this.world.sendEntityStatus(this, (byte) 3); // particles
             world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
             this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);

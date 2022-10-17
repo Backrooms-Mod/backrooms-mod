@@ -1,4 +1,4 @@
-    {
+{
       "item.backrooms.patterned_pattern": "Banner Pattern",
       "item.backrooms.patterned_pattern.desc": "Patterned Wallpaper",
       "item.backrooms.striped_pattern": "Banner Pattern",
@@ -65,5 +65,6 @@
       "block.backrooms.firesalt_crystal": "Firesalt Crystal",
       "block.backrooms.fake_carpet": "Fake Carpeting",
       "block.backrooms.fake_ceiling": "Fake Ceiling",
-      "block.backrooms.fake_wall": "Fake Wall"
+      "block.backrooms.fake_wall": "Fake Wall",
+      "itemGroup.backrooms.items": "Backrooms"
     }

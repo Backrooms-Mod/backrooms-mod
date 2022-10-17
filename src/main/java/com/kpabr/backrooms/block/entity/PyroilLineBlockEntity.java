@@ -1,6 +1,7 @@
 package com.kpabr.backrooms.block.entity;
 
 import com.kpabr.backrooms.init.BackroomsBlocks;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +11,8 @@ import net.minecraft.world.World;
 
 public class PyroilLineBlockEntity extends BlockEntity {
 
-    private long Timer = 10L;
+    private long Timer = 5L;
+    public boolean wasShotByFiresalt = false;
     public PyroilLineBlockEntity(BlockPos pos, BlockState state) {
         super(BackroomsBlocks.PYROIL_LINE_BLOCK_ENTITY, pos, state);
     }
@@ -21,12 +23,17 @@ public class PyroilLineBlockEntity extends BlockEntity {
 
 
     public static void tick(World world, BlockPos pos, BlockState state, PyroilLineBlockEntity blockEntity) {
-    if(isAroundFire(world, pos)){
-        if(world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.AIR || world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.CAVE_AIR || world.getBlockState(pos.add(0,1,0)).getBlock() == Blocks.VOID_AIR){
-            if(--blockEntity.Timer <= 0L){
-                world.setBlockState(pos.add(0, 1, 0), Blocks.FIRE.getDefaultState());
+        if(blockEntity.wasShotByFiresalt) {
+            blockEntity.wasShotByFiresalt = false;
+            world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+        }
+        if(isAroundFire(world, pos)){
+            Block block = world.getBlockState(pos.add(0,1,0)).getBlock();
+            if(block == Blocks.AIR || block == Blocks.CAVE_AIR || block == Blocks.VOID_AIR || block == Blocks.TNT){
+                if(--blockEntity.Timer <= 0L){
+                    world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+                }
             }
         }
-    }
     }
 }

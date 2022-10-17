@@ -1,9 +1,6 @@
 {
   "multipart": [
     {
-      "apply": {
-        "model": "backrooms:block/pyroil_dot"
-      },
       "when": {
         "OR": [
           {
@@ -11,24 +8,11 @@
             "north": "none",
             "south": "none",
             "west": "none"
-          },
-          {
-            "east": "side|up",
-            "north": "side|up"
-          },
-          {
-            "east": "side|up",
-            "south": "side|up"
-          },
-          {
-            "south": "side|up",
-            "west": "side|up"
-          },
-          {
-            "north": "side|up",
-            "west": "side|up"
           }
         ]
+      },
+      "apply": {
+        "model": "backrooms:block/pyroil_dot"
       }
     },
     {
