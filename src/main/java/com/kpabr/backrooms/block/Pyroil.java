@@ -28,6 +28,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -290,7 +291,6 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
                 dropStacks(state, world, pos);
                 world.removeBlock(pos, false);
             }
-
         }
     }
 
@@ -314,6 +314,11 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         return !connectsTo(blockState, direction) && (blockState.isSolidBlock(world, blockPos) || !connectsTo(world.getBlockState(blockPos.down()))) ? WireConnection.NONE : WireConnection.SIDE;
     }
 
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
+        BlockPos blockPos = pos.down();
+        BlockState blockState = world.getBlockState(blockPos);
+        return this.canRunOnTop(world, blockPos, blockState);
+    }
     private BlockState getDefaultWireState(BlockView world, BlockState state, BlockPos pos) {
         boolean noBlocksOnTop = !world.getBlockState(pos.up()).isSolidBlock(world, pos);
 
