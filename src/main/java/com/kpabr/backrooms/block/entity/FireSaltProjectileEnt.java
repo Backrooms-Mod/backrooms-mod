@@ -1,28 +1,29 @@
 package com.kpabr.backrooms.block.entity;
 
-import com.kpabr.backrooms.client.BackroomsClient;
+import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.block.Pyroil;
+import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsItems;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
 import com.kpabr.backrooms.init.BackroomsSounds;
-import com.kpabr.backrooms.items.FireSalt;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
@@ -75,24 +76,32 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         entity.setOnFire(true);
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), 4.0f);
         this.world.createExplosion(this, entity.getBlockX(), entity.getBlockY() + 0.5, entity.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
+
     }
 
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
         if (!this.world.isClient) { // checks if the world isn't client
-            if(hitResult instanceof BlockHitResult) {
-                BlockEntity entity = world.getBlockEntity(((BlockHitResult) hitResult).getBlockPos());
-                if(entity instanceof PyroilLineBlockEntity) {
-                    ((PyroilLineBlockEntity) entity).wasShotByFiresalt = true;
-                }
-            }
             this.world.sendEntityStatus(this, (byte) 3); // particles
             world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
-            this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
-            this.kill();
-        }
+            boolean firePlease = false;
+            if(hitResult instanceof BlockHitResult) {
+                BlockState hitBlock = world.getBlockState(((BlockHitResult) hitResult).getBlockPos());
+                BackroomsMod.LOGGER.info(hitBlock.getBlock().getTranslationKey());
+                if(hitBlock.getBlock() instanceof Pyroil) {
+                    if (!hitBlock.isAir()) {
+                        firePlease = true;
 
+                    }
+                }
+            }
+            this.kill();
+            this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
+            if(firePlease) {
+                world.setBlockState(((BlockHitResult) hitResult).getBlockPos(), Blocks.FIRE.getDefaultState());
+            }
+        }
     }
    /* @Override
     public Packet createSpawnPacket() {
