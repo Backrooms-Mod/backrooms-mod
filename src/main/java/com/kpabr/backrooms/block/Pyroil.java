@@ -11,6 +11,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.WireConnection;
 import net.minecraft.client.particle.LavaEmberParticle;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.particle.DustParticleEffect;
@@ -29,6 +30,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
@@ -125,7 +127,6 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         }
 
     }
-
 
     private void updateNeighbors(World world, BlockPos pos) {
         if (world.getBlockState(pos).isOf(this)) {
@@ -294,6 +295,11 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         }
     }
 
+    public void onDestroyedByExplosion(World world, BlockPos pos, Explosion explosion) {
+        if (!world.isClient) {
+            world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+        }
+    }
 
     private WireConnection getRenderConnectionType(BlockView world, BlockPos pos, Direction direction) {
         return this.getRenderConnectionType(world, pos, direction, !world.getBlockState(pos.up()).isSolidBlock(world, pos));
