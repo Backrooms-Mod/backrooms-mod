@@ -177,12 +177,19 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                 }
             }
         }
-        //Place bedrock at the bottom.
+        // Place bedrock bricks at the bottom.
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) {
-                region.setBlockState(new BlockPos(x, 0, z), Blocks.BEDROCK.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 0, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
+        // Place bedrock bricks at the roof of chunk
+        for (int x = startX; x < startX + 16; x++) {
+            for (int z = startZ; z < startZ + 16; z++) {
+                region.setBlockState(new BlockPos(x, 1+4+2 + 6 * 5, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+            }
+        }
+
 
         return CompletableFuture.completedFuture(chunk);
     }

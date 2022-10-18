@@ -107,6 +107,8 @@ public class BackroomsBlocks {
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).materialColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).materialColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
+
+	public static final Block BEDROCK_BRICKS = add("bedrock_bricks", new Block(FabricBlockSettings.copy(Blocks.BEDROCK)), ItemGroup.BUILDING_BLOCKS);
 	private static <B extends Block, T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.put(id, blockEntity);
