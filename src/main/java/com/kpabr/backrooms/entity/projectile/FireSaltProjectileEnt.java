@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.block.entity;
+package com.kpabr.backrooms.entity.projectile;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.Pyroil;
@@ -85,22 +85,8 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         if (!this.world.isClient) { // checks if the world isn't client
             this.world.sendEntityStatus(this, (byte) 3); // particles
             world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
-            boolean firePlease = false;
-            if(hitResult instanceof BlockHitResult) {
-                BlockState hitBlock = world.getBlockState(((BlockHitResult) hitResult).getBlockPos());
-                BackroomsMod.LOGGER.info(hitBlock.getBlock().getTranslationKey());
-                if(hitBlock.getBlock() instanceof Pyroil) {
-                    if (!hitBlock.isAir()) {
-                        firePlease = true;
-
-                    }
-                }
-            }
             this.kill();
             this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
-            if(firePlease) {
-                world.setBlockState(((BlockHitResult) hitResult).getBlockPos(), Blocks.FIRE.getDefaultState());
-            }
         }
     }
    /* @Override

@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.init;
 
-import com.kpabr.backrooms.block.entity.FireSaltProjectileEnt;
+import com.kpabr.backrooms.entity.projectile.FireSaltProjectileEnt;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
