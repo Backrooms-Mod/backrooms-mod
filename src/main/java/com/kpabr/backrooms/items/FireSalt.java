@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.items;
 
-import com.kpabr.backrooms.block.entity.FireSaltProjectileEnt;
+import com.kpabr.backrooms.entity.projectile.FireSaltProjectileEnt;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
