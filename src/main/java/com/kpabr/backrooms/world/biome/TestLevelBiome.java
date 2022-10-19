@@ -4,6 +4,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.gen.GeneratorOptions;
+
 public class TestLevelBiome {
     public static Biome create() {
         Biome.Builder biome = new Biome.Builder();
@@ -11,6 +13,7 @@ public class TestLevelBiome {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
 
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+
 
         BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
         biomeEffects.skyColor(13548960);
