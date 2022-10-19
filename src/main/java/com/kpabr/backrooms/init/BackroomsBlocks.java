@@ -29,11 +29,9 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.client.render.RenderLayer;
 
 @SuppressWarnings("all")
 public class BackroomsBlocks {
-
 	private static final Map<Identifier, BlockItem> ITEMS = new LinkedHashMap<>();
 	private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
 	private static final Map<Identifier, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
@@ -51,7 +49,6 @@ public class BackroomsBlocks {
 	public static final Block TILEMOLD = add("tilemold", new TilemoldBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).materialColor(DyeColor.BROWN).strength(0F).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CEILING = add("fake_ceiling", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.WHITE).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FLUORESCENT_LIGHT = add("fluorescent_light", new FluorescentLightBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_LAMP).ticksRandomly().requiresTool().materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
-
 	public static final Block PATTERNED_WALLPAPER = add("patterned_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_WALL = add("fake_wall", new Block(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).materialColor(DyeColor.YELLOW).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block STRIPED_WALLPAPER = add("striped_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
@@ -97,7 +94,6 @@ public class BackroomsBlocks {
 	public static final Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(PLASTERWALL)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block TABLE = add("table", new TableBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 	//no just no
 	//public static final Block CHAIR = add("chair", new ChairBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
