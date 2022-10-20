@@ -19,6 +19,7 @@ import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.LiminalWorld;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.loot.LootTables;
@@ -56,7 +57,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     });
 
 
-    private long worldSeed;
+    private final long worldSeed;
     public TestLevelChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("test_level"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
@@ -73,10 +74,22 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+
+        // IMPORTANT NOTE:
+        // For biomes generation we're using various vanilla blocks to replace them later with blocks we actually need in biomes.
+        // If you're adding new type of structure then don't use blocks from our mod!
+        // Instead, use those blocks:
+        //Blocks.STONE -> BackroomsBlocks.PATTERNED_WALLPAPER
+        // Blocks.GRANITE -> BackroomsBlocks.WOOLEN_CARPET
+        // Blocks.DIORITE -> BackroomsBlocks.CORK_TILE,
+        // Blocks.COBBLESTONE -> BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
+        // Blocks.BEDROCK -> BackroomsBlocks.MOLDY_WOOLEN_CARPET
+
+
         ChunkPos chunkPos = chunk.getPos();
         //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
-        int startX = chunk.getPos().getStartX();
-        int startZ = chunk.getPos().getStartZ();
+        int startX = chunkPos.getStartX();
+        int startZ = chunkPos.getStartZ();
         //Create 5 floors, top to bottom.
         for (int y = 5; y >= 0; y--) {
             //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
@@ -222,30 +235,37 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
         return world.getTopY();
     }
 
+    private void replace(Block block, Chunk chunk, BlockPos pos) {
+        chunk.setBlockState(pos, block.getDefaultState(), false);
+    }
+
     @Override
-    public void buildSurface(ChunkRegion var1, StructureAccessor var2, Chunk var3) {
-        ChunkPos chunkPos = var3.getPos();
-        BlockPos biomepos = chunkPos.getBlockPos(4, 4, 4);
+    public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
+        ChunkPos chunkPos = chunk.getPos();
+        BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < var3.getHeight(); y++) {    //controls every block in the chunk
-                    if(var3.getBiomeForNoiseGen(biomepos.getX(), biomepos.getY(), biomepos.getZ()).matchesId(BackroomsLevels.TEST_LEVEL_BIOME.getValue())) {        //does a swap from the various stones to the custom blocks
-                        BlockPos pos = var3.getPos().getBlockPos(x, y, z);
-                        if (var3.getBlockState(pos) == Blocks.STONE.getDefaultState()) {
-                            var3.setBlockState(pos, BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), false);
+                for (int y = 0; y < chunk.getHeight(); y++) {    //controls every block in the chunk
+                    //does a swap from the various stones to the custom blocks
+                    if(chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(BackroomsLevels.TEST_LEVEL_BIOME.getValue())) {
+                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                        BlockState block = chunk.getBlockState(pos);
+
+                        if (block == Blocks.STONE.getDefaultState()) {
+                            replace(BackroomsBlocks.PATTERNED_WALLPAPER, chunk, pos);
                         }
-                        if (var3.getBlockState(pos) == Blocks.GRANITE.getDefaultState()) {
-                            var3.setBlockState(pos, BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), false);
+                        if (block == Blocks.GRANITE.getDefaultState()) {
+                            replace(BackroomsBlocks.WOOLEN_CARPET, chunk, pos);
                         }
-                        if (var3.getBlockState(pos) == Blocks.DIORITE.getDefaultState()) {
-                            var3.setBlockState(pos, BackroomsBlocks.CORK_TILE.getDefaultState(), false);
+                        if (block == Blocks.DIORITE.getDefaultState()) {
+                            replace(BackroomsBlocks.CORK_TILE, chunk, pos);
                         }
-                        if (var3.getBlockState(pos) == Blocks.COBBLESTONE.getDefaultState()) {
-                            var3.setBlockState(pos, BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), false);
+                        if (block == Blocks.COBBLESTONE.getDefaultState()) {
+                            replace(BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
                         }
-                        if (var3.getBlockState(pos) == Blocks.BEDROCK.getDefaultState()) {
-                            var3.setBlockState(pos, BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState(), false);
+                        if (block == Blocks.BEDROCK.getDefaultState()) {
+                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
                         }
                     }
                 }
