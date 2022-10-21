@@ -57,6 +57,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     });
 
 
+
     private final long worldSeed;
     public TestLevelChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("test_level"), LiminalUtil.createMultiNoiseSampler());
@@ -246,14 +247,33 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < chunk.getHeight(); y++) {    //controls every block in the chunk
-                    //does a swap from the various stones to the custom blocks
+                for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
+                    // does a swap from the various stones to the custom blocks
                     if(chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(BackroomsLevels.TEST_LEVEL_BIOME.getValue())) {
                         BlockPos pos = chunkPos.getBlockPos(x, y, z);
                         BlockState block = chunk.getBlockState(pos);
 
                         if (block == Blocks.STONE.getDefaultState()) {
                             replace(BackroomsBlocks.PATTERNED_WALLPAPER, chunk, pos);
+                        }
+                        if (block == Blocks.GRANITE.getDefaultState()) {
+                            replace(BackroomsBlocks.WOOLEN_CARPET, chunk, pos);
+                        }
+                        if (block == Blocks.DIORITE.getDefaultState()) {
+                            replace(BackroomsBlocks.CORK_TILE, chunk, pos);
+                        }
+                        if (block == Blocks.COBBLESTONE.getDefaultState()) {
+                            replace(BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
+                        }
+                        if (block == Blocks.BEDROCK.getDefaultState()) {
+                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
+                        }
+                    } else if(chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(BackroomsLevels.CRIMSON_WALLS_BIOME.getValue())) {
+                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                        BlockState block = chunk.getBlockState(pos);
+
+                        if (block == Blocks.STONE.getDefaultState()) {
+                            replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
                         }
                         if (block == Blocks.GRANITE.getDefaultState()) {
                             replace(BackroomsBlocks.WOOLEN_CARPET, chunk, pos);
