@@ -35,6 +35,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
@@ -77,14 +78,14 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
 
         // IMPORTANT NOTE:
-        // For biomes generation we're using various vanilla blocks to replace them later with blocks we actually need in biomes.
-        // If you're adding new type of structure then don't use blocks from our mod!
+        // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
+        // If you're adding new type of structure then don't use blocks other than described below from our mod!
         // Instead, use those blocks:
-        //Blocks.STONE -> BackroomsBlocks.PATTERNED_WALLPAPER
-        // Blocks.GRANITE -> BackroomsBlocks.WOOLEN_CARPET
-        // Blocks.DIORITE -> BackroomsBlocks.CORK_TILE,
-        // Blocks.COBBLESTONE -> BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
-        // Blocks.BEDROCK -> BackroomsBlocks.MOLDY_WOOLEN_CARPET
+        // BackroomsBlocks.PATTERNED_WALLPAPER -> any wallpaper
+        // BackroomsBlocks.WOOLEN_CARPET -> any carpet
+        // BackroomsBlocks.CORK_TILE -> any cork tile
+        // BackroomsBlocks.FLUORESCENT_LIGHT -> any light source
+        // BackroomsBlocks.MOLDY_WOOLEN_CARPET -> random blocks(you can just replace them with carpet)
 
 
         ChunkPos chunkPos = chunk.getPos();
@@ -102,7 +103,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                         //Create the eastern wall.
                         for(int i = 0; i < 3; i++){
                             for(int j = 0; j < 4; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 6 * y + j, startZ + z * 4 + i), Blocks.STONE.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 6 * y + j, startZ + z * 4 + i), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
@@ -110,7 +111,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                         //Create the southern wall.
                         for(int i = 0; i < 3; i++){
                             for(int j = 0; j < 4; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + 3), Blocks.STONE.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
@@ -135,17 +136,17 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                     if(pillar){
                         //Create the pillar.
                         for (int j = 0; j < 4; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + 3), Blocks.STONE.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
                     // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 4; i++){
                         for(int j = 0; j < 4; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), Blocks.GRANITE.getDefaultState(), Block.FORCE_STATE, 0);
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j), Blocks.DIORITE.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
-                    region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), Blocks.COBBLESTONE.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
                     //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
@@ -183,13 +184,13 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                 int z=fullFloorRandom.nextInt(16);
                 int x2=x+fullFloorRandom.nextInt(3)-1;
                 int z2=fullFloorRandom.nextInt(3)-1;
-                if(region.getBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z))==Blocks.GRANITE.getDefaultState()){
+                if(region.getBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z))==BackroomsBlocks.WOOLEN_CARPET.getDefaultState()){
                     if(x2<0){x2=0;}
                     if(x2>15){x2=15;}
                     if(z2<0){z2=0;}
                     if(z2>15){z2=15;}
-                    if(fullFloorRandom.nextFloat()<0.1F||region.getBlockState(new BlockPos(startX + x2, 1 + 6 * y, startZ + z2))==Blocks.DIORITE.getDefaultState()){
-                        region.setBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z), Blocks.BEDROCK.getDefaultState(), Block.FORCE_STATE, 0);
+                    if(fullFloorRandom.nextFloat()<0.1F||region.getBlockState(new BlockPos(startX + x2, 1 + 6 * y, startZ + z2))==BackroomsBlocks.CORK_TILE.getDefaultState()){
+                        region.setBlockState(new BlockPos(startX + x, 1 + 6 * y, startZ + z), BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
                     }
                 }
             }
@@ -240,6 +241,10 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
         chunk.setBlockState(pos, block.getDefaultState(), false);
     }
 
+    private boolean checkBiome(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
+        return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
+    }
+
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         ChunkPos chunkPos = chunk.getPos();
@@ -249,43 +254,18 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
                     // does a swap from the various stones to the custom blocks
-                    if(chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(BackroomsLevels.TEST_LEVEL_BIOME.getValue())) {
+                    if(checkBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, chunk, biomePos)) {
                         BlockPos pos = chunkPos.getBlockPos(x, y, z);
                         BlockState block = chunk.getBlockState(pos);
 
-                        if (block == Blocks.STONE.getDefaultState()) {
-                            replace(BackroomsBlocks.PATTERNED_WALLPAPER, chunk, pos);
-                        }
-                        if (block == Blocks.GRANITE.getDefaultState()) {
-                            replace(BackroomsBlocks.WOOLEN_CARPET, chunk, pos);
-                        }
-                        if (block == Blocks.DIORITE.getDefaultState()) {
-                            replace(BackroomsBlocks.CORK_TILE, chunk, pos);
-                        }
-                        if (block == Blocks.COBBLESTONE.getDefaultState()) {
-                            replace(BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
-                        }
-                        if (block == Blocks.BEDROCK.getDefaultState()) {
-                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
-                        }
-                    } else if(chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(BackroomsLevels.CRIMSON_WALLS_BIOME.getValue())) {
-                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                        BlockState block = chunk.getBlockState(pos);
-
-                        if (block == Blocks.STONE.getDefaultState()) {
+                        if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
                             replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
                         }
-                        if (block == Blocks.GRANITE.getDefaultState()) {
+                        if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                             replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
                         }
-                        if (block == Blocks.DIORITE.getDefaultState()) {
-                            replace(BackroomsBlocks.CORK_TILE, chunk, pos);
-                        }
-                        if (block == Blocks.COBBLESTONE.getDefaultState()) {
-                            replace(BackroomsBlocks.FLUORESCENT_LIGHT, chunk, pos);
-                        }
-                        if (block == Blocks.BEDROCK.getDefaultState()) {
-                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
+                        if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
+                            replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
                         }
                     }
                 }
