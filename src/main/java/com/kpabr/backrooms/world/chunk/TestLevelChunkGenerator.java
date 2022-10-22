@@ -276,7 +276,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
                             replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
                         }
                         if (block == Blocks.GRANITE.getDefaultState()) {
-                            replace(BackroomsBlocks.WOOLEN_CARPET, chunk, pos);
+                            replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
                         }
                         if (block == Blocks.DIORITE.getDefaultState()) {
                             replace(BackroomsBlocks.CORK_TILE, chunk, pos);
