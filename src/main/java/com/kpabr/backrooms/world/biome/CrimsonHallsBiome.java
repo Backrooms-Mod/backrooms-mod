@@ -1,6 +1,7 @@
 package com.kpabr.backrooms.world.biome;
 
 import com.kpabr.backrooms.entity.living.HoundLivingEntity;
+import com.kpabr.backrooms.init.BackroomsEntities;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.world.biome.Biome;
@@ -13,13 +14,13 @@ public class CrimsonHallsBiome {
         Biome.Builder biome = new Biome.Builder();
 
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        //spawnSettings.spawn(SpawnGroup.MONSTER, new SpawnSettings.SpawnEntry(EntityType.Builder.create(HoundLivingEntity::new, SpawnGroup.MONSTER).setDimensions(1F, 1.5F).maxTrackingRange(8).build("hound"), 5, 1, 1));
+        spawnSettings.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
 
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
 
         BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
         biomeEffects.skyColor(13776695);
-        biomeEffects.waterColor(13548960);  
+        biomeEffects.waterColor(13548960);
         biomeEffects.waterFogColor(16735821);
         biomeEffects.fogColor(11548232);
         BiomeEffects effects = biomeEffects.build();
