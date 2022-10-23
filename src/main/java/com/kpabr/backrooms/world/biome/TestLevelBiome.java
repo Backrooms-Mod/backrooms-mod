@@ -21,6 +21,7 @@ public class TestLevelBiome {
         biomeEffects.waterFogColor(13548960);
         biomeEffects.fogColor(13548960);
         biomeEffects.grassColor(13818488);
+        biomeEffects.loopSound(BackroomsSoundEvents.HUMBUZZ_LEVEL_0);
         BiomeEffects effects = biomeEffects.build();
 
         biome.spawnSettings(spawnSettings.build());

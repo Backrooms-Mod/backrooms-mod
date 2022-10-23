@@ -3,5 +3,10 @@
     "sounds": [
       "backrooms:firesalt_land"
     ]
+  },
+  "humbuzz": {
+    "sounds": [
+      "backrooms:humbuzz"
+    ]
   }
 }

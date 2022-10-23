@@ -5,6 +5,11 @@ public class BackroomsSoundEvents {
 
     //public static final SoundEvent MUSIC_COMMUNAL_CORRIDORS = get("music.communal_corridors");
 
+    public static SoundEvent HUMBUZZ_LEVEL_0;
+
+    public static void init() {
+        HUMBUZZ_LEVEL_0 = get("humbuzz");
+    }
 
     // Radio
     //public static final SoundEvent RADIO_COMMUNAL_CORRIDORS = get("radio.communal_corridors");
