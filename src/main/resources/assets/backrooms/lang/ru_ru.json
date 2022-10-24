@@ -67,5 +67,7 @@
       "block.backrooms.fake_ceiling": "Фальшивый потолок",
       "block.backrooms.bedrock_bricks": "Бедроковые кирпичи",
       "block.backrooms.fake_wall": "Фальшивая стена",
-      "itemGroup.backrooms.items": "Backrooms"
+      "itemGroup.backrooms.items": "Закулисье",
+      "entity.backrooms.hound": "Гончая",
+      "entity.backrooms.fire_salt_projectile": "Огнесоль"
     }

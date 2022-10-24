@@ -67,5 +67,7 @@
       "block.backrooms.fake_ceiling": "Fake Ceiling",
       "block.backrooms.bedrock_bricks": "Bedrock Bricks",
       "block.backrooms.fake_wall": "Fake Wall",
-      "itemGroup.backrooms.items": "Backrooms"
+      "itemGroup.backrooms.items": "Backrooms",
+      "entity.backrooms.hound": "Hound",
+      "entity.backrooms.fire_salt_projectile": "Firesalt"
     }
