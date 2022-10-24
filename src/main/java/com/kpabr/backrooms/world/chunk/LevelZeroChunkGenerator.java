@@ -16,7 +16,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import com.kpabr.backrooms.BackroomsMod;
 import net.ludocrypt.limlib.api.LiminalUtil;
-import net.ludocrypt.limlib.api.LiminalWorld;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,7 +39,6 @@ import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
@@ -48,20 +46,20 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
-    public static final Codec<TestLevelChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
+public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
+    public static final Codec<LevelZeroChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
         return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
             return chunkGenerator.biomeSource;
         }), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
             return chunkGenerator.worldSeed;
-        })).apply(instance, instance.stable(TestLevelChunkGenerator::new));
+        })).apply(instance, instance.stable(LevelZeroChunkGenerator::new));
     });
 
 
 
     private final long worldSeed;
-    public TestLevelChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("test_level"), LiminalUtil.createMultiNoiseSampler());
+    public LevelZeroChunkGenerator(BiomeSource biomeSource, long worldSeed) {
+        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_zero"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
     }
 
@@ -71,7 +69,7 @@ public class TestLevelChunkGenerator extends AbstractNbtChunkGenerator {
     }
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new TestLevelChunkGenerator(this.biomeSource, seed);
+        return new LevelZeroChunkGenerator(this.biomeSource, seed);
     }
 
     @Override

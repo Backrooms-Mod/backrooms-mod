@@ -2,9 +2,7 @@ package com.kpabr.backrooms.world.biome;
 
 import com.google.common.collect.ImmutableList;
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.mojang.datafixers.kinds.Applicative;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.MathHelper;
@@ -12,37 +10,36 @@ import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
-public class BackroomsBiomeSource extends BiomeSource {
+public class LevelZeroBiomeSource extends BiomeSource {
     // BIOME SOURCE for all the biomes in the backrooms test dimension!
     // To add new biome you should make a new parameter in both constructors
     // and create new variable containing new biome
 
-    public static final Codec<BackroomsBiomeSource> CODEC = RecordCodecBuilder.create((instance) ->
+    public static final Codec<LevelZeroBiomeSource> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((biomeSource) ->
                     biomeSource.BIOME_REGISTRY), Codec.LONG.fieldOf("seed").stable().forGetter((biomeSource) ->
-                    biomeSource.seed)).apply(instance, instance.stable(BackroomsBiomeSource::new)));
+                    biomeSource.seed)).apply(instance, instance.stable(LevelZeroBiomeSource::new)));
     private final SimplexNoiseSampler noise;
     private final long seed;
     private final RegistryEntry<Biome> crimsonWallsBiome;
-    private final RegistryEntry<Biome> testBiome;
+    private final RegistryEntry<Biome> normalBiome;
 
     private Registry<Biome> BIOME_REGISTRY;
 
-    public BackroomsBiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        this(seed, biomeRegistry.getOrCreateEntry(BackroomsLevels.TEST_LEVEL_BIOME), biomeRegistry.getOrCreateEntry(BackroomsLevels.CRIMSON_WALLS_BIOME));
+    public LevelZeroBiomeSource(Registry<Biome> biomeRegistry, long seed) {
+        this(seed, biomeRegistry.getOrCreateEntry(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME), biomeRegistry.getOrCreateEntry(BackroomsLevels.CRIMSON_WALLS_BIOME));
         this.BIOME_REGISTRY = biomeRegistry;
     }
 
-    private BackroomsBiomeSource(long seed, RegistryEntry<Biome> testBiome, RegistryEntry<Biome> crimsonWallsBiome) {
-        super(ImmutableList.of(testBiome, crimsonWallsBiome));
+    private LevelZeroBiomeSource(long seed, RegistryEntry<Biome> normalBiome, RegistryEntry<Biome> crimsonWallsBiome) {
+        super(ImmutableList.of(normalBiome, crimsonWallsBiome));
         this.seed = seed;
-        this.testBiome = testBiome;
+        this.normalBiome = normalBiome;
         this.crimsonWallsBiome = crimsonWallsBiome;
         ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
         chunkRandom.skip(17292);
@@ -56,7 +53,7 @@ public class BackroomsBiomeSource extends BiomeSource {
 
     @Override
     public BiomeSource withSeed(long seed) {
-        return new BackroomsBiomeSource(seed, this.testBiome, this.crimsonWallsBiome);
+        return new LevelZeroBiomeSource(seed, this.normalBiome, this.crimsonWallsBiome);
     }
 
     // Also you should use this method
@@ -64,11 +61,11 @@ public class BackroomsBiomeSource extends BiomeSource {
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         int i = x >> 2;
         int j = z >> 2;
-        float noiseAt = BackroomsBiomeSource.getNoiseAt(this.noise, i * 2 + 1, j * 2 + 1);
+        float noiseAt = LevelZeroBiomeSource.getNoiseAt(this.noise, i * 2 + 1, j * 2 + 1);
         if (noiseAt > 40.0f) {
             return this.crimsonWallsBiome;
         }
-        return this.testBiome;
+        return this.normalBiome;
     }
 
     public boolean matches(long seed) {

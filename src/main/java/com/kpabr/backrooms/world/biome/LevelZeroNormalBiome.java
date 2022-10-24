@@ -4,9 +4,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
-import net.minecraft.world.gen.GeneratorOptions;
 
-public class TestLevelBiome {
+public class LevelZeroNormalBiome {
     public static Biome create() {
         Biome.Builder biome = new Biome.Builder();
 
