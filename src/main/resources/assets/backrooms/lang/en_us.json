@@ -69,5 +69,20 @@
       "block.backrooms.fake_wall": "Fake Wall",
       "itemGroup.backrooms.items": "Backrooms",
       "entity.backrooms.hound": "Hound",
-      "entity.backrooms.fire_salt_projectile": "Firesalt"
-    }
+      "entity.backrooms.fire_salt_projectile": "Firesalt",
+      "block.backrooms.black_carpeting": "Black Carpeting",
+      "block.backrooms.red_carpeting": "Red Carpeting",
+      "block.backrooms.pink_carpeting": "Pink Carpeting",
+      "block.backrooms.blue_carpeting": "Blue Carpeting",
+      "block.backrooms.brown_carpeting": "Brown Carpeting",
+      "block.backrooms.cyan_carpeting": "Cyan Carpeting",
+      "block.backrooms.gray_carpeting": "Gray Carpeting",
+      "block.backrooms.green_carpeting": "Green Carpeting",
+      "block.backrooms.light_blue_carpeting": "Light Blue Carpeting",
+      "block.backrooms.light_gray_carpeting": "Light Gray Carpeting",
+      "block.backrooms.lime_carpeting": "Lime Carpeting",
+      "block.backrooms.magenta_carpeting": "Magenta Carpeting",
+      "block.backrooms.orange_carpeting": "Orange Carpeting",
+      "block.backrooms.purple_carpeting": "Purple Carpeting",
+      "block.backrooms.white_carpeting": "White Carpeting"
+}

@@ -69,5 +69,20 @@
       "block.backrooms.fake_wall": "Фальшивая стена",
       "itemGroup.backrooms.items": "Закулисье",
       "entity.backrooms.hound": "Гончая",
-      "entity.backrooms.fire_salt_projectile": "Огнесоль"
+      "entity.backrooms.fire_salt_projectile": "Огнесоль",
+      "block.backrooms.black_carpeting": "Черный ковер",
+      "block.backrooms.red_carpeting": "Красный ковер",
+      "block.backrooms.pink_carpeting": "Розовый ковер",
+      "block.backrooms.blue_carpeting": "Синий ковер",
+      "block.backrooms.brown_carpeting": "Коричневый ковер",
+      "block.backrooms.cyan_carpeting": "Голубой ковер",
+      "block.backrooms.gray_carpeting": "Серый ковер",
+      "block.backrooms.green_carpeting": "Зеленый ковер",
+      "block.backrooms.light_blue_carpeting": "Светло-синий ковер",
+      "block.backrooms.light_gray_carpeting": "Светло-серый ковер",
+      "block.backrooms.lime_carpeting": "Лаймовый ковер",
+      "block.backrooms.magenta_carpeting": "Пурпурный ковер",
+      "block.backrooms.orange_carpeting": "Оранжевый ковер",
+      "block.backrooms.purple_carpeting": "Фиолетовый ковер",
+      "block.backrooms.white_carpeting": "Белый ковер"
     }
