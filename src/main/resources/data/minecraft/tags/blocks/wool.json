@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "backrooms:fake_ceiling",
+    "backrooms:moist_carpet",
+    "backrooms:fake_carpet",
+    "backrooms:moldy_carpet",
+    "backrooms:hotel_carpet",
+    "backrooms:black_carpeting",
+    "backrooms:blue_carpeting",
+    "backrooms:brown_carpeting",
+    "backrooms:cyan_carpeting",
+    "backrooms:gray_carpeting",
+    "backrooms:green_carpeting",
+    "backrooms:light_blue_carpeting",
+    "backrooms:light_gray_carpeting",
+    "backrooms:lime_carpeting",
+    "backrooms:magenta_carpeting",
+    "backrooms:orange_carpeting",
+    "backrooms:pink_carpeting",
+    "backrooms:purple_carpeting",
+    "backrooms:white_carpeting",
+    "backrooms:red_carpeting"
+  ]
+}

@@ -2,6 +2,12 @@
     "replace": false,
     "values": [
         "backrooms:patterned_wallpaper",
-        "backrooms:red_patterned_wallpaper"
+        "backrooms:red_patterned_wallpaper",
+        "backrooms:fake_wall",
+        "backrooms:striped_wallpaper",
+        "backrooms:dotted_wallpaper",
+        "backrooms:blank_wallpaper",
+        "backrooms:red_striped_wallpaper",
+        "backrooms:red_dotted_wallpaper"
     ]
 }

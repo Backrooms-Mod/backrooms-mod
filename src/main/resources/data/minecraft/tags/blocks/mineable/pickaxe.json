@@ -2,6 +2,7 @@
     "replace": false,
     "values": [
         "backrooms:cork_tile",
+        "backrooms:moldy_cork_tile",
         "backrooms:firesalt_block",
         "backrooms:firesalt_crystal",
         "backrooms:cement",
@@ -19,6 +20,9 @@
         "backrooms:cement_tiles",
         "backrooms:cement_tile_slab",
         "backrooms:cement_tile_stairs",
-        "backrooms:cement_tile_wall"
+        "backrooms:cement_tile_wall",
+        "backrooms:fluorescent_light",
+        "backrooms:cement_sandwich",
+        "backrooms:fancy_pillar"
     ]
 }
