@@ -23,6 +23,8 @@ public class BackroomsMod implements ModInitializer {
 	public void onInitialize() {
 		BackroomsConfig.init();
 		LOGGER.info("Loaded config");
+		BackroomsSoundEvents.init();
+		LOGGER.info("Loaded sounds");
 		BackroomsBlocks.init();
 		LOGGER.info("Loaded blocks");
 		BackroomsGroups.init();
