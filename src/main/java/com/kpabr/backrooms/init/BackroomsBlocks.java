@@ -94,9 +94,7 @@ public class BackroomsBlocks {
 	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
-	//no just no
-	//public static final Block CHAIR = add("chair", new ChairBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).materialColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
-	public static final BlockEntityType<ComputerBlockEntity> CHAIR_BLOCK_ENTITY = add("chair", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
+
 	public static final Block SNOWY_GLASS = add("snowy_glass", new SkyboxGlassBlock(FabricBlockSettings.copyOf(Blocks.GLASS)), ItemGroup.DECORATIONS);
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
