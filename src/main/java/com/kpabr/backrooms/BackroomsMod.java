@@ -25,6 +25,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded config");
 		BackroomsSoundEvents.init();
 		LOGGER.info("Loaded sounds");
+		BackroomsParticles.init();
+		LOGGER.info("Loaded particles");
 		BackroomsBlocks.init();
 		LOGGER.info("Loaded blocks");
 		BackroomsGroups.init();

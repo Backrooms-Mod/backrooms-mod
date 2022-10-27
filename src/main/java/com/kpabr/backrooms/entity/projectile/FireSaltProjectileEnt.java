@@ -2,10 +2,7 @@ package com.kpabr.backrooms.entity.projectile;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.Pyroil;
-import com.kpabr.backrooms.init.BackroomsBlocks;
-import com.kpabr.backrooms.init.BackroomsItems;
-import com.kpabr.backrooms.init.BackroomsProjectiles;
-import com.kpabr.backrooms.init.BackroomsSounds;
+import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -51,32 +48,27 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
 
     @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() { // particles WIP
-        ItemStack itemStack = this.getItem();
-        return itemStack.isEmpty() ? ParticleTypes.ITEM_SNOWBALL : new ItemStackParticleEffect(ParticleTypes.ITEM, itemStack);  //placeholder
+        return BackroomsParticles.FIRESALT_PARTICLE;
     }
 
     @Environment(EnvType.CLIENT)
     public void handleStatus(byte status) { // particles WIP
         if (status == 3) {
             ParticleEffect particleEffect = this.getParticleParameters();
-
             for (int i = 0; i < 8; ++i) {
                 this.world.addParticle(particleEffect, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
             }
         }
-
     }
 
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
 
-
         world.playSound(null, entity.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
         entity.setOnFire(true);
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), 4.0f);
         this.world.createExplosion(this, entity.getBlockX(), entity.getBlockY() + 0.5, entity.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
-
     }
 
 

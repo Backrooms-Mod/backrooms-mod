@@ -3,18 +3,24 @@ package com.kpabr.backrooms.client;
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.entity.renderer.living.HoundEntityRenderer;
 import com.kpabr.backrooms.init.BackroomsEntities;
+import com.kpabr.backrooms.init.BackroomsParticles;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
+import com.kpabr.backrooms.particle.FireSaltParticle;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.particle.CrackParticle;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.util.math.Vec3d;
@@ -27,8 +33,18 @@ public class BackroomsClient implements ClientModInitializer {
 
 	public static final Identifier PacketID = new Identifier(BackroomsMod.ModId, "spawn_packet");
 
+
 	@Override
 	public void onInitializeClient() {
+		ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(((atlasTexture, registry) -> {
+			registry.register(new Identifier("minecraft", "particle/flame"));
+		}));
+		/* Registers our particle client-side.
+		 * First argument is our particle's instance, created previously on ExampleMod.
+		 * Second argument is the particle's factory. The factory controls how the particle behaves.
+		 * In this example, we'll use FlameParticle's Factory.*/
+		ParticleFactoryRegistry.getInstance().register(BackroomsParticles.FIRESALT_PARTICLE, new FireSaltParticle.FireSaltFactory());
+
 		EntityRendererRegistry.INSTANCE.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, (context) ->
 				new FlyingItemEntityRenderer(context));
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.FIRESALT_CRYSTAL);
