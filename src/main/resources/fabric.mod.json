@@ -28,8 +28,8 @@
 		"exskyapi": [
 			"com.kpabr.backrooms.client.BackroomsClient"
 		],
-		"mm:early_risers": [
-			"com.kpabr.backrooms.init.BackroomsEarlyRisers"
+		"cardinal-components": [
+			"com.kpabr.backrooms.BackroomsComponents"
 		]
 	},
 	"mixins": [
@@ -40,5 +40,10 @@
 		"fabric": "*",
 		"minecraft": "1.18.2",
 		"java": ">=17"
+	},
+	"custom": {
+		"cardinal-components": [
+			"backrooms:wretched"
+		]
 	}
 }

@@ -28,7 +28,9 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 import java.util.UUID;
-@SuppressWarnings("all")
+
+
+
 public class BackroomsClient implements ClientModInitializer {
 
 	public static final Identifier PacketID = new Identifier(BackroomsMod.ModId, "spawn_packet");

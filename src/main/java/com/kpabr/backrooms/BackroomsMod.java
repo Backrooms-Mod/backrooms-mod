@@ -2,17 +2,26 @@ package com.kpabr.backrooms;
 
 
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
+import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
 public class BackroomsMod implements ModInitializer {
 
@@ -44,6 +53,18 @@ public class BackroomsMod implements ModInitializer {
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
 
+
+		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+			List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
+
+			for (ServerPlayerEntity player : players) {
+				if(player.age % 400 == 0 && player.age != 0) { // 400 = 20tps*20s
+					WretchedComponent wretched = WRETCHED.get(player);
+					wretched.increment();
+					LOGGER.info(String.valueOf(wretched.getValue())); // debugging reasons
+				}
+			}
+		});
 	}
 
 	/*@Override

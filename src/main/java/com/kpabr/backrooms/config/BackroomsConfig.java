@@ -16,7 +16,13 @@ public class BackroomsConfig implements ConfigData {
     public boolean delayMusicWithRadio = true;
 
     @ConfigEntry.Gui.Tooltip()
-    public boolean disableStrongShaders = false;
+    public boolean disableStrongShaders = true;
+
+    @ConfigEntry.Gui.Tooltip()
+    public int suffocationChance = 10;
+
+    @ConfigEntry.Gui.Tooltip()
+    public int almondMilkRestoring = 2;
 
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);

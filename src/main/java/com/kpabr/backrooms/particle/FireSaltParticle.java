@@ -14,6 +14,7 @@ import net.minecraft.item.Items;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ItemStackParticleEffect;
 
+@Environment(EnvType.CLIENT)
 public class FireSaltParticle extends SpriteBillboardParticle {
     private final float sampleU;
     private final float sampleV;
