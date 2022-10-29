@@ -6,7 +6,7 @@ import java.util.Map;
 import com.kpabr.backrooms.items.FireSalt;
 import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.items.SpecialWaterItem;
+import com.kpabr.backrooms.items.AlmondWaterItem;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
@@ -21,7 +21,7 @@ public class BackroomsItems {
 	private static final Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
 
-	public static final Item ALMOND_WATER = add("almond_water", new SpecialWaterItem(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().alwaysEdible().snack().saturationModifier(20).hunger(4).build()).maxCount(16)));
+	public static final Item ALMOND_WATER = add("almond_water", new AlmondWaterItem(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().alwaysEdible().snack().saturationModifier(20).hunger(4).build()).maxCount(16)));
 	public static final Item FIRESALT = add("firesalt", new FireSalt(new Item.Settings().group(ItemGroup.MISC)));
 	public static final Item TILEMOLD_LUMP = add("tilemold_lump", new Item(new Item.Settings().group(ItemGroup.MISC)));
 	public static final Item BAKED_TILEMOLD_LUMP = add("baked_tilemold_lump", new Item(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().snack().saturationModifier(2).hunger(2).build())));
