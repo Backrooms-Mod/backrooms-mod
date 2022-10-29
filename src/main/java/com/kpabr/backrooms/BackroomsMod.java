@@ -81,16 +81,16 @@ public class BackroomsMod implements ModInitializer {
 		WretchedComponent wretched = WRETCHED.get(player);
 		wretched.increment();
 		if(wretched.getValue() >= 24 && wretched.getValue() <= 49 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
-			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999));
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999999));
 
 		} else if(wretched.getValue() >= 50 && wretched.getValue() <= 74 && !player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
 			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
-			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.ROTTEN, 9999));
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.ROTTEN, 9999999));
 
 		} else if(wretched.getValue() >= 75 && !player.hasStatusEffect(BackroomStatusEffects.WRETCHED)) {
 			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
 			player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
-			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.WRETCHED, 9999));
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.WRETCHED, 9999999));
 		}
 		LOGGER.info(String.valueOf(wretched.getValue())); // debugging reasons
 	}
