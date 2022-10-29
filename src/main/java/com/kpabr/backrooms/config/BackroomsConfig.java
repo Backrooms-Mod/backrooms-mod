@@ -9,13 +9,6 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 public class BackroomsConfig implements ConfigData {
 
     @ConfigEntry.Gui.Tooltip()
-    @ConfigEntry.Gui.RequiresRestart
-    public boolean condensedDimensions = false;
-
-    @ConfigEntry.Gui.Tooltip()
-    public boolean delayMusicWithRadio = true;
-
-    @ConfigEntry.Gui.Tooltip()
     public boolean disableStrongShaders = true;
 
     @ConfigEntry.Gui.Tooltip()
