@@ -11,11 +11,10 @@ import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +35,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded sounds");
 		BackroomsParticles.init();
 		LOGGER.info("Loaded particles");
+		BackroomStatusEffects.init();
+		LOGGER.info("Loaded status effects");
 		BackroomsBlocks.init();
 		LOGGER.info("Loaded blocks");
 		BackroomsGroups.init();
@@ -53,15 +54,15 @@ public class BackroomsMod implements ModInitializer {
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
 
-
+		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
 			List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
 
 			for (ServerPlayerEntity player : players) {
-				if(player.age % 400 == 0 && player.age != 0) { // 400 = 20tps*20s
-					WretchedComponent wretched = WRETCHED.get(player);
-					wretched.increment();
-					LOGGER.info(String.valueOf(wretched.getValue())); // debugging reasons
+				// Iterating through every player
+				// And check if they're on the server for at least (wretchedCycleStepTime) seconds
+				if((player.age % (20*BackroomsConfig.getInstance().wretchedCycleStepTime)) == 0 && player.age != 0) {
+                    this.applyWretchedCycle(player);
 				}
 			}
 		});
@@ -76,4 +77,21 @@ public class BackroomsMod implements ModInitializer {
 		return new Identifier("backrooms", id);
 	}
 
+	public static void applyWretchedCycle(ServerPlayerEntity player) {
+		WretchedComponent wretched = WRETCHED.get(player);
+		wretched.increment();
+		if(wretched.getValue() >= 24 && wretched.getValue() <= 49 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999));
+
+		} else if(wretched.getValue() >= 50 && wretched.getValue() <= 74 && !player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
+			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.ROTTEN, 9999));
+
+		} else if(wretched.getValue() >= 75 && !player.hasStatusEffect(BackroomStatusEffects.WRETCHED)) {
+			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
+			player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.WRETCHED, 9999));
+		}
+		LOGGER.info(String.valueOf(wretched.getValue())); // debugging reasons
+	}
 }

@@ -85,5 +85,14 @@
       "block.backrooms.magenta_carpeting": "Magenta Carpeting",
       "block.backrooms.orange_carpeting": "Orange Carpeting",
       "block.backrooms.purple_carpeting": "Purple Carpeting",
-      "block.backrooms.white_carpeting": "White Carpeting"
+      "block.backrooms.white_carpeting": "White Carpeting",
+      "effect.backrooms.rotten": "Rotten",
+      "effect.backrooms.ragged": "Ragged",
+      "effect.backrooms.wretched": "Wretched",
+      "text.autoconfig.backrooms.option.condensedDimensions": "Condensed dimensions",
+      "text.autoconfig.backrooms.option.delayMusicWithRadio": "Music delay",
+      "text.autoconfig.backrooms.option.disableStrongShaders": "Disable strong shaders",
+      "text.autoconfig.backrooms.option.suffocationChance": "Suffocation chance",
+      "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing",
+      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle"
 }

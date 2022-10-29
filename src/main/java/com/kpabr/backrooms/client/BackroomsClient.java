@@ -56,6 +56,10 @@ public class BackroomsClient implements ClientModInitializer {
 		EntityRendererRegistry.INSTANCE.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
 	}
 
+	public static MinecraftClient getClient() {
+		return MinecraftClient.getInstance();
+	}
+
 
     /*public void receiveEntityPacket() {
         //packets

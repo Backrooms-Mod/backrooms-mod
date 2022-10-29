@@ -1,7 +1,9 @@
 package com.kpabr.backrooms.items;
 
+import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.init.BackroomStatusEffects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -46,8 +48,19 @@ public class AlmondWaterItem extends Item {
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1));
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 30, 0));
 
+
+			int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
 			WretchedComponent wretched = WRETCHED.get(user);
-			wretched.remove(BackroomsConfig.getInstance().almondMilkRestoring);
+			wretched.remove(almondMilkRestoring+1); // +1 because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately
+			BackroomsMod.applyWretchedCycle((ServerPlayerEntity) user);
+			if(wretched.getValue() < 24 && wretched.getValue()+almondMilkRestoring >= 24) {
+				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
+			} else if(wretched.getValue() < 50 && wretched.getValue()+almondMilkRestoring >= 50) {
+				user.removeStatusEffect(BackroomStatusEffects.ROTTEN);
+			} else if(wretched.getValue() < 75 && wretched.getValue()+almondMilkRestoring >= 75) {
+				user.removeStatusEffect(BackroomStatusEffects.WRETCHED);
+			}
+
 		}
 
 		if (stack.isEmpty()) {

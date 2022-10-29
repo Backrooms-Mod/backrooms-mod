@@ -24,6 +24,9 @@ public class BackroomsConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip()
     public int almondMilkRestoring = 2;
 
+    @ConfigEntry.Gui.Tooltip()
+    public int wretchedCycleStepTime = 20; // by default every 20 seconds we increment player's wretched parameter
+
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);
     }
