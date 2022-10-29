@@ -3,13 +3,11 @@ package com.kpabr.backrooms.items;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.Item.Settings;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
@@ -24,10 +22,10 @@ import net.minecraft.world.World;
 
 import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
-public class SpecialWaterItem extends Item {
+public class AlmondWaterItem extends Item {
 	private static final int MAX_USE_TIME = 40;
 
-	public SpecialWaterItem(Settings settings) {
+	public AlmondWaterItem(Settings settings) {
 		super(settings);
 	}
 
@@ -40,7 +38,6 @@ public class SpecialWaterItem extends Item {
 		}
 
 		if (!world.isClient) {
-
 			user.removeStatusEffect(StatusEffects.POISON);
 			user.removeStatusEffect(StatusEffects.HUNGER);
 			user.removeStatusEffect(StatusEffects.NAUSEA);
@@ -48,6 +45,7 @@ public class SpecialWaterItem extends Item {
 			user.removeStatusEffect(StatusEffects.WITHER);
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1));
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 30, 0));
+
 			WretchedComponent wretched = WRETCHED.get(user);
 			wretched.remove(BackroomsConfig.getInstance().almondMilkRestoring);
 		}
