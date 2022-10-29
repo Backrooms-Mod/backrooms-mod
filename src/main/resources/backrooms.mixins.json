@@ -1,14 +1,16 @@
 {
-	"required": true,
-	"minVersion": "0.8",
-	"package": "com.kpabr.backrooms.mixins",
-	"compatibilityLevel": "JAVA_16",
-	"mixins": [
-	],
-	"client": [
-		"InGameHudMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.kpabr.backrooms.mixins",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "EntityAccessor",
+    "EntityMixin"
+  ],
+  "client": [
+    "InGameHudMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
