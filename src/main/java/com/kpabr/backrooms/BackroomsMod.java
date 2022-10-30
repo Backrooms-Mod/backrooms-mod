@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
@@ -62,7 +63,7 @@ public class BackroomsMod implements ModInitializer {
 				// Iterating through every player
 				// And check if they're on the server for at least (wretchedCycleStepTime) seconds
 				if((player.age % (20*BackroomsConfig.getInstance().wretchedCycleStepTime)) == 0 && player.age != 0) {
-                    this.applyWretchedCycle(player);
+                    applyWretchedCycle(player);
 				}
 			}
 		});
@@ -78,6 +79,9 @@ public class BackroomsMod implements ModInitializer {
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
+		if(!Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "backrooms")) {
+			return;
+		}
 		WretchedComponent wretched = WRETCHED.get(player);
 		wretched.increment();
 		if(wretched.getValue() >= 24 && wretched.getValue() <= 49 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
