@@ -62,7 +62,6 @@ public class LevelZeroBiomeSource extends BiomeSource {
         int i = x >> 2;
         int j = z >> 2;
         float noiseAt = LevelZeroBiomeSource.getNoiseAt(this.noise, i, j);
-        BackroomsMod.LOGGER.info(String.valueOf(noiseAt));
         if (noiseAt > 40.0f) {
             return this.crimsonWallsBiome;
         }
