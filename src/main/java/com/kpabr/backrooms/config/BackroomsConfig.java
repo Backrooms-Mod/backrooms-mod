@@ -20,6 +20,9 @@ public class BackroomsConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip()
     public int wretchedCycleStepTime = 20; // by default every 20 seconds we increment player's wretched parameter
 
+    @ConfigEntry.Gui.Tooltip()
+    public double moldyCorkTileChance = 0.05;
+
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);
     }

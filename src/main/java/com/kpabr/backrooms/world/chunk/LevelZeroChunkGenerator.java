@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
+import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -56,11 +57,12 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
     });
 
 
-
+    private Random moldPlacementRandom;
     private final long worldSeed;
     public LevelZeroChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_zero"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
+        this.moldPlacementRandom = new Random(worldSeed);
     }
 
     @Override
@@ -258,12 +260,14 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
 
                         if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
                             replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
-                        }
-                        if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                        } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                             replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
-                        }
-                        if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
+                        } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
                             replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
+                        } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
+                            if(moldPlacementRandom.nextDouble() < BackroomsConfig.getInstance().moldyCorkTileChance) {
+                                replace(BackroomsBlocks.MOLDY_CORK_TILE, chunk, pos);
+                            }
                         }
                     }
                 }

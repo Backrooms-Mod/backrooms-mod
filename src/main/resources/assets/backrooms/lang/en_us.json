@@ -92,5 +92,6 @@
       "text.autoconfig.backrooms.option.disableStrongShaders": "Disable strong shaders",
       "text.autoconfig.backrooms.option.suffocationChance": "Suffocation chance",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing",
-      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle"
+      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle",
+      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance to spawn moldy cork in crimson halls"
 }
