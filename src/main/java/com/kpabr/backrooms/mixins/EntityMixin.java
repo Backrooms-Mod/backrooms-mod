@@ -8,6 +8,7 @@ import com.kpabr.backrooms.world.biome.LevelZeroBiomeSource;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FallingBlock;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -15,6 +16,7 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +25,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Random;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -37,9 +41,7 @@ public abstract class EntityMixin {
             if (!world.isClient) {
                 if (isInsideHardBlocks(entity) && world.getRegistryKey() == World.OVERWORLD && !((ServerPlayerEntity) entity).isCreative()) {
                     if (world.random.nextDouble() < BackroomsConfig.getInstance().suffocationChance) {
-                        // TODO: implement teleporting to nearest safe biome
-                        //getServer().getWorld(BackroomsLevels.TEST_LEVEL.getWorldKey()).locateBiome(LevelZeroBiomeSource.class., new BlockPos(0, 30, 0), 1000, 4);
-                        ((ServerPlayerEntity) entity).teleport(getServer().getWorld(BackroomsLevels.TEST_LEVEL.getWorldKey()), 0,30,0,0,10);
+                        teleportToLevel((ServerPlayerEntity) entity, getServer().getWorld(BackroomsLevels.TEST_LEVEL.getWorldKey()));
                     }
                 }
             }
@@ -62,5 +64,23 @@ public abstract class EntityMixin {
                     // if block isn't falling(so it's not gravel or sand)
                     && !(blockState.getBlock() instanceof FallingBlock);
         });
+    }
+
+    private static void teleportToLevel(ServerPlayerEntity entity, World world) {
+        Random rand = world.getRandom();
+
+        int newX = (rand.nextInt(25) * 16) + rand.nextInt(16);
+        int newZ = (rand.nextInt(25) * 16) + rand.nextInt(16);
+        int newY = 30;
+
+        BlockPos.Mutable mutBlockPos = new BlockPos(newX, newY, newZ).mutableCopy().move(Direction.DOWN);
+        while (!world.isAir(mutBlockPos) && world.getBlockState(mutBlockPos) != null) {
+            mutBlockPos.move(Direction.SOUTH).move(Direction.EAST);
+            if (world.isAir(mutBlockPos.up()) && !world.isAir(mutBlockPos)) {
+                mutBlockPos.move(Direction.UP);
+            }
+        }
+
+        entity.teleport((ServerWorld) world, mutBlockPos.getX() + 0.5, mutBlockPos.getY(), mutBlockPos.getZ() + 0.5, entity.getYaw(), entity.getPitch());
     }
 }
