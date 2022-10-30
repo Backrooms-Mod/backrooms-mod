@@ -152,11 +152,8 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
             }
             Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y)); //Create an unique random Object for the current floor.
             if(fullFloorRandom.nextFloat() < 0.1F || true){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
-                //Place a large (7x7 block) room in the current chunk at the current floor.
+                //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
 
-                //Choose a spot in the chunk.
-                int x=fullFloorRandom.nextInt(3);
-                int z=fullFloorRandom.nextInt(3);
                 //Choose the room that will be placed.
                 int roomNumber = (fullFloorRandom.nextInt(12) + 1);
                 if(fullFloorRandom.nextFloat() < 0.6F){ //The number with an F directly after it denotes the probability of an empty room being generated regardless.
@@ -165,15 +162,24 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
                 BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
-                //Fill the area the room will be placed in with air.
-                for(int i = 0; i < 7; i++){
-                    for(int j = 0; j < this.loadedStructures.get("backrooms_large_" + roomNumber).sizeY; j++){
-                        for(int k = 0; k < 7; k++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                //Define some variables to be used later.
+                int sizeX=dir.equals(Direction.NORTH) || dir.equals(Direction.SOUTH) ? this.loadedStructures.get("backrooms_large_" + roomNumber).sizeX : this.loadedStructures.get("backrooms_large_" + roomNumber).sizeZ;
+                int sizeY=this.loadedStructures.get("backrooms_large_" + roomNumber).sizeY;
+                int sizeZ=dir.equals(Direction.NORTH) || dir.equals(Direction.SOUTH) ? this.loadedStructures.get("backrooms_large_" + roomNumber).sizeZ : this.loadedStructures.get("backrooms_large_" + roomNumber).sizeX;
+                if(6 * y + sizeY < 1 + 6 * 6) { //Only generate the structure if it has enough vertical space to generate.
+                    //Choose a spot in the chunk.
+                    int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
+                    int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
+                    //Fill the area the room will be placed in with air.
+                    for (int i = 0; i < sizeX; i++) {
+                        for (int j = 0; j < sizeY; j++) {
+                            for (int k = 0; k < sizeZ; k++) {
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
                         }
                     }
+                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), "backrooms_large_" + roomNumber, rotation); //Actually generate the room.
                 }
-                generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), "backrooms_large_" + roomNumber, rotation); //Actually generate the room.
             }
         }
         //Mold placement code; will be subject to heavy revisions, so ignore for now.
@@ -204,7 +210,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         // Place bedrock bricks at the roof of chunk
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) {
-                region.setBlockState(new BlockPos(x, 1+4+2 + 6 * 5, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 1 + 6 * 6, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
 
