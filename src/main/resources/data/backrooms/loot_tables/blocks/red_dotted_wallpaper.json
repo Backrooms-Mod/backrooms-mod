@@ -6,7 +6,7 @@
           "entries": [
             {
               "type": "minecraft:item",
-              "name": "backrooms:plasterwall"
+              "name": "backrooms:red_dotted_wallpaper"
             }
           ],
           "conditions": [
