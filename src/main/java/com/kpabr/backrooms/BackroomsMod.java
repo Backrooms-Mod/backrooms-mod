@@ -80,8 +80,13 @@ public class BackroomsMod implements ModInitializer {
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
 		if(!Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "backrooms")) {
-			return;
+			if(!Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "minecraft")) {
+				WretchedComponent wretched = WRETCHED.get(player);
+				wretched.decrement();
+				return;
+			}
 		}
+
 		WretchedComponent wretched = WRETCHED.get(player);
 		wretched.increment();
 		if(wretched.getValue() >= 24 && wretched.getValue() <= 49 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
