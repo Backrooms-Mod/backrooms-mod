@@ -254,13 +254,13 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         ChunkPos chunkPos = chunk.getPos();
-        BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
+        BlockPos biomePos = chunkPos.getBlockPos(0, 0, 0);
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
                     // does a swap from the various stones to the custom blocks
-                    if(checkBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, chunk, biomePos)) {
+                    if(checkBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, chunk, biomePos.add(x, y, z))) {
                         BlockPos pos = chunkPos.getBlockPos(x, y, z);
                         BlockState block = chunk.getBlockState(pos);
 
