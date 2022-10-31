@@ -7,14 +7,21 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
+import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
+
+import static java.lang.Math.abs;
+import static java.lang.Math.sqrt;
+import static net.minecraft.util.math.MathHelper.clamp;
+import static net.minecraft.util.math.MathHelper.square;
 
 public class LevelZeroBiomeSource extends BiomeSource {
     // BIOME SOURCE for all the biomes in the backrooms test dimension!
@@ -25,7 +32,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
             instance.group(RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((biomeSource) ->
                     biomeSource.BIOME_REGISTRY), Codec.LONG.fieldOf("seed").stable().forGetter((biomeSource) ->
                     biomeSource.seed)).apply(instance, instance.stable(LevelZeroBiomeSource::new)));
-    private final SimplexNoiseSampler noise;
+    private final PerlinNoiseSampler noise;
     private final long seed;
     private final RegistryEntry<Biome> crimsonWallsBiome;
     private final RegistryEntry<Biome> normalBiome;
@@ -43,7 +50,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
         this.normalBiome = normalBiome;
         this.crimsonWallsBiome = crimsonWallsBiome;
         ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
-        this.noise = new SimplexNoiseSampler(chunkRandom);
+        this.noise = new PerlinNoiseSampler(chunkRandom);
     }
 
     @Override
@@ -59,12 +66,11 @@ public class LevelZeroBiomeSource extends BiomeSource {
     // Also you should use this method
     @Override
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
-        int i = x >> 2;
-        int j = z >> 2;
-        float noiseAt = LevelZeroBiomeSource.getNoiseAt(this.noise, i, j);
-        if (noiseAt > 40.0f) {
+        double noiseAt = LevelZeroBiomeSource.getNoiseAt(this.noise, x, y, z);
+        if (noiseAt <= 0.3) {
             return this.crimsonWallsBiome;
         }
+
         return this.normalBiome;
     }
 
@@ -72,13 +78,15 @@ public class LevelZeroBiomeSource extends BiomeSource {
         return this.seed == seed;
     }
 
-    public static float getNoiseAt(SimplexNoiseSampler simplexNoiseSampler, int i, int j) {
-        int k = i / 2;
-        int l = j / 2;
+    public static double getNoiseAt(PerlinNoiseSampler perlinNoiseSampler, int x, int y, int z) {
 
-        float f = MathHelper.sqrt(i * i + j * j) * 8.0f;
-        f = MathHelper.clamp(f, -100.0f, 80.0f);
-        return f;
+        double n = perlinNoiseSampler.sample(x*0.01, y*0.01, z*0.01);
+
+        //Transform the range to [0.0, 1.0], supposing that the range of Noise2D is [-1.0, 1.0]
+        n += 1.0;
+        n /= 2.0;
+
+        return MathHelper.clamp(n, 0.0, 1.5);
     }
 }
 

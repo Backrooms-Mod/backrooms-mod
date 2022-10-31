@@ -7,4 +7,5 @@ public interface WretchedComponent extends Component {
     void setValue(int value);
     void remove(int amount);
     void increment();
+    void decrement();
 }

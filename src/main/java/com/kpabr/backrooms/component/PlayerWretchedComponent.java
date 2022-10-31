@@ -27,6 +27,11 @@ public class PlayerWretchedComponent implements WretchedComponent {
     }
 
     @Override
+    public void decrement() {
+        this.wretched--;
+    }
+
+    @Override
     public void readFromNbt(NbtCompound tag) {
         this.wretched = tag.getInt("wretched");
     }
