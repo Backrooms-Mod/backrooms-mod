@@ -286,6 +286,20 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                             }
                         }
                     }
+                    if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
+                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                        BlockState block = chunk.getBlockState(pos);
+
+                        if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
+                            replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
+                        } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                            replace(BackroomsBlocks.CEMENT, chunk, pos);
+                        } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
+                            replace(BackroomsBlocks.CEMENT, chunk, pos);
+                        } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
+                            replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                        }
+                    }
                 }
             }
         }
