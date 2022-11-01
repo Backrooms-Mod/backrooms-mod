@@ -44,7 +44,7 @@ import java.util.Random;
 
 public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
-    public Long attacktimer = 11L;
+    public Long attacktimer = 18L;
     private Long runtimer = 60L;
     private Random random = new Random(123456);
     private Long lookaroundtimerON = random.nextLong(6000L);
@@ -52,7 +52,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     public Long LookaroundtimerFOR = 0L;
     public BlockPos pos = this.getBlockPos();
 
-    private double speed = 0.5f;
+    private final double speed = 1f;
 
 
     private static final TrackedData<Boolean> ISINVICINITYOFPLAYER = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -110,8 +110,8 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 60)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 15);
     }
 
 
