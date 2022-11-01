@@ -1,19 +1,9 @@
 package com.kpabr.backrooms.entity.goals;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -49,11 +39,12 @@ private Random random = new Random();
             return false;
     }
 
-        @Override
+    @Override
     public boolean shouldRunEveryTick(){
             return true;
         }
-        @Override
+
+    @Override
     public void start(){
         LivingEntity player = this.mob.getTarget();
         if(player != null) {
@@ -61,7 +52,8 @@ private Random random = new Random();
             submitted = true;
         }
     }
-        @Override
+
+    @Override
     public void tick() {
             LivingEntity player = this.mob.getTarget();
             if (!hangery && submitted && player != null) {

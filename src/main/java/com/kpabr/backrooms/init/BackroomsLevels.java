@@ -26,14 +26,6 @@ public class BackroomsLevels {
     public static final RegistryKey<Biome> LEVEL_ZERO_NORMAL_BIOME = get("normal_biome", LevelZeroNormalBiome.create());
     public static final RegistryKey<Biome> CRIMSON_WALLS_BIOME = get("crimson_walls", CrimsonHallsBiome.create());
 
-    //of(new StrongLiminalShader(BackroomsMod.id("communal_corridors")))
-
-    //.of(new LiminalSkyRenderer.SkyboxSky(BackroomsMod.id("textures/sky/snow")))
-
-    //.of(new MusicSound(BackroomsSoundEvents.MUSIC_COMMUNAL_CORRIDORS, 3000, 8000, true))
-
-
-
     public static final LiminalEffects LEVEL_ZERO_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
     public static final LiminalWorld TEST_LEVEL = get("level_zero", new LiminalWorld(BackroomsMod.id("level_zero"), DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, BackroomsMod.id("level_zero")), BackroomsMod.id("level_zero"), 0.075F),
             (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->

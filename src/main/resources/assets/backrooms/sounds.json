@@ -8,5 +8,37 @@
     "sounds": [
       "backrooms:humbuzz"
     ]
+  },
+  "entity.hound.idle": {
+    "category": "hostile",
+    "sounds": [
+      "backrooms:mob/hound/idle1",
+      "backrooms:mob/hound/idle2",
+      "backrooms:mob/hound/idle3"
+    ],
+    "subtitle": "subtitles.entity.hound.idle"
+  },
+  "entity.hound.attack": {
+    "category": "hostile",
+    "sounds": [
+      "backrooms:mob/hound/attack1",
+      "backrooms:mob/hound/attack2"
+    ],
+    "subtitle": "subtitles.entity.hound.attack"
+  },
+  "entity.hound.hurt": {
+    "category": "hostile",
+    "sounds": [
+      "backrooms:mob/hound/hurt1",
+      "backrooms:mob/hound/hurt2"
+    ],
+    "subtitle": "subtitles.entity.hound.hurt"
+  },
+  "entity.hound.death": {
+    "category": "hostile",
+    "sounds": [
+      "backrooms:mob/hound/death"
+    ],
+    "subtitle": "subtitles.entity.hound.death"
   }
 }
