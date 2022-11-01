@@ -5,12 +5,21 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class BackroomsSounds implements ModInitializer {
-    public static final Identifier FIRESALT_LAND = new Identifier("backrooms:firesalt_land");
-    public static SoundEvent FIRESALT_LAND_EVENT = new SoundEvent(FIRESALT_LAND);
+import static com.kpabr.backrooms.util.RegistryHelper.get;
 
-    @Override
-    public void onInitialize() {
-        Registry.register(Registry.SOUND_EVENT, FIRESALT_LAND, FIRESALT_LAND_EVENT);
+public class BackroomsSounds {
+    public static SoundEvent FIRESALT_LAND_EVENT;
+    public static SoundEvent HUMBUZZ_LEVEL_0;
+
+    public static SoundEvent HOUND_ATTACK;
+
+    public static void init() {
+        HUMBUZZ_LEVEL_0 = get("humbuzz");
+        FIRESALT_LAND_EVENT = get("firesalt_land");
+        initHoundSounds();
+    }
+
+    private static void initHoundSounds() {
+        HOUND_ATTACK = get("entity.hound.attack");
     }
 }

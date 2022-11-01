@@ -32,7 +32,7 @@ public class BackroomsMod implements ModInitializer {
 	public void onInitialize() {
 		BackroomsConfig.init();
 		LOGGER.info("Loaded config");
-		BackroomsSoundEvents.init();
+		BackroomsSounds.init();
 		LOGGER.info("Loaded sounds");
 		BackroomsParticles.init();
 		LOGGER.info("Loaded particles");

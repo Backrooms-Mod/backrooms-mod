@@ -1,11 +1,8 @@
 package com.kpabr.backrooms.world.biome;
 
-import com.kpabr.backrooms.entity.living.HoundLivingEntity;
 import com.kpabr.backrooms.init.BackroomsEntities;
-import com.kpabr.backrooms.init.BackroomsSoundEvents;
-import net.minecraft.entity.EntityType;
+import com.kpabr.backrooms.init.BackroomsSounds;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
@@ -25,7 +22,7 @@ public class CrimsonHallsBiome {
         biomeEffects.waterColor(13548960);
         biomeEffects.waterFogColor(16735821);
         biomeEffects.fogColor(11548232);
-        biomeEffects.loopSound(BackroomsSoundEvents.HUMBUZZ_LEVEL_0);
+        biomeEffects.loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
         BiomeEffects effects = biomeEffects.build();
 
         biome.spawnSettings(spawnSettings.build());

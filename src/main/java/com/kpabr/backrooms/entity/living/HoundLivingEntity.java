@@ -2,6 +2,7 @@ package com.kpabr.backrooms.entity.living;
 
 import com.kpabr.backrooms.entity.goals.HoundRunningGoal;
 import com.kpabr.backrooms.entity.goals.SubmissionGoal;
+import com.kpabr.backrooms.init.BackroomsSounds;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -44,7 +45,7 @@ import java.util.Random;
 
 public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
-    public Long attacktimer = 11L;
+    public Long attacktimer = 18L;
     private Long runtimer = 60L;
     private Random random = new Random(123456);
     private Long lookaroundtimerON = random.nextLong(6000L);
@@ -52,7 +53,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     public Long LookaroundtimerFOR = 0L;
     public BlockPos pos = this.getBlockPos();
 
-    private double speed = 0.5f;
+    private final double speed = 1f;
 
 
     private static final TrackedData<Boolean> ISINVICINITYOFPLAYER = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
@@ -79,6 +80,9 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     public void tick() {
         super.tick();
         if (this.IsAttacking()) {
+            if(attacktimer == 20) {
+                this.playSound(BackroomsSounds.HOUND_ATTACK, 10f, 10f);
+            }
             if (--attacktimer <= 0L) {
                 this.setIsAttacking(false);
                 this.attacktimer = 20L;
@@ -110,8 +114,8 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         return MobEntity.createMobAttributes()
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 60)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35);
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25);
     }
 
 

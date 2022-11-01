@@ -86,12 +86,25 @@
       "block.backrooms.orange_carpeting": "Orange Carpeting",
       "block.backrooms.purple_carpeting": "Purple Carpeting",
       "block.backrooms.white_carpeting": "White Carpeting",
+
       "effect.backrooms.rotten": "Rotten",
       "effect.backrooms.ragged": "Ragged",
       "effect.backrooms.wretched": "Wretched",
+
       "text.autoconfig.backrooms.option.disableStrongShaders": "Disable strong shaders",
       "text.autoconfig.backrooms.option.suffocationChance": "Suffocation chance",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing",
       "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle",
-      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance to spawn moldy cork in crimson halls"
+      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance to spawn moldy cork in crimson halls",
+
+      "subtitles.entity.hound.idle": "Hound growls",
+      "subtitles.entity.hound.attack": "Hound attacks",
+      "subtitles.entity.hound.hurt": "Hound hurts",
+      "subtitles.entity.hound.death": "Hound dies",
+
+      "subtitles.entity.skin_stealer.idle": "Skin stealer moans",
+      "subtitles.entity.skin_stealer.attack": "Skin stealer attacks",
+      "subtitles.entity.skin_stealer.kill": "Skin stealer kills mob",
+      "subtitles.entity.skin_stealer.hurt": "Skin stealer hurts",
+      "subtitles.entity.skin_stealer.death": "Skin stealer dies"
 }

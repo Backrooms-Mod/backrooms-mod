@@ -92,5 +92,16 @@
       "text.autoconfig.backrooms.option.suffocationChance": "Шанс задохнуться",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Восстановление миндальным молоком",
       "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Секунды между следующими шагами цикла убогих",
-      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс заспавнится плесневелой плитке в багровых корридорах"
+      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс заспавнится плесневелой плитке в багровых корридорах",
+
+      "subtitles.entity.hound.idle": "Гончая воет",
+      "subtitles.entity.hound.attack": "Гончая атакует",
+      "subtitles.entity.hound.hurt": "Гончая получила урон",
+      "subtitles.entity.hound.death": "Гончая умирает",
+
+      "subtitles.entity.skin_stealer.idle": "Кожекрад стонет",
+      "subtitles.entity.skin_stealer.attack": "Кожекрад атакует",
+      "subtitles.entity.skin_stealer.kill": "Кожекрад убивает",
+      "subtitles.entity.skin_stealer.hurt": "Кожекрад получил урон",
+      "subtitles.entity.skin_stealer.death": "Кожекрад умирает"
     }
