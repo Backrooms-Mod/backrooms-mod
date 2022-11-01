@@ -156,7 +156,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
 
                 //Define the amounts of regular and nofill rooms.
                 int regularRooms=12;
-                int nofillRooms=1;
+                int nofillRooms=3;
                 //Choose the room that will be placed.
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
                 if(fullFloorRandom.nextFloat() < 0.6F){ //The number with an F directly after it denotes the probability of an empty room being generated regardless.
@@ -230,7 +230,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void storeStructures(ServerWorld world) {
         store("backrooms_large", world, 0, 12); //Makes it so the large regular rooms can be used while generating.
-        store("backrooms_large_nofill", world, 1, 1); //Makes it so the large nofill rooms can be used while generating.
+        store("backrooms_large_nofill", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.
     }
 
     @Override
