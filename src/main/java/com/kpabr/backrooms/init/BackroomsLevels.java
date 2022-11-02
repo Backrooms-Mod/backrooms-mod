@@ -11,6 +11,7 @@ import com.kpabr.backrooms.world.biome.Level1BiomeSource;
 import com.kpabr.backrooms.world.biome.CrimsonHallsBiome;
 import com.kpabr.backrooms.world.biome.LevelZeroNormalBiome;
 import com.kpabr.backrooms.world.biome.CementHallsBiome;
+import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import net.ludocrypt.limlib.api.LiminalEffects;
 import net.ludocrypt.limlib.api.LiminalWorld;
@@ -35,12 +36,13 @@ public class BackroomsLevels {
             new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new LevelZeroChunkGenerator(new LevelZeroBiomeSource(biomeRegistry, seed), seed)), LEVEL_ZERO_EFFECTS));
     public static final LiminalWorld LEVEL_1 = get("level_1", new LiminalWorld(BackroomsMod.id("level_1"), DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, BackroomsMod.id("level_1")), BackroomsMod.id("level_1"), 0.075F),
             (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->
-                    new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new LevelZeroChunkGenerator(new Level1BiomeSource(biomeRegistry, seed), seed)), LEVEL_ZERO_EFFECTS));
+                    new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new LevelOneChunkGenerator(new Level1BiomeSource(biomeRegistry, seed), seed)), LEVEL_ZERO_EFFECTS));
 
     public static void init() {
         Registry.register(Registry.BIOME_SOURCE, BackroomsMod.id("level_zero_biome_source"), LevelZeroBiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, BackroomsMod.id("level_1_biome_source"), Level1BiomeSource.CODEC);
         get("level_zero_chunk_generator", LevelZeroChunkGenerator.CODEC);
+        get("level_one_chunk_generator", LevelOneChunkGenerator.CODEC);
     }
 
 }

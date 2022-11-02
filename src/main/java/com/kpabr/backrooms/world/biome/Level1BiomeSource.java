@@ -1,27 +1,20 @@
 package com.kpabr.backrooms.world.biome;
 
 import com.google.common.collect.ImmutableList;
-import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
-import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
-import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.sqrt;
-import static net.minecraft.util.math.MathHelper.clamp;
-import static net.minecraft.util.math.MathHelper.square;
 
 public class Level1BiomeSource extends BiomeSource {
     // BIOME SOURCE for all the biomes in level 1
@@ -65,6 +58,7 @@ public class Level1BiomeSource extends BiomeSource {
         double noiseAt = Level1BiomeSource.getNoiseAt(this.noise, x, y, z);
         return this.cementWallsBiome;
     }
+
 
     public boolean matches(long seed) {
         return this.seed == seed;
