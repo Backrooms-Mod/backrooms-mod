@@ -5,6 +5,8 @@ import com.kpabr.backrooms.client.BackroomsClient;
 import com.kpabr.backrooms.init.BackroomStatusEffects;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.render.*;
@@ -29,6 +31,7 @@ public abstract class InGameHudMixin {
     @Shadow public float vignetteDarkness;
     private static final Identifier VIGNETTE_TEXTURE = new Identifier("textures/misc/vignette.png");
 
+    @Environment(EnvType.CLIENT)
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V", shift = At.Shift.AFTER), slice = @Slice(from = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;enableBlend()V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F")))
     private void renderWretchedVignette(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         boolean wretchedCycleEffects = client.player.hasStatusEffect(BackroomStatusEffects.ROTTEN) || client.player.hasStatusEffect(BackroomStatusEffects.WRETCHED);
