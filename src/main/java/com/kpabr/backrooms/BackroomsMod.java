@@ -15,6 +15,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +80,10 @@ public class BackroomsMod implements ModInitializer {
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
+		if(player.interactionManager.getGameMode().equals(GameMode.CREATIVE) || player.interactionManager.getGameMode().equals(GameMode.SPECTATOR)) {
+			return;
+		}
+
 		if(!Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "backrooms")) {
 			if(Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "minecraft")) {
 				WretchedComponent wretched = WRETCHED.get(player);
