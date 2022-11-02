@@ -22,10 +22,6 @@ repositories {
 		url = 'https://jitpack.io/'
 	}
 	maven {
-		name = 'synchlabs'
-		url = 'https://github.com/Synchlabs/ExdimapiREPO'
-	}
-	maven {
 		url "https://maven.shedaniel.me/"
 	}
 	maven {
@@ -48,13 +44,15 @@ dependencies {
 	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.51'
 
 	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.config_version}"
-	includeMod "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
+	modImplementation "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
 
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.1.4"
 	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.1.4"
+
+	include "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
 	// Includes Cardinal Components API as a Jar-in-Jar dependency (optional)
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.1.4"
-	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.1.4"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+	include "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
 
 }
 
