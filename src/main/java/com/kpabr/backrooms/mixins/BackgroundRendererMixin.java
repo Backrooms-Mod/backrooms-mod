@@ -20,7 +20,7 @@ public abstract class BackgroundRendererMixin {
 	@ModifyVariable(method = "render", at = @At(value = "STORE", ordinal = 2), index = 7)
 	private static float corners$modifySkyColor(float in) {
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client.world.getRegistryKey().equals(BackroomsLevels.TEST_LEVEL.getWorldKey())) {
+		if (client.world.getRegistryKey().equals(BackroomsLevels.LEVEL_0.getWorldKey())) {
 			return 1.0F;
 		}
 		return in;

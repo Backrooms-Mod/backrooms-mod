@@ -67,6 +67,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
     @Override
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         double noiseAt = LevelZeroBiomeSource.getNoiseAt(this.noise, x, y, z);
+        // Higher values = often spawn of biome
         if (noiseAt <= 0.3) {
             return this.crimsonWallsBiome;
         }

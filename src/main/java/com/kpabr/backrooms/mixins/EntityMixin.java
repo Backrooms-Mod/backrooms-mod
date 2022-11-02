@@ -41,7 +41,7 @@ public abstract class EntityMixin {
             if (!world.isClient) {
                 if (isInsideHardBlocks(entity) && world.getRegistryKey() == World.OVERWORLD && !((ServerPlayerEntity) entity).isCreative()) {
                     if (world.random.nextDouble() < BackroomsConfig.getInstance().suffocationChance) {
-                        teleportToLevel((ServerPlayerEntity) entity, getServer().getWorld(BackroomsLevels.TEST_LEVEL.getWorldKey()));
+                        teleportToLevel((ServerPlayerEntity) entity, getServer().getWorld(BackroomsLevels.LEVEL_0.getWorldKey()));
                     }
                 }
             }

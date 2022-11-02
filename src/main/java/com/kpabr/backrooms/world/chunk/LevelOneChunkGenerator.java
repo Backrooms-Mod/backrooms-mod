@@ -199,8 +199,10 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         }
         // Place bedrock bricks at the roof of chunk
         for (int x = startX; x < startX + 16; x++) {
-            for (int z = startZ; z < startZ + 16; z++) {
+            for (int z = startZ; z < startZ + 16; z++) { // 3 layers to be
                 region.setBlockState(new BlockPos(x, 1 + 6 * 6, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 2 + 6 * 6, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 3 + 6 * 6, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
 
