@@ -266,6 +266,8 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                             replace(BackroomsBlocks.CEMENT, chunk, pos);
                         } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
                             replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                        } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
+                            replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
                         }
                     }
                 }
