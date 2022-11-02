@@ -24,7 +24,7 @@ import static net.minecraft.util.math.MathHelper.clamp;
 import static net.minecraft.util.math.MathHelper.square;
 
 public class LevelZeroBiomeSource extends BiomeSource {
-    // BIOME SOURCE for all the biomes in the backrooms test dimension!
+    // BIOME SOURCE for all the biomes in the level zero dimension!
     // To add new biome you should make a new parameter in both constructors
     // and create new variable containing new biome
 
