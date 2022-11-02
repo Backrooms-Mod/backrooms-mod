@@ -4,8 +4,11 @@
   "package": "com.kpabr.backrooms.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BrewingRecipeRegistryInvoker",
+    "BrewingRecipeRegistryMixin",
     "EntityAccessor",
-    "EntityMixin"
+    "EntityMixin",
+    "NetherWartAccessor"
   ],
   "client": [
     "InGameHudMixin"
