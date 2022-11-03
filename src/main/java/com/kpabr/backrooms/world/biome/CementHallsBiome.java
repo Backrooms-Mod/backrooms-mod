@@ -23,7 +23,6 @@ public class CementHallsBiome {
         biomeEffects.waterFogColor(10921378);
         biomeEffects.fogColor(10921378);
         biomeEffects.grassColor(13818488);
-        biomeEffects.loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
         BiomeEffects effects = biomeEffects.build();
 
         biome.spawnSettings(spawnSettings.build());
