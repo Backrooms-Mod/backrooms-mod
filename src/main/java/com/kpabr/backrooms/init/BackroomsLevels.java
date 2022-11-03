@@ -57,6 +57,10 @@ public class BackroomsLevels {
 
     public static LiminalWorld registerLevel(Identifier name, Class chunkGenerator, Class biomeSource) {
         try {
+            // getting constructors of chunkGenerator and biomeSource
+            // related questions if you wanna know how it's working
+            // https://www.tutorialspoint.com/java/lang/class_getdeclaredconstructor.htm
+            // https://stackoverflow.com/questions/8249050/java-instantiate-class-at-runtime-with-parameters
             Constructor chunkGeneratorConstructor = chunkGenerator.getDeclaredConstructor(BiomeSource.class, long.class);
             chunkGeneratorConstructor.setAccessible(true);
             Constructor biomeSourceConstructor = biomeSource.getDeclaredConstructor(Registry.class, long.class);
@@ -80,10 +84,7 @@ public class BackroomsLevels {
 
     public static LiminalWorld registerLevelWithEffects(Identifier name, Class<ChunkGenerator> chunkGenerator, Class<Object[]> biomeSource, LiminalEffects effects) {
         try {
-            // getting constructors of chunkGenerator and biomeSource
-            // related questions if you wanna know how it's working
-            // https://www.tutorialspoint.com/java/lang/class_getdeclaredconstructor.htm
-            // https://stackoverflow.com/questions/8249050/java-instantiate-class-at-runtime-with-parameters
+
 
 
             Constructor<ChunkGenerator> chunkGeneratorConstructor = chunkGenerator.getDeclaredConstructor(BiomeSource.class, long.class);
