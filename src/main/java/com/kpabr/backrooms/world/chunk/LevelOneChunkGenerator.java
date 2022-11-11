@@ -91,6 +91,8 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         int startZ = chunkPos.getStartZ();
         //Define how many floors the level will have.
         int floorCount=5;
+        //Define a position for checking biomes
+        BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
         //Create 5 floors, top to bottom.
         for (int y = floorCount; y >= 0; y--) {
             //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
@@ -98,6 +100,12 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                 for (int z = 3; z >= 0; z--) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y)); //Make a Random object controlling the generation of the section.
                     int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0); //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
+                    if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)){
+                        wallType = (random.nextFloat() < 0.3F ? 1 : 0) + (random.nextFloat() < 0.3F ? 2 : 0);
+                    }
+                    if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)){
+                        wallType=0;
+                    }
                     if((wallType & 1) == 1){ //Check if the arrangement includes the eastern wall.
                         //Create the eastern wall.
                         for(int i = 0; i < 3; i++){
@@ -133,7 +141,12 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                     if(x == 3 && z == 3){ //If you're on the southeasternmost spot on the chunk, always make a pillar.
                         pillar = true;
                     }
-                    pillar = pillar||(random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
+                    if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos) && (x & 1) == 1){
+                        pillar = true;
+                    }
+                    if(!checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
+                        pillar = pillar || (random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
+                    }
                     if(pillar){
                         //Create the pillar.
                         for (int j = 0; j < 4; j++){
@@ -145,14 +158,22 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                         for(int j = 0; j < 4; j++){
                             region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
                             region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 5 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
                         }
                     }
-                    region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
+                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 5 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    }
+                    else {
+                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    }
                     //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
             Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y)); //Create an unique random Object for the current floor.
-            if(fullFloorRandom.nextFloat() < 0.1F || true){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
+            if(fullFloorRandom.nextFloat() < 0.1F & false){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
                 //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
 
                 //Define the amounts of regular and nofill rooms.
@@ -254,23 +275,19 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
-                    // does a swap from the various blocks to the custom blocks
+                    BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                    BlockState block = chunk.getBlockState(pos);
 
-                    if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
-                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                        BlockState block = chunk.getBlockState(pos);
-
-                        if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
-                            replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
-                        } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
-                            replace(BackroomsBlocks.CEMENT, chunk, pos);
-                        } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
-                            replace(BackroomsBlocks.CEMENT, chunk, pos);
-                        } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
-                            replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
-                        } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
-                            replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
-                        }
+                    if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
+                        replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
+                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                        replace(BackroomsBlocks.CEMENT, chunk, pos);
+                    } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
+                        replace(BackroomsBlocks.CEMENT, chunk, pos);
+                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
+                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                    } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
+                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     }
                 }
             }

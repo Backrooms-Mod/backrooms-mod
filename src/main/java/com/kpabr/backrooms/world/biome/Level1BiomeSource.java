@@ -26,18 +26,22 @@ public class Level1BiomeSource extends BiomeSource {
     private final PerlinNoiseSampler noise;
     private final long seed;
     private final RegistryEntry<Biome> cementWallsBiome;
+    private final RegistryEntry<Biome> parkingGarageBiome;
+    private final RegistryEntry<Biome> warehouseBiome;
 
     private Registry<Biome> BIOME_REGISTRY;
 
     public Level1BiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        this(seed, biomeRegistry.getOrCreateEntry(BackroomsLevels.CEMENT_WALLS_BIOME));
+        this(seed, biomeRegistry.getOrCreateEntry(BackroomsLevels.CEMENT_WALLS_BIOME), biomeRegistry.getOrCreateEntry(BackroomsLevels.PARKING_GARAGE_BIOME), biomeRegistry.getOrCreateEntry(BackroomsLevels.WAREHOUSE_BIOME));
         this.BIOME_REGISTRY = biomeRegistry;
     }
 
-    private Level1BiomeSource(long seed, RegistryEntry<Biome> cementWallsBiome) {
-        super(ImmutableList.of(cementWallsBiome));
+    private Level1BiomeSource(long seed, RegistryEntry<Biome> cementWallsBiome, RegistryEntry<Biome> parkingGarageBiome, RegistryEntry<Biome> warehouseBiome) {
+        super(ImmutableList.of(cementWallsBiome, parkingGarageBiome, warehouseBiome));
         this.seed = seed;
         this.cementWallsBiome = cementWallsBiome;
+        this.parkingGarageBiome = parkingGarageBiome;
+        this.warehouseBiome = warehouseBiome;
         ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
         this.noise = new PerlinNoiseSampler(chunkRandom);
     }
@@ -49,13 +53,21 @@ public class Level1BiomeSource extends BiomeSource {
 
     @Override
     public BiomeSource withSeed(long seed) {
-        return new Level1BiomeSource(seed, this.cementWallsBiome);
+        return new Level1BiomeSource(seed, this.cementWallsBiome, this.parkingGarageBiome, this.warehouseBiome);
     }
 
     // Also you should use this method
     @Override
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         double noiseAt = Level1BiomeSource.getNoiseAt(this.noise, x, y, z);
+        // Higher values = often spawn of biome
+        if (noiseAt <= 0.3) {
+            return this.warehouseBiome;
+        }
+        if (noiseAt <= 0.6) {
+            return this.parkingGarageBiome;
+        }
+
         return this.cementWallsBiome;
     }
 
