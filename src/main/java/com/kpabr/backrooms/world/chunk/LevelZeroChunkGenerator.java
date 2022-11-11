@@ -92,6 +92,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
         int startX = chunkPos.getStartX();
         int startZ = chunkPos.getStartZ();
+        //Define how many floors the level will have.
         int floorCount=5;
         //Create 5 floors, top to bottom.
         for (int y = floorCount; y >= 0; y--) {
@@ -174,7 +175,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 int sizeX=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeX : this.loadedStructures.get(roomName).sizeZ;
                 int sizeY=this.loadedStructures.get(roomName).sizeY;
                 int sizeZ=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeZ : this.loadedStructures.get(roomName).sizeX;
-                if(6 * y + sizeY < 1 + 6 * (floorCount+1)) { //Only generate the structure if it has enough vertical space to generate.
+                if(6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
                     //Choose a spot in the chunk.
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
