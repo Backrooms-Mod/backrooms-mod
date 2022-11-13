@@ -8,13 +8,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.world.biome.LevelZeroBiomeSource;
-import com.kpabr.backrooms.world.biome.Level1BiomeSource;
-import com.kpabr.backrooms.world.biome.LevelZeroNormalBiome;
-import com.kpabr.backrooms.world.biome.CrimsonHallsBiome;
-import com.kpabr.backrooms.world.biome.CementHallsBiome;
-import com.kpabr.backrooms.world.biome.ParkingGarageBiome;
-import com.kpabr.backrooms.world.biome.WarehouseBiome;
+import com.kpabr.backrooms.world.biome.*;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import net.ludocrypt.limlib.api.LiminalEffects;
@@ -48,12 +42,12 @@ public class BackroomsLevels {
     //        (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->
     //                new DimensionOptions(dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()), new LevelOneChunkGenerator(new Level1BiomeSource(biomeRegistry, seed), seed)), LEVEL_ZERO_EFFECTS));
 
-    public static final LiminalWorld LEVEL_0 = registerLevel(BackroomsMod.id("level_0"), LevelZeroChunkGenerator.class, LevelZeroBiomeSource.class);
+    public static final LiminalWorld LEVEL_0 = registerLevel(BackroomsMod.id("level_0"), LevelZeroChunkGenerator.class, ExampleBiomeSource.class);
     public static final LiminalWorld LEVEL_1 = registerLevel(BackroomsMod.id("level_1"), LevelOneChunkGenerator.class, Level1BiomeSource.class);
 
 
     public static void init() {
-        Registry.register(Registry.BIOME_SOURCE, BackroomsMod.id("level_0_biome_source"), LevelZeroBiomeSource.CODEC);
+        Registry.register(Registry.BIOME_SOURCE, BackroomsMod.id("level_0_biome_source"), ExampleBiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, BackroomsMod.id("level_1_biome_source"), Level1BiomeSource.CODEC);
         get("level_0_chunk_generator", LevelZeroChunkGenerator.CODEC);
         get("level_1_chunk_generator", LevelOneChunkGenerator.CODEC);
@@ -81,7 +75,6 @@ public class BackroomsLevels {
                     }, LEVEL_ZERO_EFFECTS));
             return LEVEL;
         } catch (NoSuchMethodException e) {
-
             throw new RuntimeException(e);
         }
     }

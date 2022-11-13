@@ -18,12 +18,18 @@ public class PlayerWretchedComponent implements WretchedComponent {
 
     @Override
     public void remove(int amount) {
-        this.wretched -= amount;
+        if(this.wretched - amount < 0) {
+            this.wretched = 0;
+        } else {
+            this.wretched -= amount;
+        }
     }
 
     @Override
     public void increment() {
-        this.wretched++;
+        if(this.wretched + 1 > 100) {
+            this.wretched++;
+        }
     }
 
     @Override
