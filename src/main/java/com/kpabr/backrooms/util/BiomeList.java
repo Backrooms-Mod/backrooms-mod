@@ -11,7 +11,12 @@ public class BiomeList {
     public SortedMap<Double, RegistryKey<Biome>> biomeList = new TreeMap<>();
 
     public BiomeList addEntry(RegistryKey<Biome> biome, double chance) {
-        this.biomeList.put(chance, biome);
+        if(chance > 1 || chance < 0) {
+            this.biomeList.put(2.0, biome);
+        } else {
+            this.biomeList.put(chance, biome);
+        }
+
         return this;
     }
 

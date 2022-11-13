@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.noise.PerlinNoiseSampler;
+import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
@@ -25,7 +26,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
     // and create new variable containing new biome
 
 
-    private final PerlinNoiseSampler noise;
+    private final SimplexNoiseSampler noise;
     protected final long seed;
 
     protected final BiomeRegistryList biomeList;
@@ -43,7 +44,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
         this.biomeList = biomeList;
 
         ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
-        this.noise = new PerlinNoiseSampler(chunkRandom);
+        this.noise = new SimplexNoiseSampler(chunkRandom);
     }
 
     @Override
@@ -56,7 +57,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
         return this.seed == seed;
     }
 
-    public static double getNoiseAt(PerlinNoiseSampler perlinNoiseSampler, int x, int y, int z) {
+    public static double getNoiseAt(SimplexNoiseSampler perlinNoiseSampler, int x, int y, int z) {
 
         double n = perlinNoiseSampler.sample(x*0.01, y*0.01, z*0.01);
 

@@ -63,6 +63,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_zero"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
         this.moldPlacementRandom = new Random(worldSeed);
+
     }
 
     @Override
