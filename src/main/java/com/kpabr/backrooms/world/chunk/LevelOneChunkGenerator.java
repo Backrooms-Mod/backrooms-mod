@@ -58,7 +58,7 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
     private final long worldSeed;
     public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_zero"), LiminalUtil.createMultiNoiseSampler());
+        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
     }
 
@@ -100,27 +100,30 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                 for (int z = 3; z >= 0; z--) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y)); //Make a Random object controlling the generation of the section.
                     int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0); //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
+                    boolean isParkingGarage=checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos);
                     if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)){
-                        wallType = (random.nextFloat() < 0.3F ? 1 : 0) + (random.nextFloat() < 0.3F ? 2 : 0);
+                        wallType = (random.nextFloat() < 0.2F ? 1 : 0) + (random.nextFloat() < 0.2F ? 2 : 0);
                     }
-                    if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)){
+                    if(isParkingGarage){
                         wallType=0;
                     }
                     if((wallType & 1) == 1){ //Check if the arrangement includes the eastern wall.
                         //Create the eastern wall.
                         for(int i = 0; i < 3; i++){
-                            for(int j = 0; j < 4; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 6 * y + j, startZ + z * 4 + i), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                            for(int j = 0; j < 5; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 3 + 8 * y + j, startZ + z * 4 + i), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
                             }
+                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
 
                     if((wallType & 2) == 2){ //Check if the arrangement includes the southern wall.
                         //Create the southern wall.
                         for(int i = 0; i < 3; i++){
-                            for(int j = 0; j < 4; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                            for(int j = 0; j < 5; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 3 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
                             }
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
 
@@ -129,45 +132,61 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                         pillar = true;
                     }
                     if(x != 3){ //Check if you're not on the eastern edge of the chunk. If you aren't, proceed.
-                        if(region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 6 * y, startZ + z * 4 + 3))!=Blocks.AIR.getDefaultState()){ //Check one block east whether there's a wall there. If so, a pillar will always be generated.
+                        if(region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 8 * y, startZ + z * 4 + 3))!=Blocks.AIR.getDefaultState()){ //Check one block east whether there's a wall there. If so, a pillar will always be generated.
                             pillar = true;
                         }
                     }
                     if(z != 3){ //Check if you're not on the southern edge of the chunk. If you aren't, proceed.
-                        if(region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4))!=Blocks.AIR.getDefaultState()){ //Check one block south whether there's a wall there. If so, a pillar will always be generated.
+                        if(region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + 4))!=Blocks.AIR.getDefaultState()){ //Check one block south whether there's a wall there. If so, a pillar will always be generated.
                             pillar = true;
                         }
                     }
                     if(x == 3 && z == 3){ //If you're on the southeasternmost spot on the chunk, always make a pillar.
                         pillar = true;
                     }
-                    if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos) && (x & 1) == 1){
+                    if(isParkingGarage && (x & 1) == 1){
                         pillar = true;
                     }
-                    if(!checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
+                    if(!isParkingGarage) {
                         pillar = pillar || (random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
                     }
                     if(pillar){
                         //Create the pillar.
-                        for (int j = 0; j < 4; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + 3), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                        for (int j = 0; j < 6; j++){
+                            if(isParkingGarage){
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
+                            else {
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
+                        }
+                        if(!isParkingGarage){
+                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
                     // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 4; i++){
                         for(int j = 0; j < 4; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + i, 8 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)||isParkingGarage){
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 7 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            }
                             if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
-                                region.setBlockState(new BlockPos(startX + x * 4 + i, 5 + 6 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 5 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
+                    //Place a ceiling light at the correct height.
                     if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
-                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 5 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 5 + 8 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    }
+                    else if(isParkingGarage){
+                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 8 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
                     }
                     else {
-                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                        region.setBlockState(new BlockPos(startX + x * 4 + 1, 8 + 8 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
                     }
                     //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
@@ -223,9 +242,9 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         // Place bedrock bricks at the roof of chunk
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) { // 3 layers to be
-                region.setBlockState(new BlockPos(x, 1 + 6 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 2 + 6 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 3 + 6 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 1 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 2 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 3 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
 
@@ -235,8 +254,8 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("backrooms_large", world, 0, 12); //Makes it so the large regular rooms can be used while generating.
-        store("backrooms_large_nofill", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.
+        /*store("warehouse", world, 0, 5); //Makes it so the large regular rooms can be used while generating.
+        store("cement_halls", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.*/
     }
 
     @Override

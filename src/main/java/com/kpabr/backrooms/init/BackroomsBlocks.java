@@ -77,6 +77,7 @@ public class BackroomsBlocks {
 
 
 	public static final Block PYROIL = add("pyroil", new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().materialColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PIPE = add("pipe", new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil", FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
 
