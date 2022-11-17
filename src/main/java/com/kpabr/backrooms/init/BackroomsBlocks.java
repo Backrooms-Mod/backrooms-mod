@@ -88,6 +88,7 @@ public class BackroomsBlocks {
 
 	public static Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PARKING_CEMENT_PILLAR = add("parking_cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(CEMENT_PILLAR).materialColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 

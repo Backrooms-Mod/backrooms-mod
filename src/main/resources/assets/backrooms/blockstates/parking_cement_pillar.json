@@ -1,0 +1,16 @@
+{
+	"variants": {
+		"axis=x": {
+			"model": "backrooms:block/parking_cement_pillar_horizontal",
+			"x": 90,
+			"y": 90
+		},
+		"axis=y": {
+			"model": "backrooms:block/parking_cement_pillar"
+		},
+		"axis=z": {
+			"model": "backrooms:block/parking_cement_pillar_horizontal",
+			"x": 90
+		}
+	}
+}
