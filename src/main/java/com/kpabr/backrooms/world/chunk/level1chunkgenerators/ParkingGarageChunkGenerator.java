@@ -99,9 +99,10 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
                 for (int z = 3; z >= 0; z--) {
                     if((x & 1) == 1){
                         //Create a pillar.
-                        for (int j = 0; j < 6; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
-                        }
+                        region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.PARKING_CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
+                        region.setBlockState(new BlockPos(startX + x * 4 + 3, 3 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.PARKING_CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
+                        region.setBlockState(new BlockPos(startX + x * 4 + 3, 4 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
+                        region.setBlockState(new BlockPos(startX + x * 4 + 3, 5 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
                     }
                     // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 4; i++){
