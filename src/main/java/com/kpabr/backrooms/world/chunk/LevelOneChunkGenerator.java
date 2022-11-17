@@ -58,9 +58,18 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
 
     private final long worldSeed;
-    public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed) {
+    private final CementHallsChunkGenerator cementHallsChunkGenerator;
+    private final ParkingGarageChunkGenerator parkingGarageChunkGenerator;
+    private final WarehouseChunkGenerator warehouseChunkGenerator;
+    public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed, CementHallsChunkGenerator cementHallsChunkGenerator, ParkingGarageChunkGenerator parkingGarageChunkGenerator, WarehouseChunkGenerator warehouseChunkGenerator) {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
+        this.cementHallsChunkGenerator = cementHallsChunkGenerator;
+        this.parkingGarageChunkGenerator = parkingGarageChunkGenerator;
+        this.warehouseChunkGenerator = warehouseChunkGenerator;
+    }
+    public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed) {
+        this(biomeSource, worldSeed, new CementHallsChunkGenerator(biomeSource, worldSeed),  new ParkingGarageChunkGenerator(biomeSource, worldSeed),  new WarehouseChunkGenerator(biomeSource, worldSeed));
     }
 
     @Override
@@ -94,7 +103,15 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         int startZ = chunkPos.getStartZ();
         //Define how many floors the level will have.
         int floorCount=getFloorCount();
-        ((CementHallsChunkGenerator)this).populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
+        if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
+            this.cementHallsChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
+        }
+        if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)){
+            this.parkingGarageChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
+        }
+        if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)){
+            this.warehouseChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
+        }
 
         // Place bedrock bricks at the bottom.
         for (int x = startX; x < startX + 16; x++) {
