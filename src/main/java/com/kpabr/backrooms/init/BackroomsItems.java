@@ -8,12 +8,9 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.items.AlmondWaterItem;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.item.FoodComponent;
-import net.minecraft.item.SpawnEggItem;
 
 public class BackroomsItems {
 
@@ -26,6 +23,7 @@ public class BackroomsItems {
 	public static final Item BAKED_TILEMOLD_LUMP = add("baked_tilemold_lump", new Item(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().snack().saturationModifier(2).hunger(2).build())));
 	public static final Item TAINTED_FLESH = add("tainted_flesh", new Item(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().saturationModifier(0).hunger(3).statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0), 0.8F).meat().build())));
 	public static final Item COOKED_FLESH = add("cooked_flesh", new Item(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().saturationModifier(3).hunger(5).meat().build())));
+	public static final Item ALMOND_WATER_BUCKET = add("cooked_flesh", new BucketItem(BackroomsFluids.ALMOND_WATER_STILL, new Item.Settings().group(ItemGroup.MISC).maxCount(1)));
 	public static final Item HOUND_SPAWN_EGG = add("hound_spawn_egg", new SpawnEggItem(BackroomsEntities.HOUND,16777215,8531483,new Item.Settings().group(ItemGroup.MISC)));
 
 

@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
+import com.kpabr.backrooms.fluid.BackroomsFluidBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -15,11 +16,7 @@ import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PortalSpawnerBlockEntity;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.WallBlock;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
@@ -99,6 +96,7 @@ public class BackroomsBlocks {
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).materialColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).materialColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block BEDROCK_BRICKS = add("bedrock_bricks", new Block(FabricBlockSettings.copy(Blocks.BEDROCK)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block ALMOND_WATER_FLUID_BLOCK = addNoItem("almond_water_fluid_block", new BackroomsFluidBlock(BackroomsFluids.ALMOND_WATER_STILL, FabricBlockSettings.of(Material.WATER).noCollision().nonOpaque().dropsNothing()), ItemGroup.BUILDING_BLOCKS);
 
 	// 16 types of various carpetings
 	public static final Block BLACK_CARPETING = add("black_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).materialColor(DyeColor.BLACK)), ItemGroup.BUILDING_BLOCKS);
@@ -133,6 +131,10 @@ public class BackroomsBlocks {
 			ITEMS.put(BackroomsMod.id(name), item);
 		}
 		return block;
+	}
+
+	private static <B extends Block> B addNoItem(String name, B block, ItemGroup tab) {
+		return Registry.register(Registry.BLOCK, new Identifier(BackroomsMod.ModId, name), block);
 	}
 
 	private static <B extends Block> B add(String name, B block) {
