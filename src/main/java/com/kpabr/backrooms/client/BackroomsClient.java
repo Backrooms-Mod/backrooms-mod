@@ -2,6 +2,9 @@ package com.kpabr.backrooms.client;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.entity.renderer.living.HoundEntityRenderer;
+import com.kpabr.backrooms.init.BackroomsEntities;
+import com.kpabr.backrooms.init.BackroomsParticles;
+import com.kpabr.backrooms.init.BackroomsProjectiles;
 import com.kpabr.backrooms.init.*;
 import com.kpabr.backrooms.particle.FireSaltParticle;
 import net.fabricmc.api.ClientModInitializer;
@@ -22,6 +25,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
+import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 

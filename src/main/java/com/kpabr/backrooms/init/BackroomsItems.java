@@ -8,9 +8,13 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.items.AlmondWaterItem;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.item.FoodComponent;
+import net.minecraft.item.SpawnEggItem;
 
 public class BackroomsItems {
 
