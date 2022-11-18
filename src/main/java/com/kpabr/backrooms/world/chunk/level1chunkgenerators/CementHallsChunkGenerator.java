@@ -159,20 +159,17 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 }
             }
             Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y)); //Create an unique random Object for the current floor.
-            if(fullFloorRandom.nextFloat() < 0.1F & false){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
+            if(fullFloorRandom.nextFloat() < 0.2F){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
                 //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
 
                 //Define the amounts of regular and nofill rooms.
-                int regularRooms=12;
-                int nofillRooms=3;
+                int regularRooms=2;
+                int nofillRooms=0;
                 //Choose the room that will be placed.
-                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
-                if(fullFloorRandom.nextFloat() < 0.6F){ //The number with an F directly after it denotes the probability of an empty room being generated regardless.
-                    roomNumber=0;
-                }
-                String roomName = "backrooms_large_" + roomNumber;
-                if(roomNumber>regularRooms){
-                    roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
+                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms));
+                String roomName = "cement_walls_" + roomNumber;
+                if(roomNumber>=regularRooms){
+                    roomName = "cement_walls_nofill_" + (roomNumber - regularRooms);
                 }
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
@@ -181,21 +178,21 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 int sizeX=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeX : this.loadedStructures.get(roomName).sizeZ;
                 int sizeY=this.loadedStructures.get(roomName).sizeY;
                 int sizeZ=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeZ : this.loadedStructures.get(roomName).sizeX;
-                if(6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
+                if(8 * y + sizeY < 1 + 8 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
                     //Choose a spot in the chunk.
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
                     //Fill the area the room will be placed in with air.
-                    if(roomNumber<=regularRooms) {
+                    if(roomNumber<regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {
                                 for (int k = 0; k < sizeZ; k++) {
-                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
                                 }
                             }
                         }
                     }
-                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation); //Actually generate the room.
+                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 8 * y, startZ + z * 4), roomName, rotation); //Actually generate the room.
                 }
             }
         }
@@ -204,8 +201,8 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        /*store("warehouse", world, 0, 5); //Makes it so the large regular rooms can be used while generating.
-        store("cement_halls", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.*/
+        store("cement_walls", world, 0, 1); //Makes it so the large regular rooms can be used while generating.
+        store("cement_walls_nofill", world, 1, 0); //Makes it so the large nofill rooms can be used while generating.*/
     }
 
     @Override

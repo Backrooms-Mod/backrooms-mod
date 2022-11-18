@@ -134,8 +134,7 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        /*store("warehouse", world, 0, 5); //Makes it so the large regular rooms can be used while generating.
-        store("cement_halls", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.*/
+        this.cementHallsChunkGenerator.storeStructures(world);
     }
 
     @Override
