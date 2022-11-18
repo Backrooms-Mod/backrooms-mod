@@ -58,11 +58,11 @@ public class BackroomsClient implements ClientModInitializer {
 		FluidRenderHandlerRegistry.INSTANCE.register(BackroomsFluids.ALMOND_WATER_STILL,
 				new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
 						SimpleFluidRenderHandler.WATER_FLOWING,
-						SimpleFluidRenderHandler.WATER_OVERLAY, 0xFF0000));
+						SimpleFluidRenderHandler.WATER_OVERLAY, 0xE0E0FF));
 		FluidRenderHandlerRegistry.INSTANCE.register(BackroomsFluids.ALMOND_WATER_FLOWING,
 				new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
 						SimpleFluidRenderHandler.WATER_FLOWING,
-						SimpleFluidRenderHandler.WATER_OVERLAY, 0xFF0000));
+						SimpleFluidRenderHandler.WATER_OVERLAY, 0xE0E0FF));
 	}
 
 	public static MinecraftClient getClient() {
