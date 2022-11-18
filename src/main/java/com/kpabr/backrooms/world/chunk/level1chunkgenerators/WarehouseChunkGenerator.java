@@ -102,8 +102,8 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if((wallType & 1) == 1){ //Check if the arrangement includes the eastern wall.
                         //Create the eastern wall.
                         for(int i = 0; i < 3; i++){
-                            for(int j = 0; j < 5; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 3 + 8 * y + j, startZ + z * 4 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                            for(int j = 0; j < 6; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 8 * y + j, startZ + z * 4 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
@@ -111,8 +111,8 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if((wallType & 2) == 2){ //Check if the arrangement includes the southern wall.
                         //Create the southern wall.
                         for(int i = 0; i < 3; i++){
-                            for(int j = 0; j < 5; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + i, 3 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                            for(int j = 0; j < 6; j++){
+                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
@@ -138,9 +138,8 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if(pillar){
                         //Create the pillar.
                         for (int j = 0; j < 6; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                         }
-                        region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                     }
                     // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 4; i++){
