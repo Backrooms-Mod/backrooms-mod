@@ -5,10 +5,13 @@ import com.kpabr.backrooms.entity.renderer.living.HoundEntityRenderer;
 import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.init.BackroomsParticles;
 import com.kpabr.backrooms.init.BackroomsProjectiles;
+import com.kpabr.backrooms.init.*;
 import com.kpabr.backrooms.particle.FireSaltParticle;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
+import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
@@ -54,6 +57,16 @@ public class BackroomsClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.PYROIL, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
 		EntityRendererRegistry.INSTANCE.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
+
+		//almond water fluid rendering
+		FluidRenderHandlerRegistry.INSTANCE.register(BackroomsFluids.ALMOND_WATER_STILL,
+				new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+						SimpleFluidRenderHandler.WATER_FLOWING,
+						SimpleFluidRenderHandler.WATER_OVERLAY, 0xE0E0FF));
+		FluidRenderHandlerRegistry.INSTANCE.register(BackroomsFluids.ALMOND_WATER_FLOWING,
+				new SimpleFluidRenderHandler(SimpleFluidRenderHandler.WATER_STILL,
+						SimpleFluidRenderHandler.WATER_FLOWING,
+						SimpleFluidRenderHandler.WATER_OVERLAY, 0xE0E0FF));
 	}
 
 	public static MinecraftClient getClient() {
