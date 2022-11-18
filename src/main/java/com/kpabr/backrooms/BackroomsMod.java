@@ -41,6 +41,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded status effects");
 		BackroomsBlocks.init();
 		LOGGER.info("Loaded blocks");
+		BackroomsFluids.init();
+		LOGGER.info("Loaded fluids");
 		BackroomsGroups.init();
 		LOGGER.info("Loaded groups");
 		BackroomsItems.init();

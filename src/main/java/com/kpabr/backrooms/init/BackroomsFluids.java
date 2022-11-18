@@ -1,5 +1,8 @@
 package com.kpabr.backrooms.init;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.fluid.AlmondWaterFluid;
 import net.minecraft.fluid.FlowableFluid;
@@ -7,10 +10,20 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class BackroomsFluids {
-    public static final FlowableFluid ALMOND_WATER_STILL = register("almond_water_still", new AlmondWaterFluid.Still());
-    public static final FlowableFluid ALMOND_WATER_FLOWING = register("almond_water_flowing", new AlmondWaterFluid.Flowing());
+    private static final Map<Identifier, FlowableFluid> FLUIDS = new LinkedHashMap<>();
 
-    private static FlowableFluid register(String name, FlowableFluid flowableFluid) {
-        return Registry.register(Registry.FLUID, new Identifier(BackroomsMod.ModId, name), flowableFluid);
+
+    public static final FlowableFluid ALMOND_WATER_STILL = add("almond_water_still", new AlmondWaterFluid.Still());
+    public static final FlowableFluid ALMOND_WATER_FLOWING = add("almond_water_flowing", new AlmondWaterFluid.Flowing());
+
+    private static <F extends FlowableFluid> F add(String name, F fluid) {
+        FLUIDS.put(BackroomsMod.id(name), fluid);
+        return fluid;
+    }
+
+    public static void init() {
+        for (Identifier id : FLUIDS.keySet()) {
+            Registry.register(Registry.FLUID, id, FLUIDS.get(id));
+        }
     }
 }
