@@ -166,6 +166,7 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 int regularRooms=12;
                 int nofillRooms=3;
                 //Choose the room that will be placed.
+<<<<<<< Updated upstream
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
                 if(fullFloorRandom.nextFloat() < 0.6F){ //The number with an F directly after it denotes the probability of an empty room being generated regardless.
                     roomNumber=0;
@@ -173,6 +174,12 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 String roomName = "backrooms_large_" + roomNumber;
                 if(roomNumber>regularRooms){
                     roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
+=======
+                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms));
+                String roomName = "cement_walls_" + roomNumber;
+                if(roomNumber>regularRooms){
+                    roomName = "cement_walls_nofill_" + (roomNumber - regularRooms);
+>>>>>>> Stashed changes
                 }
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
@@ -181,7 +188,7 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 int sizeX=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeX : this.loadedStructures.get(roomName).sizeZ;
                 int sizeY=this.loadedStructures.get(roomName).sizeY;
                 int sizeZ=dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeZ : this.loadedStructures.get(roomName).sizeX;
-                if(6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
+                if(8 * y + sizeY < 1 + 8 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
                     //Choose a spot in the chunk.
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
@@ -190,15 +197,16 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {
                                 for (int k = 0; k < sizeZ; k++) {
-                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
                                 }
                             }
                         }
                     }
-                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation); //Actually generate the room.
+                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 8 * y, startZ + z * 4), roomName, rotation); //Actually generate the room.
                 }
             }
         }
+
         return CompletableFuture.completedFuture(chunk);
     }
 
