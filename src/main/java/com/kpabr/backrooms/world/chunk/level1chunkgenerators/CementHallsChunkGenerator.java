@@ -159,21 +159,20 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                 }
             }
             Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y)); //Create an unique random Object for the current floor.
-            if(fullFloorRandom.nextFloat() < 0.1F & false){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
+            if(fullFloorRandom.nextFloat() < 0.15F){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
                 //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
 
                 //Define the amounts of regular and nofill rooms.
-                int regularRooms=12;
-                int nofillRooms=3;
+                int regularRooms=2;
+                int nofillRooms=0;
                 //Choose the room that will be placed.
-                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
-                if(fullFloorRandom.nextFloat() < 0.6F){ //The number with an F directly after it denotes the probability of an empty room being generated regardless.
-                    roomNumber=0;
-                }
-                String roomName = "backrooms_large_" + roomNumber;
+                /*int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms));
+                String roomName = "cement_walls_" + roomNumber;
                 if(roomNumber>regularRooms){
-                    roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
-                }
+                    roomName = "cement_walls_nofill_" + (roomNumber - regularRooms);
+                }*/
+                int roomNumber = 0;
+                String roomName = "cement_walls_0";
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
                 BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
@@ -204,8 +203,8 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        /*store("warehouse", world, 0, 5); //Makes it so the large regular rooms can be used while generating.
-        store("cement_halls", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.*/
+        store("cement_walls", world, 0, 1); //Makes it so the large regular rooms can be used while generating.
+        store("cement_walls_nofill", world, 1, 0); //Makes it so the large nofill rooms can be used while generating.
     }
 
     @Override
