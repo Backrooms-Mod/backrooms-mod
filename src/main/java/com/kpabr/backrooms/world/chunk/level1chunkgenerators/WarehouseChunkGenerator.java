@@ -94,25 +94,25 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         //Create 5 floors, top to bottom.
         int floorCount=LevelOneChunkGenerator.getFloorCount();
         for (int y = floorCount; y >= 0; y--) {
-            //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
-            for (int x = 3; x >= 0; x--) {
-                for (int z = 3; z >= 0; z--) {
+            //Create 4 smaller sections of the floor, layed out in a 2x2 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
+            for (int x = 1; x >= 0; x--) {
+                for (int z = 1; z >= 0; z--) {
                     Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y)); //Make a Random object controlling the generation of the section.
-                    int wallType = (random.nextFloat() < 0.2F ? 1 : 0) + (random.nextFloat() < 0.2F ? 2 : 0); //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
+                    int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0); //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
                     if((wallType & 1) == 1){ //Check if the arrangement includes the eastern wall.
                         //Create the eastern wall.
-                        for(int i = 0; i < 3; i++){
+                        for(int i = 0; i < 7; i++){
                             for(int j = 0; j < 6; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + 3 , 2 + 8 * y + j, startZ + z * 4 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 8 + 7 , 2 + 8 * y + j, startZ + z * 8 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
 
                     if((wallType & 2) == 2){ //Check if the arrangement includes the southern wall.
                         //Create the southern wall.
-                        for(int i = 0; i < 3; i++){
+                        for(int i = 0; i < 7; i++){
                             for(int j = 0; j < 6; j++){
-                                region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                                region.setBlockState(new BlockPos(startX + x * 8 + i, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                             }
                         }
                     }
@@ -122,12 +122,12 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                         pillar = true;
                     }
                     if(x != 3){ //Check if you're not on the eastern edge of the chunk. If you aren't, proceed.
-                        if(region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 8 * y, startZ + z * 4 + 3))!=Blocks.AIR.getDefaultState()){ //Check one block east whether there's a wall there. If so, a pillar will always be generated.
+                        if(region.getBlockState(new BlockPos(startX + x * 8 + 8, 2 + 8 * y, startZ + z * 8 + 7))!=Blocks.AIR.getDefaultState()){ //Check one block east whether there's a wall there. If so, a pillar will always be generated.
                             pillar = true;
                         }
                     }
                     if(z != 3){ //Check if you're not on the southern edge of the chunk. If you aren't, proceed.
-                        if(region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y, startZ + z * 4 + 4))!=Blocks.AIR.getDefaultState()){ //Check one block south whether there's a wall there. If so, a pillar will always be generated.
+                        if(region.getBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 8))!=Blocks.AIR.getDefaultState()){ //Check one block south whether there's a wall there. If so, a pillar will always be generated.
                             pillar = true;
                         }
                     }
@@ -138,18 +138,18 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if(pillar){
                         //Create the pillar.
                         for (int j = 0; j < 6; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + 3, 2 + 8 * y + j, startZ + z * 4 + 3), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
                     // Generate the carpeting and the ceiling.
-                    for(int i = 0; i < 4; i++){
-                        for(int j = 0; j < 4; j++){
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
-                            region.setBlockState(new BlockPos(startX + x * 4 + i, 8 + 8 * y, startZ + z * 4 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                    for(int i = 0; i < 8; i++){
+                        for(int j = 0; j < 8; j++){
+                            region.setBlockState(new BlockPos(startX + x * 8 + i, 1 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 8 + i, 8 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
                         }
                     }
                     //Place a ceiling light at the correct height.
-                    region.setBlockState(new BlockPos(startX + x * 4 + 1, 8 + 8 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    region.setBlockState(new BlockPos(startX + x * 8 + 3, 8 + 8 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
                     //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
