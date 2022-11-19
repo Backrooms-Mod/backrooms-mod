@@ -15,52 +15,40 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import static java.lang.Double.valueOf;
+
 
 // used internally
 
 public class BiomeRegistryList {
+    public static final Double DEFAULT_CHANCE_VALUE = 2.D; // Use for default biome type
     public SortedMap<Double, RegistryEntry<Biome>> biomeList = new TreeMap<>();
-
-    private RegistryEntry<Biome> defaultBiome;
-
-    public void addEntry(RegistryEntry<Biome> biome, double chance) {
-        this.biomeList.put(chance, biome);
-    }
-
-    public SortedMap<Double, RegistryEntry<Biome>> getBiomeList() {
-        return this.biomeList;
-    }
 
     public Stream<RegistryEntry<Biome>> getBiomeEntries() {
         BackroomsMod.LOGGER.info(this.biomeList.values().stream().toString());
         return this.biomeList.values().stream();
     }
 
-    public Set<Double> getChances() {
+    private Set<Double> getChances() {
         return this.biomeList.keySet();
     }
 
-    public RegistryEntry<Biome> findNearest(double n) {
-        double max = 2;
+    public RegistryEntry<Biome> findNearest(double key) {
 
         for(double chance : getChances()) {
-            if(chance < max && n <= chance) {
-                max = chance;
-            }
+            if (key <= chance) return biomeList.get(chance);
         }
-
-        return biomeList.get(max);
+        return biomeList.get(DEFAULT_CHANCE_VALUE);
     }
 
     public static BiomeRegistryList from(Registry<Biome> biomeRegistry, BiomeList biomeList) {
-        BiomeRegistryList temp = new BiomeRegistryList();
+        BiomeRegistryList list = new BiomeRegistryList();
 
-        for (Map.Entry<Double, RegistryKey<Biome>> entry : biomeList.getBiomeList().entrySet()) {
-            BackroomsMod.LOGGER.info(entry.getValue().toString());
-            temp.addEntry(biomeRegistry.getOrCreateEntry(entry.getValue()), entry.getKey());
-        }
-        return temp;
+        biomeList.getBiomeList().forEach((key, value) -> {
+            BackroomsMod.LOGGER.info(value.toString());
+            list.biomeList.put(key, biomeRegistry.getOrCreateEntry(value));
+        });
+        return list;
     }
-
 }
 

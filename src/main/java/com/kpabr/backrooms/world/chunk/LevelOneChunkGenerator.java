@@ -2,31 +2,29 @@ package com.kpabr.backrooms.world.chunk;
 
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.world.chunk.level1chunkgenerators.*;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.CementHallsChunkGenerator;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.ParkingGarageChunkGenerator;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.WarehouseChunkGenerator;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.structure.StructureSet;
-import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
@@ -42,25 +40,26 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
 public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
-    public static final Codec<LevelOneChunkGenerator> CODEC = RecordCodecBuilder.create((instance) -> {
-        return instance.group(BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter((chunkGenerator) -> {
-            return chunkGenerator.biomeSource;
-        }), Codec.LONG.fieldOf("seed").stable().forGetter((chunkGenerator) -> {
-            return chunkGenerator.worldSeed;
-        })).apply(instance, instance.stable(LevelOneChunkGenerator::new));
-    });
-
+    public static final Codec<LevelOneChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
+            instance.group(
+                    BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter(
+                            (chunkGenerator) -> chunkGenerator.biomeSource),
+                    Codec.LONG.fieldOf("seed").stable().forGetter(
+                            (chunkGenerator) -> chunkGenerator.worldSeed)
+            ).apply(instance, instance.stable(LevelOneChunkGenerator::new))
+    );
 
     private final long worldSeed;
     private final CementHallsChunkGenerator cementHallsChunkGenerator;
     private final ParkingGarageChunkGenerator parkingGarageChunkGenerator;
     private final WarehouseChunkGenerator warehouseChunkGenerator;
+    //Define roof position on y coordinate.
+    private static final int ROOF_BEGIN_Y = 8 * (getFloorCount() + 1) + 1;
     public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed, CementHallsChunkGenerator cementHallsChunkGenerator, ParkingGarageChunkGenerator parkingGarageChunkGenerator, WarehouseChunkGenerator warehouseChunkGenerator) {
         super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
@@ -69,7 +68,10 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         this.warehouseChunkGenerator = warehouseChunkGenerator;
     }
     public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        this(biomeSource, worldSeed, new CementHallsChunkGenerator(biomeSource, worldSeed),  new ParkingGarageChunkGenerator(biomeSource, worldSeed),  new WarehouseChunkGenerator(biomeSource, worldSeed));
+        this(biomeSource, worldSeed,
+                new CementHallsChunkGenerator(biomeSource, worldSeed),
+                new ParkingGarageChunkGenerator(biomeSource, worldSeed),
+                new WarehouseChunkGenerator(biomeSource, worldSeed));
     }
 
     @Override
@@ -101,15 +103,14 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
         int startX = chunkPos.getStartX();
         int startZ = chunkPos.getStartZ();
-        //Define how many floors the level will have.
-        int floorCount=getFloorCount();
-        if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)){
+
+        if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
             this.cementHallsChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
-        if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)){
+        else if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
             this.parkingGarageChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
-        if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)){
+        else if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)) {
             this.warehouseChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
 
@@ -119,15 +120,15 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
                 region.setBlockState(new BlockPos(x, 0, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
+
         // Place bedrock bricks at the roof of chunk
         for (int x = startX; x < startX + 16; x++) {
             for (int z = startZ; z < startZ + 16; z++) { // 3 layers to be placed
-                region.setBlockState(new BlockPos(x, 1 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 2 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 3 + 8 * (floorCount + 1), z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 0 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 1 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 2 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
             }
         }
-
 
         return CompletableFuture.completedFuture(chunk);
     }
@@ -172,7 +173,6 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         ChunkPos chunkPos = chunk.getPos();
-        BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -182,13 +182,11 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
                     if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
-                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()
+                            || block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
-                    } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
+                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()
+                            || block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     }
                 }

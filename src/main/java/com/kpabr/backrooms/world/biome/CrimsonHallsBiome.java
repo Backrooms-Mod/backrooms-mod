@@ -10,8 +10,6 @@ import net.minecraft.world.biome.SpawnSettings;
 
 public class CrimsonHallsBiome {
     public static Biome create() {
-        Biome.Builder biome = new Biome.Builder();
-
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         spawnSettings.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
 
@@ -25,15 +23,17 @@ public class CrimsonHallsBiome {
         biomeEffects.loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
         BiomeEffects effects = biomeEffects.build();
 
-        biome.spawnSettings(spawnSettings.build());
-        biome.generationSettings(generationSettings.build());
-        biome.effects(effects);
+        // Configure crimson halls biome
+        Biome.Builder biome = new Biome.Builder()
+                .spawnSettings(spawnSettings.build())
+                .generationSettings(generationSettings.build())
+                .effects(effects)
 
-        biome.precipitation(Biome.Precipitation.NONE);
-        biome.category(Biome.Category.NONE);
+                .precipitation(Biome.Precipitation.NONE)
+                .category(Biome.Category.NONE)
 
-        biome.temperature(0.8F);
-        biome.downfall(1.0F);
+                .temperature(0.8F)
+                .downfall(1.0F);
 
         return biome.build();
     }

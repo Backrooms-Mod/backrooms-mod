@@ -139,23 +139,9 @@ public class Color {
 		int tb = (int) (0.272 * r + 0.534 * g + 0.131 * b);
 
 		// check condition
-		if (tr > 255) {
-			r = 255;
-		} else {
-			r = tr;
-		}
-
-		if (tg > 255) {
-			g = 255;
-		} else {
-			g = tg;
-		}
-
-		if (tb > 255) {
-			b = 255;
-		} else {
-			b = tb;
-		}
+		r = Math.min(tr, 255);
+		g = Math.min(tg, 255);
+		b = Math.min(tb, 255);
 
 		// set new RGB value
 		p = (a << 24) | (r << 16) | (g << 8) | b;

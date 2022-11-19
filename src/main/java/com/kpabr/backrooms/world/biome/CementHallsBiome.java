@@ -10,30 +10,29 @@ import net.minecraft.world.biome.SpawnSettings;
 
 public class CementHallsBiome {
     public static Biome create() {
-        Biome.Builder biome = new Biome.Builder();
 
-        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        spawnSettings.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
+        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder()
+                .spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
 
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
 
-        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
-        biomeEffects.skyColor(10921378);
-        biomeEffects.waterColor(10921378);
-        biomeEffects.waterFogColor(10921378);
-        biomeEffects.fogColor(10921378);
-        biomeEffects.grassColor(13818488);
-        BiomeEffects effects = biomeEffects.build();
+        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
+                .skyColor(10921378)
+                .waterColor(10921378)
+                .waterFogColor(10921378)
+                .fogColor(10921378)
+                .grassColor(13818488);
 
-        biome.spawnSettings(spawnSettings.build());
-        biome.generationSettings(generationSettings.build());
-        biome.effects(effects);
+        Biome.Builder biome = new Biome.Builder()
+                .spawnSettings(spawnSettings.build())
+                .generationSettings(generationSettings.build())
+                .effects(biomeEffects.build())
 
-        biome.precipitation(Biome.Precipitation.NONE);
-        biome.category(Biome.Category.NONE);
+                .precipitation(Biome.Precipitation.NONE)
+                .category(Biome.Category.NONE)
 
-        biome.temperature(0.8F);
-        biome.downfall(1.0F);
+                .temperature(0.8F)
+                .downfall(1.0F);
 
         return biome.build();
     }

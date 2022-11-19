@@ -7,31 +7,27 @@ import net.minecraft.world.biome.SpawnSettings;
 
 public class LevelZeroNormalBiome {
     public static Biome create() {
-        Biome.Builder biome = new Biome.Builder();
-
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
+                .skyColor(13548960)
+                .waterColor(13548960)
+                .waterFogColor(13548960)
+                .fogColor(13548960)
+                .grassColor(13818488)
+                .loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
 
+        // Configure level 0 default biome
+        Biome.Builder biome = new Biome.Builder()
+            .spawnSettings(spawnSettings.build())
+            .generationSettings(generationSettings.build())
+            .effects(biomeEffects.build())
 
-        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
-        biomeEffects.skyColor(13548960);
-        biomeEffects.waterColor(13548960);
-        biomeEffects.waterFogColor(13548960);
-        biomeEffects.fogColor(13548960);
-        biomeEffects.grassColor(13818488);
-        biomeEffects.loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
-        BiomeEffects effects = biomeEffects.build();
+            .precipitation(Biome.Precipitation.NONE)
+            .category(Biome.Category.NONE)
 
-        biome.spawnSettings(spawnSettings.build());
-        biome.generationSettings(generationSettings.build());
-        biome.effects(effects);
-
-        biome.precipitation(Biome.Precipitation.NONE);
-        biome.category(Biome.Category.NONE);
-
-        biome.temperature(0.8F);
-        biome.downfall(0.0F);
+            .temperature(0.8F)
+            .downfall(0.0F);
 
         return biome.build();
     }

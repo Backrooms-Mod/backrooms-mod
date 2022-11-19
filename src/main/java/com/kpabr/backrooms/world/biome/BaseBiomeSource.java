@@ -25,7 +25,6 @@ public abstract class BaseBiomeSource extends BiomeSource {
     // To add new biome you should make a new parameter in both constructors
     // and create new variable containing new biome
 
-
     private final SimplexNoiseSampler noise;
     protected final long seed;
 
@@ -58,13 +57,11 @@ public abstract class BaseBiomeSource extends BiomeSource {
     }
 
     public static double getNoiseAt(SimplexNoiseSampler perlinNoiseSampler, int x, int y, int z) {
-
         double n = perlinNoiseSampler.sample(x*0.01, y*0.01, z*0.01);
 
         //Transform the range to [0.0, 1.0], supposing that the range of Noise2D is [-1.0, 1.0]
         n += 1.0;
         n /= 2.0;
-
         return n;
     }
 }
