@@ -21,9 +21,6 @@ import net.minecraft.world.gen.random.ChunkRandom;
 import java.util.Stack;
 
 public abstract class BaseBiomeSource extends BiomeSource {
-    // BIOME SOURCE for all the biomes in the level zero dimension!
-    // To add new biome you should make a new parameter in both constructors
-    // and create new variable containing new biome
 
 
     private final SimplexNoiseSampler noise;

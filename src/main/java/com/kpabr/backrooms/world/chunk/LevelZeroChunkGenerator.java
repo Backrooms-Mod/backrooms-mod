@@ -272,7 +272,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
-                    // does a swap from the various stones to the custom blocks
+                    // does a swap from the various default blocks to the custom blocks
                     if(checkBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, chunk, biomePos)) {
                         BlockPos pos = chunkPos.getBlockPos(x, y, z);
                         BlockState block = chunk.getBlockState(pos);
@@ -287,6 +287,16 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                             if(moldPlacementRandom.nextDouble() < BackroomsConfig.getInstance().moldyCorkTileChance) {
                                 replace(BackroomsBlocks.MOLDY_CORK_TILE, chunk, pos);
                             }
+                        }
+                    }
+                    if(checkBiome(BackroomsLevels.DECREPIT_BIOME, chunk, biomePos)) {
+                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                        BlockState block = chunk.getBlockState(pos);
+
+                        if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
+                        } else if (block == BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState()) {
+                            replace(BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT, chunk, pos);
                         }
                     }
                 }

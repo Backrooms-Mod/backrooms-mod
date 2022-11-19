@@ -20,7 +20,8 @@ public class Level0BiomeSource extends BaseBiomeSource {
         super(biomeRegistry, seed, new
                 BiomeList()
                 .addEntry(BackroomsLevels.CRIMSON_WALLS_BIOME, 0.3)
-                .addEntry(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME, 2)
+                .addEntry(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME, 1.6)
+                .addEntry(BackroomsLevels.DECREPIT_BIOME, 0.4)
         );
     }
 
