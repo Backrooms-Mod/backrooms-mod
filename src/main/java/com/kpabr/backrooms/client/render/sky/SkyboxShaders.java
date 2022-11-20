@@ -22,7 +22,6 @@ import net.minecraft.util.math.Vector4f;
 public class SkyboxShaders {
 
 	public static Shader SKYBOX_SHADER;
-	public static final RenderPhase.Shader SKYBOX_RENDER_PHASE = new RenderPhase.Shader(() -> SKYBOX_SHADER);
 
 	public static void addAll(List<BakedQuad> list, BakedModel model, BlockState state, Direction dir, Random random) {
 		list.addAll(model.getQuads(state, dir, random).stream().filter((quad) -> quad.getSprite().getId().getPath().startsWith("sky/")).toList());
@@ -60,19 +59,14 @@ public class SkyboxShaders {
 				consumer.accept(new Vec3f(vector4f.getX(), vector4f.getY(), vector4f.getZ()));
 			}
 		} catch (Throwable var33) {
-			if (memoryStack != null) {
-				try {
-					memoryStack.close();
-				} catch (Throwable var32) {
-					var33.addSuppressed(var32);
-				}
+			try {
+				memoryStack.close();
+			} catch (Throwable var32) {
+				var33.addSuppressed(var32);
 			}
-
 			throw var33;
 		}
-		if (memoryStack != null) {
-			memoryStack.close();
-		}
+		memoryStack.close();
 	}
 
 }

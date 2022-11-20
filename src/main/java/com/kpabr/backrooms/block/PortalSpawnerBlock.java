@@ -32,10 +32,7 @@ public class PortalSpawnerBlock extends Block implements BlockEntityProvider {
 		if(type == BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY) {
 			return (theWorld, blockPos, blockState, entity) -> PortalSpawnerBlockEntity.tick(theWorld, blockPos, blockState, (PortalSpawnerBlockEntity)(entity));
 		}
-		else
-		{
-			return null;
-		}
+		else return null;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.items;
 
-import com.kpabr.backrooms.entity.projectile.FireSaltProjectileEnt;
+import com.kpabr.backrooms.entity.projectile.FireSaltProjectileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +19,7 @@ public class FireSalt extends Item {
         ItemStack itemStack = user.getStackInHand(hand);
         user.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, 100, 1); //placeholder
         if (!world.isClient) {
-            FireSaltProjectileEnt FireSaltEnt = new FireSaltProjectileEnt(world, user);
+            FireSaltProjectileEntity FireSaltEnt = new FireSaltProjectileEntity(world, user);
             FireSaltEnt.setItem(itemStack);
             FireSaltEnt.setVelocity(user, user.getPitch(), user.getYaw(), 0.0F, 1.5F, 1.0F);
             world.spawnEntity(FireSaltEnt);

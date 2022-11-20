@@ -3,12 +3,7 @@ package com.kpabr.backrooms.entity.living;
 import com.kpabr.backrooms.entity.goals.HoundRunningGoal;
 import com.kpabr.backrooms.entity.goals.SubmissionGoal;
 import com.kpabr.backrooms.init.BackroomsSounds;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.entity.LivingEntityRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,20 +12,10 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.command.SeedCommand;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import org.lwjgl.system.CallbackI;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -38,13 +23,10 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.List;
 import java.util.Random;
 
 public class HoundLivingEntity extends HostileEntity implements IAnimatable {
-
     public Long attacktimer = 18L;
     private Long runtimer = 60L;
     private Random random = new Random(123456);
@@ -56,24 +38,23 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     private final double speed = 1f;
 
 
-    private static final TrackedData<Boolean> ISINVICINITYOFPLAYER = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> IS_INVICINITY_OF_PLAYER = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     private static final TrackedData<Boolean> ATTACKING = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> ISLOOKINGAROUND = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private AnimationFactory factory = new AnimationFactory(this);
+    private static final TrackedData<Boolean> IS_LOOKING_AROUND = DataTracker.registerData(HoundLivingEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     public HoundLivingEntity(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);
         this.experiencePoints = 1;
     }
 
-
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(ISINVICINITYOFPLAYER, false);
+        this.dataTracker.startTracking(IS_INVICINITY_OF_PLAYER, false);
         this.dataTracker.startTracking(ATTACKING, false);
-        this.dataTracker.startTracking(ISLOOKINGAROUND, false);
+        this.dataTracker.startTracking(IS_LOOKING_AROUND, false);
     }
 
     @Override
@@ -82,8 +63,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         if (this.IsAttacking()) {
             if(attacktimer == 20) {
                 this.playSound(BackroomsSounds.HOUND_ATTACK, 10f, 10f);
-            }
-            if (--attacktimer <= 0L) {
+            } else if (--attacktimer == 0L) {
                 this.setIsAttacking(false);
                 this.attacktimer = 20L;
             }
@@ -133,11 +113,10 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         if (event.isMoving()) {
             if (IsInVicinity()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.run", true));
-                return PlayState.CONTINUE;
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.walk", true));
-                return PlayState.CONTINUE;
             }
+            return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.idle", true));
         return PlayState.CONTINUE;
@@ -145,7 +124,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController<HoundLivingEntity>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
@@ -165,20 +144,20 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
         this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
     }
 
-    public void setIsinvicinityofplayer(boolean isinvicinityofplayer) {
-        this.dataTracker.set(ISINVICINITYOFPLAYER, isinvicinityofplayer);
+    public void setIsInvicinityOfPlayer(boolean isInvicinityOfPlayer) {
+        this.dataTracker.set(IS_INVICINITY_OF_PLAYER, isInvicinityOfPlayer);
     }
 
     public void setIsAttacking(boolean isAttacking) {
         this.dataTracker.set(ATTACKING, isAttacking);
     }
 
-    public void setIsLooking(boolean islooking) {
-        this.dataTracker.set(ISLOOKINGAROUND, islooking);
+    public void setIsLooking(boolean isLooking) {
+        this.dataTracker.set(IS_LOOKING_AROUND, isLooking);
     }
 
     public boolean IsInVicinity() {
-        return this.dataTracker.get(ISINVICINITYOFPLAYER);
+        return this.dataTracker.get(IS_INVICINITY_OF_PLAYER);
     }
 
     public boolean IsAttacking() {
@@ -186,7 +165,7 @@ public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     }
 
     public boolean IsLooking() {
-        return this.dataTracker.get(ISLOOKINGAROUND);
+        return this.dataTracker.get(IS_LOOKING_AROUND);
     }
 
     @Override

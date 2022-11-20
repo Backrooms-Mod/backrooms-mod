@@ -12,11 +12,12 @@ import net.minecraft.util.Identifier;
 
 public class StrongLiminalShader extends LiminalShaderApplier.SimpleShader {
 
-    public static final Codec<StrongLiminalShader> CODEC = RecordCodecBuilder.create((instance) -> {
-        return instance.group(Identifier.CODEC.fieldOf("shader").stable().forGetter((shader) -> {
-            return shader.getShaderId();
-        })).apply(instance, instance.stable(StrongLiminalShader::new));
-    });
+    public static final Codec<StrongLiminalShader> CODEC = RecordCodecBuilder.create((instance) ->
+         instance.group(
+                 Identifier.CODEC.fieldOf("shader")
+                         .stable()
+                         .forGetter((shader) -> shader.getShaderId())
+         ).apply(instance, instance.stable(StrongLiminalShader::new)));
 
     public StrongLiminalShader(Identifier shader) {
         super(shader);
@@ -24,7 +25,7 @@ public class StrongLiminalShader extends LiminalShaderApplier.SimpleShader {
 
     @Override
     @Environment(EnvType.CLIENT)
-    public boolean shouldRender(MinecraftClient client, float tickdelta) {
+    public boolean shouldRender(MinecraftClient client, float tickDelta) {
         return !BackroomsConfig.getInstance().disableStrongShaders;
     }
 

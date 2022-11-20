@@ -14,7 +14,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
@@ -37,7 +36,7 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return (BlockState)this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
     }
 
     @Nullable
@@ -52,9 +51,6 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
         if(type == BackroomsBlocks.COMPUTER_BLOCK_ENTITY) {
             return (theWorld, blockPos, blockState, entity) -> ComputerBlockEntity.tick(theWorld, blockPos, blockState, (ComputerBlockEntity)(entity));
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 }

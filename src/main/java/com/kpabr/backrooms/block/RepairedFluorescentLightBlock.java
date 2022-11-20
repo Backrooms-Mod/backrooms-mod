@@ -21,24 +21,21 @@ public class RepairedFluorescentLightBlock extends Block {
 		this.setDefaultState(getStateManager().getDefaultState().with(POWERED, false).with(LIT, false));
 	}
 
+	@Override
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-			state = (BlockState)state.cycle(LIT);
-			world.setBlockState(pos, state, 2);
-
-			return ActionResult.success(world.isClient);
+		state = state.cycle(LIT);
+		world.setBlockState(pos, state, 2);
+		return ActionResult.success(world.isClient);
 	}
 
+	@Override
 	public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
 		if (!world.isClient) {
 			boolean bl = world.isReceivingRedstonePower(pos);
-			if (bl != (Boolean)state.get(POWERED)) {
-				if ((Boolean)state.get(LIT) != bl) {
-					state = (BlockState)state.with(LIT, bl);
-				}
-
-				world.setBlockState(pos, (BlockState)state.with(POWERED, bl), 2);
+			if (bl != state.get(POWERED)) {
+				if (state.get(LIT) != bl) state = state.with(LIT, bl);
+				world.setBlockState(pos, state.with(POWERED, bl), 2);
 			}
-
 		}
 	}
 

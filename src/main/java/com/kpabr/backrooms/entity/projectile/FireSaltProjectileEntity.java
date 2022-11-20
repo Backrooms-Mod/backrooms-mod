@@ -1,54 +1,43 @@
 package com.kpabr.backrooms.entity.projectile;
 
-import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.block.Pyroil;
-import com.kpabr.backrooms.init.*;
+import static com.kpabr.backrooms.init.BackroomsItems.FIRESALT;
+import static com.kpabr.backrooms.init.BackroomsParticles.FIRESALT_PARTICLE;
+import static com.kpabr.backrooms.init.BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE;
+import static com.kpabr.backrooms.init.BackroomsSounds.FIRESALT_LAND_EVENT;
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 
-public class FireSaltProjectileEnt extends ThrownItemEntity {
+public class FireSaltProjectileEntity extends ThrownItemEntity {
 
-    public FireSaltProjectileEnt(EntityType<? extends ThrownItemEntity> entityType, World world) {
+    public FireSaltProjectileEntity(EntityType<? extends FireSaltProjectileEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public FireSaltProjectileEnt(World world, LivingEntity owner) {
-        super(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, owner, world);
-    }
-
-    public FireSaltProjectileEnt(World world, double x, double y, double z) {
-        super(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, x, y, z, world);
+    public FireSaltProjectileEntity(World world, LivingEntity owner) {
+        super(FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, owner, world);
     }
 
     @Override
     protected Item getDefaultItem() {
-        return BackroomsItems.FIRESALT;
+        return FIRESALT;
     }
 
     @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() { // particles WIP
-        return BackroomsParticles.FIRESALT_PARTICLE;
+        return FIRESALT_PARTICLE;
     }
 
     @Environment(EnvType.CLIENT)
@@ -65,7 +54,7 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
 
-        world.playSound(null, entity.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
+        world.playSound(null, entity.getBlockPos(), FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
         entity.setOnFire(true);
         entity.damage(DamageSource.thrownProjectile(this, this.getOwner()), 4.0f);
         this.world.createExplosion(this, entity.getBlockX(), entity.getBlockY() + 0.5, entity.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
@@ -74,16 +63,11 @@ public class FireSaltProjectileEnt extends ThrownItemEntity {
 
     protected void onCollision(HitResult hitResult) {
         super.onCollision(hitResult);
-        if (!this.world.isClient) { // checks if the world isn't client
+        if (!this.world.isClient) {
             this.world.sendEntityStatus(this, (byte) 3); // particles
-            world.playSound(null, this.getBlockPos(), BackroomsSounds.FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
+            world.playSound(null, this.getBlockPos(), FIRESALT_LAND_EVENT, SoundCategory.BLOCKS, 1f, 1f);
             this.kill();
             this.world.createExplosion(this, this.getBlockX(), this.getBlockY() + 0.5, this.getBlockZ(), 0.5f, true, Explosion.DestructionType.BREAK);
         }
     }
-   /* @Override
-    public Packet createSpawnPacket() {
-        return this.createSpawnPacket();
-    }
-    */
 }

@@ -46,8 +46,19 @@ public class TilemoldBlock extends Block implements Waterloggable {
 	protected final VoxelShape upShape;
 	protected final VoxelShape downShape;
 
+	public TilemoldBlock(FabricBlockSettings fabricBlockSettings) {
+		super(fabricBlockSettings);
+		final double xzOffset = 0;
+		final double height = 1.0;
+		this.upShape = Block.createCuboidShape(0, 0.0, xzOffset, 16 - xzOffset, height, 16 - xzOffset);
+		this.downShape = Block.createCuboidShape(xzOffset, 16 - height, xzOffset, 16 - xzOffset, 16.0, 16 - xzOffset);
+		this.northShape = Block.createCuboidShape(xzOffset, xzOffset, 16 - height, 16 - xzOffset, 16 - xzOffset, 16.0);
+		this.southShape = Block.createCuboidShape(xzOffset, xzOffset, 0.0, 16 - xzOffset, 16 - xzOffset, height);
+		this.eastShape = Block.createCuboidShape(0.0, xzOffset, xzOffset, height, 16 - xzOffset, 16 - xzOffset);
+		this.westShape = Block.createCuboidShape(16 - height, xzOffset, xzOffset, 16.0, 16 - xzOffset, 16 - xzOffset);
+	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		Direction direction = state.get(FACING);
 		switch (direction) {
@@ -67,14 +78,14 @@ public class TilemoldBlock extends Block implements Waterloggable {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
 		Direction direction = state.get(FACING);
 		BlockPos blockPos = pos.offset(direction.getOpposite());
 		return world.getBlockState(blockPos).isSideSolidFullSquare(world, blockPos, direction);
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
 			world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
@@ -90,17 +101,17 @@ public class TilemoldBlock extends Block implements Waterloggable {
 		return this.getDefaultState().with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER).with(FACING, ctx.getSide());
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
 		return state.with(FACING, rotation.rotate(state.get(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		return state.rotate(mirror.getRotation(state.get(FACING)));
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
@@ -109,22 +120,8 @@ public class TilemoldBlock extends Block implements Waterloggable {
 		builder.add(WATERLOGGED, FACING);
 	}
 
-	@SuppressWarnings("deprecation")
+	@Override
 	public PistonBehavior getPistonBehavior(BlockState state) {
 		return PistonBehavior.DESTROY;
-	}
-
-
-
-	public TilemoldBlock(FabricBlockSettings fabricBlockSettings) {
-		super(fabricBlockSettings);
-		double xzOffset = 0;
-		double height = 1.0;
-		this.upShape = Block.createCuboidShape(0, 0.0, xzOffset, 16 - xzOffset, height, 16 - xzOffset);
-		this.downShape = Block.createCuboidShape(xzOffset, 16 - height, xzOffset, 16 - xzOffset, 16.0, 16 - xzOffset);
-		this.northShape = Block.createCuboidShape(xzOffset, xzOffset, 16 - height, 16 - xzOffset, 16 - xzOffset, 16.0);
-		this.southShape = Block.createCuboidShape(xzOffset, xzOffset, 0.0, 16 - xzOffset, 16 - xzOffset, height);
-		this.eastShape = Block.createCuboidShape(0.0, xzOffset, xzOffset, height, 16 - xzOffset, 16 - xzOffset);
-		this.westShape = Block.createCuboidShape(16 - height, xzOffset, xzOffset, 16.0, 16 - xzOffset, 16 - xzOffset);
 	}
 }

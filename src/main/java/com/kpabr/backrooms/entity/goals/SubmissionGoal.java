@@ -5,25 +5,16 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Random;
-
-
 public class SubmissionGoal extends Goal {
-private final PathAwareEntity mob;
-private Long submissiontime;
-private boolean hangery = false;
+    private final PathAwareEntity mob;
+    private Long submissiontime;
+    private boolean hangery = false;
 
-private boolean submitted = false;
-
-private Random random = new Random();
+    private boolean submitted = false;
     public SubmissionGoal(PathAwareEntity mob, Long submissiontime) {
         this.mob = mob;
         this.submissiontime = submissiontime;
     }
-
-
-
-
 
     @Override
     public boolean canStart() {
@@ -34,7 +25,7 @@ private Random random = new Random();
             double d = vec3d2.length();
             vec3d2 = vec3d2.normalize();
             double e = vec3d.dotProduct(vec3d2);
-            return e > 1.0D - 0.025D / d ? player.canSee(this.mob) : false;
+            return e > 1.0D - 0.025D / d && player.canSee(this.mob);
         }
             return false;
     }
@@ -46,24 +37,18 @@ private Random random = new Random();
 
     @Override
     public void start(){
-        LivingEntity player = this.mob.getTarget();
-        if(player != null) {
-
-            submitted = true;
-        }
+        submitted = this.mob.getTarget() != null;
     }
 
     @Override
     public void tick() {
             LivingEntity player = this.mob.getTarget();
             if (!hangery && submitted && player != null) {
-                if (--submissiontime > 0L && player != null) {
+                if (--submissiontime > 0L) {
                     this.mob.setVelocity(0, 0, 0);
                     this.mob.lookAt(player.getCommandSource().getEntityAnchor(), player.getPos());
-                } else if (player != null) {
-                        hangery = true;
-                    }
-                }
+                } else hangery = true;
             }
-        }
+    }
+}
 

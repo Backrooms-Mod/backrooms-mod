@@ -42,4 +42,3 @@ public class BiomeRegistryList {
         return list;
     }
 }
-

@@ -148,7 +148,6 @@ public class BackroomsBlocks {
 	}
 
 	public static void init() {
-
 		for (Identifier id : ITEMS.keySet()) {
 			Registry.register(Registry.ITEM, id, ITEMS.get(id));
 		}
@@ -162,21 +161,17 @@ public class BackroomsBlocks {
 		registerCompostableBlocks();
 		registerFlammableBlocks();
 		registerFuels();
-
 	}
 
 	private static void registerCompostableBlocks() {
-
 	}
 
 	private static void registerFlammableBlocks() {
 		FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
-
 	}
 
 	private static void registerFuels() {
 		FuelRegistry registry = FuelRegistry.INSTANCE;
 		registry.add(PYROIL, 800);
 	}
-
 }

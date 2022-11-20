@@ -89,14 +89,14 @@ public class HoundRunningGoal extends Goal {
             double distance = pos1.distanceTo(pos2);
             if (path != null && distance < 20) {
                 if (this.mob instanceof HoundLivingEntity) {
-                    if (!((HoundLivingEntity) this.mob).IsInVicinity() == true) {
-                        ((HoundLivingEntity) this.mob).setIsinvicinityofplayer(true);
+                    if (!((HoundLivingEntity) this.mob).IsInVicinity()) {
+                        ((HoundLivingEntity) this.mob).setIsInvicinityOfPlayer(true);
                     }
                 }
                 this.mob.getNavigation().setSpeed(runspeed);
             } else {
                 if (this.mob instanceof HoundLivingEntity) {
-                    ((HoundLivingEntity) this.mob).setIsinvicinityofplayer(false);
+                    ((HoundLivingEntity) this.mob).setIsInvicinityOfPlayer(false);
                 }
                 this.mob.getNavigation().setSpeed(speed);
             }
@@ -115,7 +115,7 @@ public class HoundRunningGoal extends Goal {
     public void stop() {
         LivingEntity livingEntity = this.mob.getTarget();
         if (!EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR.test(livingEntity)) {
-            this.mob.setTarget((LivingEntity)null);
+            this.mob.setTarget(null);
         }
 
         this.mob.setAttacking(false);
@@ -163,7 +163,6 @@ public class HoundRunningGoal extends Goal {
             this.mob.swingHand(Hand.MAIN_HAND);
             this.mob.tryAttack(target);
         }
-
     }
 
     protected void resetCooldown() {
@@ -183,6 +182,6 @@ public class HoundRunningGoal extends Goal {
     }
 
     protected double getSquaredMaxAttackDistance(LivingEntity entity) {
-        return (double)(this.mob.getWidth() * 2.0F * this.mob.getWidth() * 2.0F + entity.getWidth());
+        return this.mob.getWidth() * 2.0F * this.mob.getWidth() * 2.0F + entity.getWidth();
     }
 }

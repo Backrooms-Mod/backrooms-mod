@@ -19,16 +19,6 @@ public class FireSaltParticle extends SpriteBillboardParticle {
     private final float sampleU;
     private final float sampleV;
 
-    FireSaltParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, ItemStack stack) {
-        this(world, x, y, z, stack);
-        this.velocityX *= 0.1f;
-        this.velocityY *= 0.1f;
-        this.velocityZ *= 0.1f;
-        this.velocityX += velocityX;
-        this.velocityY += velocityY;
-        this.velocityZ += velocityZ;
-    }
-
     @Override
     public ParticleTextureSheet getType() {
         return ParticleTextureSheet.TERRAIN_SHEET;
@@ -45,25 +35,25 @@ public class FireSaltParticle extends SpriteBillboardParticle {
 
     @Override
     protected float getMinU() {
-        return this.sprite.getFrameU((this.sampleU + 1.0f) / 4.0f * 16.0f);
+        return this.sprite.getFrameU((this.sampleU + 1.0f) * 4.0f);
     }
 
     @Override
     protected float getMaxU() {
-        return this.sprite.getFrameU(this.sampleU / 4.0f * 16.0f);
+        return this.sprite.getFrameU(this.sampleU * 4.0f);
     }
 
     @Override
     protected float getMinV() {
-        return this.sprite.getFrameV(this.sampleV / 4.0f * 16.0f);
+        return this.sprite.getFrameV(this.sampleV * 4.0f);
     }
 
     @Override
     protected float getMaxV() {
-        return this.sprite.getFrameV((this.sampleV + 1.0f) / 4.0f * 16.0f);
+        return this.sprite.getFrameV((this.sampleV + 1.0f) * 4.0f);
     }
 
-    @Environment(value= EnvType.CLIENT)
+    @Environment(value = EnvType.CLIENT)
     public static class FireSaltFactory
             implements ParticleFactory<DefaultParticleType> {
         @Override

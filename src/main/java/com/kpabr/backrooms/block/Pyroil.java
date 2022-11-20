@@ -37,20 +37,20 @@ import java.util.Random;
 
 
 public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
-    public static final EnumProperty<WireConnection> WIRE_CONNECTION_NORTH = Properties.NORTH_WIRE_CONNECTION;
-    public static final EnumProperty<WireConnection> WIRE_CONNECTION_EAST = Properties.EAST_WIRE_CONNECTION;
-    public static final EnumProperty<WireConnection> WIRE_CONNECTION_SOUTH = Properties.SOUTH_WIRE_CONNECTION;
-    public static final EnumProperty<WireConnection> WIRE_CONNECTION_WEST = Properties.WEST_WIRE_CONNECTION;
-    public static final Map<Direction, EnumProperty<WireConnection>> DIRECTION_TO_WIRE_CONNECTION_PROPERTY = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, WIRE_CONNECTION_NORTH, Direction.EAST, WIRE_CONNECTION_EAST, Direction.SOUTH, WIRE_CONNECTION_SOUTH, Direction.WEST, WIRE_CONNECTION_WEST));
-    public static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
+    private static final EnumProperty<WireConnection> WIRE_CONNECTION_NORTH = Properties.NORTH_WIRE_CONNECTION;
+    private static final EnumProperty<WireConnection> WIRE_CONNECTION_EAST = Properties.EAST_WIRE_CONNECTION;
+    private static final EnumProperty<WireConnection> WIRE_CONNECTION_SOUTH = Properties.SOUTH_WIRE_CONNECTION;
+    private static final EnumProperty<WireConnection> WIRE_CONNECTION_WEST = Properties.WEST_WIRE_CONNECTION;
+    private static final Map<Direction, EnumProperty<WireConnection>> DIRECTION_TO_WIRE_CONNECTION_PROPERTY = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, WIRE_CONNECTION_NORTH, Direction.EAST, WIRE_CONNECTION_EAST, Direction.SOUTH, WIRE_CONNECTION_SOUTH, Direction.WEST, WIRE_CONNECTION_WEST));
+    private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
     //Idk what does that means, TODO:
-    public static final Map<Direction, VoxelShape> field_24414 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 1.0, 13.0), Direction.SOUTH, Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 16.0), Direction.EAST, Block.createCuboidShape(3.0, 0.0, 3.0, 16.0, 1.0, 13.0), Direction.WEST, Block.createCuboidShape(0.0, 0.0, 3.0, 13.0, 1.0, 13.0)));
-    public static final Map<Direction, VoxelShape> field_24415 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, VoxelShapes.union(field_24414.get(Direction.NORTH), Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 16.0, 1.0)), Direction.SOUTH, VoxelShapes.union(field_24414.get(Direction.SOUTH), Block.createCuboidShape(3.0, 0.0, 15.0, 13.0, 16.0, 16.0)), Direction.EAST, VoxelShapes.union(field_24414.get(Direction.EAST), Block.createCuboidShape(15.0, 0.0, 3.0, 16.0, 16.0, 13.0)), Direction.WEST, VoxelShapes.union(field_24414.get(Direction.WEST), Block.createCuboidShape(0.0, 0.0, 3.0, 1.0, 16.0, 13.0))));
+    private static final Map<Direction, VoxelShape> field_24414 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 1.0, 13.0), Direction.SOUTH, Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 16.0), Direction.EAST, Block.createCuboidShape(3.0, 0.0, 3.0, 16.0, 1.0, 13.0), Direction.WEST, Block.createCuboidShape(0.0, 0.0, 3.0, 13.0, 1.0, 13.0)));
+    private static final Map<Direction, VoxelShape> field_24415 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, VoxelShapes.union(field_24414.get(Direction.NORTH), Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 16.0, 1.0)), Direction.SOUTH, VoxelShapes.union(field_24414.get(Direction.SOUTH), Block.createCuboidShape(3.0, 0.0, 15.0, 13.0, 16.0, 16.0)), Direction.EAST, VoxelShapes.union(field_24414.get(Direction.EAST), Block.createCuboidShape(15.0, 0.0, 3.0, 16.0, 16.0, 13.0)), Direction.WEST, VoxelShapes.union(field_24414.get(Direction.WEST), Block.createCuboidShape(0.0, 0.0, 3.0, 1.0, 16.0, 13.0))));
 
     private static final Vec3d[] COLORS = Util.make(new Vec3d[16], (vec3ds) -> {
         for(int i = 0; i <= 15; ++i) {
-            float r = (float)i / 15.0F;
+            float r = (float) i / 15.0F;
             float g = r * 0.6F + (r > 0.0F ? 0.4F : 0.3F);
             float h = MathHelper.clamp(r * r * 0.7F - 0.5F, 0.0F, 1.0F);
             float j = MathHelper.clamp(r * r * 0.6F - 0.7F, 0.0F, 1.0F);
@@ -85,7 +85,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         return voxelShape;
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!oldState.isOf(state.getBlock()) && !world.isClient) {
 
@@ -96,15 +96,13 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
             this.updateOffsetNeighbors(world, pos);
         }
     }
-
-    @SuppressWarnings("deprecation")
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
         return SHAPES.get(state);
     }
 
     private void updateOffsetNeighbors(World world, BlockPos pos) {
         Iterator<Direction> horizontal_directions = Direction.Type.HORIZONTAL.iterator();
-
         Direction direction;
 
         while(horizontal_directions.hasNext()) {
@@ -135,11 +133,10 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
             for (Direction direction : directions) {
                 world.updateNeighborsAlways(pos.offset(direction), this);
             }
-
         }
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!moved && !state.isOf(newState.getBlock())) {
             super.onStateReplaced(state, world, pos, newState, moved);
@@ -155,7 +152,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         }
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void prepare(BlockState state, WorldAccess world, BlockPos pos, int flags, int maxUpdateDepth) {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
 
@@ -178,7 +175,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
 
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         if (direction == Direction.DOWN) {
             return state;
@@ -204,18 +201,16 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
             boolean isWestConnected = state.get(WIRE_CONNECTION_WEST).isConnected();
             boolean areNorthSouthConnected = !isNorthConnected && !isSouthConnected;
             boolean areEastWestConnected = !isEastConnected && !isWestConnected;
+
             if (!isWestConnected && areNorthSouthConnected) {
                 state = state.with(WIRE_CONNECTION_WEST, WireConnection.SIDE);
             }
-
             if (!isEastConnected && areNorthSouthConnected) {
                 state = state.with(WIRE_CONNECTION_EAST, WireConnection.SIDE);
             }
-
             if (!isNorthConnected && areEastWestConnected) {
                 state = state.with(WIRE_CONNECTION_NORTH, WireConnection.SIDE);
             }
-
             if (!isSouthConnected && areEastWestConnected) {
                 state = state.with(WIRE_CONNECTION_SOUTH, WireConnection.SIDE);
             }
@@ -224,7 +219,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         return state;
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (player.getAbilities().allowModifyWorld) {
             if (isFullyConnected(state) || isNotConnected(state)) {
@@ -237,7 +232,6 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
                 }
             }
         }
-
         return ActionResult.PASS;
     }
 
@@ -250,30 +244,28 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         }
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-        switch (mirror) {
-            case LEFT_RIGHT:
-                return state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH));
-            case FRONT_BACK:
-                return state.with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
-            default:
-                return super.mirror(state, mirror);
-        }
+        return switch (mirror) {
+            case LEFT_RIGHT ->
+                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH));
+            case FRONT_BACK ->
+                    state.with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
+            default -> super.mirror(state, mirror);
+        };
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
-        switch (rotation) {
-            case CLOCKWISE_180:
-                return state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
-            case COUNTERCLOCKWISE_90:
-                return state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_NORTH));
-            case CLOCKWISE_90:
-                return (state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_WEST))).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_SOUTH));
-            default:
-                return state;
-        }
+        return switch (rotation) {
+            case CLOCKWISE_180 ->
+                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
+            case COUNTERCLOCKWISE_90 ->
+                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_NORTH));
+            case CLOCKWISE_90 ->
+                    (state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_WEST))).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_SOUTH));
+            default -> state;
+        };
     }
 
     private static boolean isFullyConnected(BlockState state) {
@@ -284,7 +276,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         return !state.get(WIRE_CONNECTION_NORTH).isConnected() && !state.get(WIRE_CONNECTION_SOUTH).isConnected() && !state.get(WIRE_CONNECTION_EAST).isConnected() && !state.get(WIRE_CONNECTION_WEST).isConnected();
     }
 
-    @SuppressWarnings("deprecation")
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
         if (!world.isClient) {
             if (!state.canPlaceAt(world, pos)) {
