@@ -61,7 +61,7 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
     //Define roof position on y coordinate.
     private static final int ROOF_BEGIN_Y = 8 * (getFloorCount() + 1) + 1;
     public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed, CementHallsChunkGenerator cementHallsChunkGenerator, ParkingGarageChunkGenerator parkingGarageChunkGenerator, WarehouseChunkGenerator warehouseChunkGenerator) {
-        super(new SimpleRegistry<StructureSet>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
+        super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
         this.cementHallsChunkGenerator = cementHallsChunkGenerator;
         this.parkingGarageChunkGenerator = parkingGarageChunkGenerator;
@@ -85,7 +85,6 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
-
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
         // If you're adding new type of structure then don't use blocks other than described below from our mod!

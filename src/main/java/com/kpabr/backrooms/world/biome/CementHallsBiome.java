@@ -10,7 +10,6 @@ import net.minecraft.world.biome.SpawnSettings;
 
 public class CementHallsBiome {
     public static Biome create() {
-
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder()
                 .spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
 

@@ -24,9 +24,9 @@ public class Level1BiomeSource extends BaseBiomeSource {
 
     public Level1BiomeSource(Registry<Biome> biomeRegistry, long seed) {
         super(biomeRegistry, seed, new BiomeList()
-                .addEntry(BackroomsLevels.WAREHOUSE_BIOME, 0.1)
-                .addEntry(BackroomsLevels.PARKING_GARAGE_BIOME, 0.4)
-                .addEntry(BackroomsLevels.CEMENT_WALLS_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
+                .addEntry(BackroomsLevels.WAREHOUSE_BIOME, 1)
+                .addEntry(BackroomsLevels.PARKING_GARAGE_BIOME, 2)
+                .addEntry(BackroomsLevels.CEMENT_WALLS_BIOME, 6)
         );
     }
 

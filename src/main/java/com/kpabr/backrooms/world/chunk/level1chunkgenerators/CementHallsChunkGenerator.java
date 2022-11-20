@@ -204,12 +204,11 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
             //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
             if (fullFloorRandom.nextFloat() < 0.2F) {
                 //Define the amounts of regular and nofill rooms.
-                final int regularRooms=2;
-                final int nofillRooms=0;
+                final int regularRooms = 2;
+                final int noFillRooms = 0;
                 //Choose the room that will be placed.
-                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms));
+                int roomNumber = (fullFloorRandom.nextInt(regularRooms + noFillRooms));
                 String roomName = "cement_walls_" + roomNumber;
-                // TODO: roomNumber is always less than regularRooms
                 if(roomNumber >= regularRooms) {
                     roomName = "cement_walls_nofill_" + (roomNumber - regularRooms);
                 }
@@ -231,7 +230,6 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
                     //Fill the area the room will be placed in with air.
-                    // TODO: Accords to 212 line: roomNumber is always less than regularRooms
                     if(roomNumber < regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {

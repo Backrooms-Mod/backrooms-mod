@@ -1,14 +1,7 @@
 package com.kpabr.backrooms.world.biome;
 
-
-import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.BiomeList;
 import com.kpabr.backrooms.util.BiomeRegistryList;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.util.dynamic.RegistryOps;
-import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
@@ -21,9 +14,6 @@ import net.minecraft.world.gen.random.ChunkRandom;
 import java.util.Stack;
 
 public abstract class BaseBiomeSource extends BiomeSource {
-    // BIOME SOURCE for all the biomes in the level zero dimension!
-    // To add new biome you should make a new parameter in both constructors
-    // and create new variable containing new biome
 
     private final SimplexNoiseSampler noise;
     protected final long seed;

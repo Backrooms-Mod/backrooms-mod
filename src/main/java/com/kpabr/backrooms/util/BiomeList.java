@@ -16,7 +16,6 @@ public class BiomeList {
         } else {
             this.biomeList.put(chance, biome);
         }
-
         return this;
     }
 

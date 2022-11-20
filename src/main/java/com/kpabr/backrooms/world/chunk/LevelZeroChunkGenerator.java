@@ -27,7 +27,6 @@ import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.math.BlockPos;
@@ -338,6 +337,16 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                                 && moldPlacementRandom.nextDouble() < BackroomsConfig.getInstance().moldyCorkTileChance) {
 
                             replace(BackroomsBlocks.MOLDY_CORK_TILE, chunk, pos);
+                        }
+                    }
+                    if(checkBiome(BackroomsLevels.DECREPIT_BIOME, chunk, biomePos)) {
+                        BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                        BlockState block = chunk.getBlockState(pos);
+
+                        if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
+                        } else if (block == BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState()) {
+                            replace(BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT, chunk, pos);
                         }
                     }
                 }
