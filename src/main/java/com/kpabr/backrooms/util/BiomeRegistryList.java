@@ -22,25 +22,16 @@ import static java.lang.Double.valueOf;
 
 public class BiomeRegistryList {
     public static final Double DEFAULT_CHANCE_VALUE = 2.D; // Use for default biome type
-    public SortedMap<Double, RegistryEntry<Biome>> biomeList = new TreeMap<>();
+    public TreeMap<Double, RegistryEntry<Biome>> biomeList = new TreeMap<>();
 
     public Stream<RegistryEntry<Biome>> getBiomeEntries() {
         BackroomsMod.LOGGER.info(this.biomeList.values().stream().toString());
         return this.biomeList.values().stream();
     }
 
-    private Set<Double> getChances() {
-        return this.biomeList.keySet();
-    }
-
     public RegistryEntry<Biome> findNearest(double key) {
-
-        for(double chance : getChances()) {
-            if (key <= chance) return biomeList.get(chance);
-        }
-        return biomeList.get(DEFAULT_CHANCE_VALUE);
+        return biomeList.floorEntry(key).getValue();
     }
-
     public static BiomeRegistryList from(Registry<Biome> biomeRegistry, BiomeList biomeList) {
         BiomeRegistryList list = new BiomeRegistryList();
 
