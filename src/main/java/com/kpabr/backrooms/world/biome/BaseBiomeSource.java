@@ -11,8 +11,6 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
-import java.util.Stack;
-
 public abstract class BaseBiomeSource extends BiomeSource {
 
     private final SimplexNoiseSampler noise;
