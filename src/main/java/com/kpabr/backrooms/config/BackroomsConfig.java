@@ -1,27 +1,28 @@
 package com.kpabr.backrooms.config;
+import com.kpabr.backrooms.BackroomsMod;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
+
+@Config.Gui.Background("backrooms:textures/block/patterned_wallpaper.png")
 @Config(name = "backrooms")
 public class BackroomsConfig implements ConfigData {
-
-    @ConfigEntry.Gui.Tooltip()
-    public boolean disableStrongShaders = true;
-
-    @ConfigEntry.Gui.Tooltip()
+    @ConfigEntry.Category("Gameplay")
     public int suffocationChance = 10;
 
-    @ConfigEntry.Gui.Tooltip()
+    @ConfigEntry.Category("Gameplay")
     public int almondMilkRestoring = 2;
 
-    @ConfigEntry.Gui.Tooltip()
+    @ConfigEntry.Category("Gameplay")
     public int wretchedCycleStepTime = 20; // by default every 20 seconds we increment player's wretched parameter
-
-    @ConfigEntry.Gui.Tooltip()
+    @ConfigEntry.Category("Gameplay")
     public double moldyCorkTileChance = 0.05;
+
+    @ConfigEntry.Category("Render")
+    public boolean disableStrongShaders = true;
 
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);
