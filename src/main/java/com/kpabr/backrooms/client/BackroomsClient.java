@@ -1,6 +1,7 @@
 package com.kpabr.backrooms.client;
 
 import com.kpabr.backrooms.entity.renderer.living.HoundEntityRenderer;
+import com.kpabr.backrooms.entity.renderer.living.WretchEntityRenderer;
 import com.kpabr.backrooms.init.*;
 import com.kpabr.backrooms.particle.FireSaltParticle;
 import net.fabricmc.api.ClientModInitializer;
@@ -38,7 +39,9 @@ public class BackroomsClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.TILEMOLD);
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.PYROIL, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getTranslucent());
+
 		EntityRendererRegistry.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
+		EntityRendererRegistry.register(BackroomsEntities.WRETCHED, WretchEntityRenderer::new);
 
 		//almond water fluid rendering
 		FluidRenderHandlerRegistry.INSTANCE.register(BackroomsFluids.ALMOND_WATER_STILL,
