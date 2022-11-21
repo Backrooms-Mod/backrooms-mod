@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "backrooms:block/pipe_middle"
+        "model": "backrooms:block/pipe_turn"
       },
       "when": {
         "OR": [
@@ -17,20 +17,20 @@
           {"down": "true", "north": "true"},
           {"down": "true", "east": "true"},
           {"down": "true", "south": "true"},
-          {"down": "true", "west": "true"},
+          {"down": "true", "west":  "true"},
           {"north": "true", "south": "false"},
           {"east": "true", "west": "false"},
           {"south": "true", "north": "false"},
           {"west": "true", "east": "false"},
           {"up": "true", "down": "false"},
           {"down": "true", "up": "false"},
-          {"north": "false", "east": "false", "south": "false", "west": "false", "up": "false", "down": "false"}
+          {"north": "false", "south": "false", "east": "false", "west": "false", "up": "false", "down": "false"}
         ]
       }
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe"
+        "model": "backrooms:block/pipe_edge"
       },
       "when": {
         "north": "true"
@@ -38,8 +38,8 @@
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe",
-        "uvlock": true,
+        "model": "backrooms:block/pipe_edge",
+        "uvlock": "true",
         "y": 90
       },
       "when": {
@@ -48,8 +48,8 @@
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe",
-        "uvlock": true,
+        "model": "backrooms:block/pipe_edge",
+        "uvlock": "true",
         "y": 180
       },
       "when": {
@@ -58,8 +58,8 @@
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe",
-        "uvlock": true,
+        "model": "backrooms:block/pipe_edge",
+        "uvlock": "true",
         "y": 270
       },
       "when": {
@@ -68,8 +68,8 @@
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe",
-        "uvlock": true,
+        "model": "backrooms:block/pipe_edge",
+        "uvlock": "true",
         "x": 270
       },
       "when": {
@@ -78,12 +78,36 @@
     },
     {
       "apply": {
-        "model": "backrooms:block/pipe",
-        "uvlock": true,
+        "model": "backrooms:block/pipe_edge",
+        "uvlock": "true",
         "x": 90
       },
       "when": {
         "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/pipe_ns"
+      },
+      "when": {
+        "north": "true", "south": "true", "east": "false", "west": "false", "up": "false", "down": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/pipe_ew"
+      },
+      "when": {
+        "north": "false", "south": "false", "east": "true", "west": "true", "up": "false", "down": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/pipe_ud"
+      },
+      "when": {
+        "north": "false", "south": "false", "east": "false", "west": "false", "up": "true", "down": "true"
       }
     }
   ]
