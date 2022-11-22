@@ -3,13 +3,18 @@ package com.kpabr.backrooms.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConnectingBlock;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 
@@ -52,6 +57,27 @@ public class PipeBlock extends Block {
 
 	protected void appendProperties(Builder<Block, BlockState> builder) {
 		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {
+
+		VoxelShape finalShape = VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f);
+		if (state.get(NORTH))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.0f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+		if (state.get(SOUTH))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 1.0f), BooleanBiFunction.OR);
+		if (state.get(EAST))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 1.0f, 0.75f, 0.75f), BooleanBiFunction.OR);
+		if (state.get(WEST))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.0f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+		if (state.get(DOWN))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.0f, 0.25f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+		if (state.get(UP))
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 1.0f, 0.75f), BooleanBiFunction.OR);
+
+		return finalShape;
 	}
 
 	static {
