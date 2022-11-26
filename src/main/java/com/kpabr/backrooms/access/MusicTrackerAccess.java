@@ -6,6 +6,5 @@ import net.minecraft.util.math.BlockPos;
 
 public interface MusicTrackerAccess {
 
-	public List<BlockPos> getRadioPositions();
-
+	List<BlockPos> getRadioPositions();
 }

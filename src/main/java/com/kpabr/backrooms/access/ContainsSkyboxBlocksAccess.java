@@ -7,6 +7,5 @@ import net.minecraft.util.math.BlockPos;
 
 public interface ContainsSkyboxBlocksAccess {
 
-	public HashMap<BlockPos, BlockState> getSkyboxBlocks();
-
+	HashMap<BlockPos, BlockState> getSkyboxBlocks();
 }

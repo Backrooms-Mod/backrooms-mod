@@ -5,6 +5,5 @@ import net.minecraft.client.render.model.BakedModel;
 
 public interface BlockRenderManagerAccess {
 
-	public BakedModel getModelPure(BlockState state);
-
+	BakedModel getModelPure(BlockState state);
 }

@@ -28,8 +28,8 @@ import java.util.Random;
 
 public class HoundLivingEntity extends HostileEntity implements IAnimatable {
     public Long attacktimer = 18L;
-    private Long runtimer = 60L;
-    private Random random = new Random(123456);
+    private final Long runtimer = 60L;
+    private final Random random = new Random(123456);
     private Long lookaroundtimerON = random.nextLong(6000L);
     private Long lookaroundtimerOFF = 50L;
     public Long LookaroundtimerFOR = 0L;
