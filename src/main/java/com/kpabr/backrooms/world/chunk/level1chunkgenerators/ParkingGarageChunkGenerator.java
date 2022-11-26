@@ -146,10 +146,10 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
                 };
 
                 // Get size of current room.
-                var currentRoom = this.loadedStructures.get(roomName);
-
-                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+                final var currentRoom = this.loadedStructures.get(roomName);
                 final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+
                 if(isEastOrWestDirection) {
                     sizeX = currentRoom.sizeX;
                     sizeZ = currentRoom.sizeZ;
@@ -173,7 +173,8 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
                             }
                         }
                     }
-                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation); //Actually generate the room.
+                    // Actually generate the room.
+                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation);
                 }
             }
         }
