@@ -267,9 +267,10 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         final ChunkPos chunkPos = chunk.getPos();
 
+        // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
+                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
                     final BlockPos pos = chunkPos.getBlockPos(x, y, z);
                     final BlockState block = chunk.getBlockState(pos);
 
