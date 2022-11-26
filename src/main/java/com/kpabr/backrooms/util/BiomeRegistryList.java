@@ -15,7 +15,6 @@ public class BiomeRegistryList {
     public TreeMap<Double, RegistryEntry<Biome>> biomeList = new TreeMap<>();
 
     public Stream<RegistryEntry<Biome>> getBiomeEntries() {
-        BackroomsMod.LOGGER.info(this.biomeList.values().stream().toString());
         return this.biomeList.values().stream();
     }
 
@@ -27,7 +26,6 @@ public class BiomeRegistryList {
         BiomeRegistryList list = new BiomeRegistryList();
 
         biomeList.getBiomeList().forEach((key, value) -> {
-            BackroomsMod.LOGGER.info(value.toString());
             list.biomeList.put(key, biomeRegistry.getOrCreateEntry(value));
         });
         return list;

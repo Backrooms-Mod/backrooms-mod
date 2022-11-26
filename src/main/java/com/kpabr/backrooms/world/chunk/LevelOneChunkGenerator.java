@@ -13,7 +13,6 @@ import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.ludocrypt.limlib.api.LiminalUtil;
 import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.loot.LootTables;
@@ -21,7 +20,6 @@ import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -45,6 +43,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Function;
 
 public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
+
     public static final Codec<LevelOneChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
                     BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter(
@@ -58,6 +57,12 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
     private final CementHallsChunkGenerator cementHallsChunkGenerator;
     private final ParkingGarageChunkGenerator parkingGarageChunkGenerator;
     private final WarehouseChunkGenerator warehouseChunkGenerator;
+    private static final BlockState PATTERNED_WALLPAPER = BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState();
+    private static final BlockState WOOLEN_CARPET = BackroomsBlocks.WOOLEN_CARPET.getDefaultState();
+    private static final BlockState MOLDY_WOOLEN_CARPET = BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState();
+    private static final BlockState CORK_TILE = BackroomsBlocks.CORK_TILE.getDefaultState();
+    private static final BlockState MOLDY_CORK_TILE = BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState();
+    private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
     //Define roof position on y coordinate.
     private static final int ROOF_BEGIN_Y = 8 * (getFloorCount() + 1) + 1;
     public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed, CementHallsChunkGenerator cementHallsChunkGenerator, ParkingGarageChunkGenerator parkingGarageChunkGenerator, WarehouseChunkGenerator warehouseChunkGenerator) {
@@ -95,37 +100,39 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         // BackroomsBlocks.FLUORESCENT_LIGHT -> any light source
         // BackroomsBlocks.MOLDY_WOOLEN_CARPET -> random blocks(you can just replace them with carpet)
 
-
-        ChunkPos chunkPos = chunk.getPos();
+        final ChunkPos chunkPos = chunk.getPos();
         //Define a position for checking biomes
-        BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
+        final BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
         //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
-        int startX = chunkPos.getStartX();
-        int startZ = chunkPos.getStartZ();
+        final int startX = chunkPos.getStartX();
+        final int endX = chunkPos.getStartX() + 16;
+        final int startZ = chunkPos.getStartZ();
+        final int endZ = chunkPos.getStartZ() + 16;
 
-        if(checkBiome(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
+        if(isBiomeEquals(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
             this.cementHallsChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
-        else if(checkBiome(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
+        else if(isBiomeEquals(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
             this.parkingGarageChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
-        else if(checkBiome(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)) {
+        else if(isBiomeEquals(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)) {
             this.warehouseChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
         }
 
         // Place bedrock bricks at the bottom.
-        for (int x = startX; x < startX + 16; x++) {
-            for (int z = startZ; z < startZ + 16; z++) {
-                region.setBlockState(new BlockPos(x, 0, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+        for (int x = startX; x < endX; x++) {
+            for (int z = startZ; z < endZ; z++) {
+                region.setBlockState(new BlockPos(x, 0, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
             }
         }
 
         // Place bedrock bricks at the roof of chunk
-        for (int x = startX; x < startX + 16; x++) {
-            for (int z = startZ; z < startZ + 16; z++) { // 3 layers to be placed
-                region.setBlockState(new BlockPos(x, 0 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 1 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 2 + ROOF_BEGIN_Y, z), BackroomsBlocks.BEDROCK_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+        for (int x = startX; x < endX; x++) {
+            // 3 layers to be placed
+            for (int z = startZ; z < endZ; z++) {
+                region.setBlockState(new BlockPos(x, ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 1 + ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+                region.setBlockState(new BlockPos(x, 2 + ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
             }
         }
 
@@ -161,31 +168,30 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         return 5;
     }
 
-    private void replace(Block block, Chunk chunk, BlockPos pos) {
+    private static void replace(Block block, Chunk chunk, BlockPos pos) {
         chunk.setBlockState(pos, block.getDefaultState(), false);
     }
 
-    private boolean checkBiome(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
+    private boolean isBiomeEquals(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
         return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
     }
 
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
-        ChunkPos chunkPos = chunk.getPos();
+        final ChunkPos chunkPos = chunk.getPos();
 
+        // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
-                    BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                    BlockState block = chunk.getBlockState(pos);
+                for (int y = 0; y < ROOF_BEGIN_Y - 1; y++) {
+                    final BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                    final BlockState block = chunk.getBlockState(pos);
 
-                    if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
+                    if (block == PATTERNED_WALLPAPER) {
                         replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
-                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()
-                            || block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
+                    } else if (block == WOOLEN_CARPET || block == MOLDY_WOOLEN_CARPET) {
                         replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()
-                            || block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
+                    } else if (block == CORK_TILE || block == MOLDY_CORK_TILE) {
                         replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     }
                 }
