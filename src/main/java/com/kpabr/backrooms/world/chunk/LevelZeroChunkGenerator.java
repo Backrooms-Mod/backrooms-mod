@@ -102,11 +102,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
             for (int x = 3; x >= 0; x--) {
                 for (int z = 3; z >= 0; z--) {
                     //Make a Random object controlling the generation of the section.
-                    final Random random = new Random(region.getSeed() + MathHelper.hashCode(
-                            chunk.getPos().getStartX(),
-                            chunk.getPos().getStartZ(),
-                            x + 4 * z + 20 * y
-                    ));
+                    final Random random = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, x + 4 * z + 20 * y));
                     //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
                     final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
 
@@ -147,13 +143,13 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                     // Check one block east whether there's a wall there. If so, a pillar will always be generated.
                     if(x != 3) {
                         pillar = pillar ||
-                                region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 6 * y, startZ + z * 4 + 3)) != Blocks.AIR.getDefaultState();
+                                !region.getBlockState(new BlockPos(startX + x * 4 + 4, 2 + 6 * y, startZ + z * 4 + 3)).isAir();
                     }
                     // Check if you're not on the southern edge of the chunk. If you aren't, proceed.
                     if(z != 3) {
                         // Check one block south whether there's a wall there. If so, a pillar will always be generated.
                         pillar = pillar
-                                || region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4)) != Blocks.AIR.getDefaultState();
+                                || !region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4)).isAir();
                     }
                     pillar = pillar || (random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
                     if (pillar) {
@@ -171,12 +167,11 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                     }
                     //Place a ceiling light.
                     region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 6 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
-                    //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
 
             // Create an unique random Object for the current floor.
-            Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
+            final Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
             // Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
             // Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
             if (fullFloorRandom.nextFloat() < 0.1F || true) {
@@ -187,7 +182,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
                 //The number with an F directly after it denotes the probability of an empty room being generated regardless.
                 if(fullFloorRandom.nextFloat() < 0.6F) {
-                    roomNumber=0;
+                    roomNumber = 0;
                 }
                 String roomName = "backrooms_large_" + roomNumber;
                 if(roomNumber > regularRooms) {
@@ -195,15 +190,14 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 }
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
-                BlockRotation rotation = dir.equals(Direction.NORTH)
-                        ? BlockRotation.COUNTERCLOCKWISE_90
-                        : dir.equals(Direction.EAST)
-                                ? BlockRotation.NONE
-                                : dir.equals(Direction.SOUTH)
-                                    ? BlockRotation.CLOCKWISE_90
-                                    : BlockRotation.CLOCKWISE_180;
+                BlockRotation rotation = switch(dir) {
+                    case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
+                    case EAST -> BlockRotation.NONE;
+                    case SOUTH -> BlockRotation.CLOCKWISE_90;
+                    default -> BlockRotation.CLOCKWISE_180;
+                };
 
-                //Calculate 3 dimensional size
+                // Calculate size of current room
                 var currentRoom = this.loadedStructures.get(roomName);
 
                 int sizeY = currentRoom.sizeY, sizeX, sizeZ;
@@ -323,9 +317,9 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         final ChunkPos chunkPos = chunk.getPos();
         final BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
 
+        // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                // controls every block up to the roof
                 for (int y = 0; y < ROOF_BEGIN_Y; y++) {
                     // does a swap from the various stones to the custom blocks
                     if(isBiomeEquals(BackroomsLevels.CRIMSON_WALLS_BIOME, chunk, biomePos)) {

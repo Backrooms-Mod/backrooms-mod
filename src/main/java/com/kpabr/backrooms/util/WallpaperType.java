@@ -1,7 +1,6 @@
 package com.kpabr.backrooms.util;
 
-import com.google.common.base.Supplier;
-
+import java.util.function.Supplier;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.util.StringIdentifiable;
@@ -28,5 +27,4 @@ public enum WallpaperType implements StringIdentifiable {
 	public String asString() {
 		return this.name;
 	}
-
 }

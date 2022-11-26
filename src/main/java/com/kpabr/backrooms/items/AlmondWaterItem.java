@@ -47,8 +47,7 @@ public class AlmondWaterItem extends Item {
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1));
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 30, 0));
 
-
-			int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
+			final int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
 			WretchedComponent wretched = WRETCHED.get(user);
 
 			// add 1 to almondMilkRestoring because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately

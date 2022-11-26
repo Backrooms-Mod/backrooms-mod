@@ -103,11 +103,12 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         final ChunkPos chunkPos = chunk.getPos();
         //Define a position for checking biomes
         final BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
-        //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
+        
+        //Save the first and last x and z position of the chunk. Note: positive x means east, positive z means south.
         final int startX = chunkPos.getStartX();
-        final int endX = chunkPos.getStartX() + 16;
+        final int endX = startX + 16;
         final int startZ = chunkPos.getStartZ();
-        final int endZ = chunkPos.getStartZ() + 16;
+        final int endZ = startZ  + 16;
 
         if(isBiomeEquals(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
             this.cementHallsChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
@@ -183,7 +184,7 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < ROOF_BEGIN_Y - 1; y++) {
+                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
                     final BlockPos pos = chunkPos.getBlockPos(x, y, z);
                     final BlockState block = chunk.getBlockState(pos);
 

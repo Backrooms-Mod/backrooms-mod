@@ -1,7 +1,9 @@
 package com.kpabr.backrooms.util;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 public class Color {
-	private int value;
+	private final int value;
 
 	private Color(int rgb) {
 		value = 0xff000000 | rgb;
@@ -44,42 +46,42 @@ public class Color {
 		if (saturation == 0) {
 			r = g = b = (int) (brightness * 255.0f + 0.5f);
 		} else {
-			double h = (hue - (double) Math.floor(hue)) * 6.0f;
-			double f = h - (double) Math.floor(h);
+			double h = (hue - Math.floor(hue)) * 6.0f;
+			double f = h - Math.floor(h);
 			double p = brightness * (1.0f - saturation);
 			double q = brightness * (1.0f - saturation * f);
 			double t = brightness * (1.0f - (saturation * (1.0f - f)));
 			switch ((int) h) {
-			case 0:
-				r = (int) (brightness * 255.0f + 0.5f);
-				g = (int) (t * 255.0f + 0.5f);
-				b = (int) (p * 255.0f + 0.5f);
-				break;
-			case 1:
-				r = (int) (q * 255.0f + 0.5f);
-				g = (int) (brightness * 255.0f + 0.5f);
-				b = (int) (p * 255.0f + 0.5f);
-				break;
-			case 2:
-				r = (int) (p * 255.0f + 0.5f);
-				g = (int) (brightness * 255.0f + 0.5f);
-				b = (int) (t * 255.0f + 0.5f);
-				break;
-			case 3:
-				r = (int) (p * 255.0f + 0.5f);
-				g = (int) (q * 255.0f + 0.5f);
-				b = (int) (brightness * 255.0f + 0.5f);
-				break;
-			case 4:
-				r = (int) (t * 255.0f + 0.5f);
-				g = (int) (p * 255.0f + 0.5f);
-				b = (int) (brightness * 255.0f + 0.5f);
-				break;
-			case 5:
-				r = (int) (brightness * 255.0f + 0.5f);
-				g = (int) (p * 255.0f + 0.5f);
-				b = (int) (q * 255.0f + 0.5f);
-				break;
+				case 0 -> {
+					r = (int) (brightness * 255.0f + 0.5f);
+					g = (int) (t * 255.0f + 0.5f);
+					b = (int) (p * 255.0f + 0.5f);
+				}
+				case 1 -> {
+					r = (int) (q * 255.0f + 0.5f);
+					g = (int) (brightness * 255.0f + 0.5f);
+					b = (int) (p * 255.0f + 0.5f);
+				}
+				case 2 -> {
+					r = (int) (p * 255.0f + 0.5f);
+					g = (int) (brightness * 255.0f + 0.5f);
+					b = (int) (t * 255.0f + 0.5f);
+				}
+				case 3 -> {
+					r = (int) (p * 255.0f + 0.5f);
+					g = (int) (q * 255.0f + 0.5f);
+					b = (int) (brightness * 255.0f + 0.5f);
+				}
+				case 4 -> {
+					r = (int) (t * 255.0f + 0.5f);
+					g = (int) (p * 255.0f + 0.5f);
+					b = (int) (brightness * 255.0f + 0.5f);
+				}
+				case 5 -> {
+					r = (int) (brightness * 255.0f + 0.5f);
+					g = (int) (p * 255.0f + 0.5f);
+					b = (int) (q * 255.0f + 0.5f);
+				}
 			}
 		}
 		return colorOf(0xff000000 | (r << 16) | (g << 8) | (b << 0));
@@ -91,33 +93,25 @@ public class Color {
 		int b = this.getBlue();
 		double hue, saturation, brightness;
 		double[] hsbvals = new double[3];
-		int cmax = (r > g) ? r : g;
-		if (b > cmax)
-			cmax = b;
-		int cmin = (r < g) ? r : g;
-		if (b < cmin)
-			cmin = b;
+		int cmax = NumberUtils.max(r, g, b);
+		int cmin = NumberUtils.min(r, g, b);
 
-		brightness = ((double) cmax) / 255.0f;
-		if (cmax != 0)
-			saturation = ((double) (cmax - cmin)) / ((double) cmax);
-		else
-			saturation = 0;
-		if (saturation == 0)
-			hue = 0;
+		brightness = (double) cmax / 255.0d;
+		if (cmax != 0) saturation = (double) (cmax - cmin) / (double) cmax;
+		else saturation = 0;
+
+		if (saturation == 0) hue = 0;
 		else {
-			double redc = ((double) (cmax - r)) / ((double) (cmax - cmin));
-			double greenc = ((double) (cmax - g)) / ((double) (cmax - cmin));
-			double bluec = ((double) (cmax - b)) / ((double) (cmax - cmin));
-			if (r == cmax)
-				hue = bluec - greenc;
-			else if (g == cmax)
-				hue = 2.0f + redc - bluec;
-			else
-				hue = 4.0f + greenc - redc;
-			hue = hue / 6.0f;
-			if (hue < 0)
-				hue = hue + 1.0f;
+			double redc = (double) (cmax - r) / (double) (cmax - cmin);
+			double greenc = (double) (cmax - g) / (double) (cmax - cmin);
+			double bluec = (double) (cmax - b) / (double) (cmax - cmin);
+
+			if (r == cmax) hue = bluec - greenc;
+			else if (g == cmax) hue = 2.0f + redc - bluec;
+			else hue = 4.0f + greenc - redc;
+
+			hue /= 6.0f;
+			if (hue < 0) hue += 1.0f;
 		}
 		hsbvals[0] = hue;
 		hsbvals[1] = saturation;
@@ -154,11 +148,11 @@ public class Color {
 	}
 
 	public int getRed() {
-		return (getRGB() >> 16) & 0xFF;
+		return value & 0xFF;
 	}
 
 	public int getGreen() {
-		return (getRGB() >> 8) & 0xFF;
+		return value & 0xFF;
 	}
 
 	public int getRGB() {
@@ -166,10 +160,10 @@ public class Color {
 	}
 
 	public int getBlue() {
-		return (getRGB()) & 0xFF;
+		return value & 0xFF;
 	}
 
 	public int getAlpha() {
-		return (getRGB() >> 24) & 0xff;
+		return value & 0xff;
 	}
 }

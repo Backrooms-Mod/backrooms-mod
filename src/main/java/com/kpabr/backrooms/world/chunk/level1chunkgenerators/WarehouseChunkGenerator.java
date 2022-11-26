@@ -74,7 +74,6 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
-
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
         // If you're adding new type of structure then don't use blocks other than described below from our mod!
@@ -85,13 +84,12 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         // BackroomsBlocks.FLUORESCENT_LIGHT -> any light source
         // BackroomsBlocks.MOLDY_WOOLEN_CARPET -> random blocks(you can just replace them with carpet)
 
-
-        ChunkPos chunkPos = chunk.getPos();
+        final ChunkPos chunkPos = chunk.getPos();
         // Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
-        int startX = chunkPos.getStartX();
-        int startZ = chunkPos.getStartZ();
+        final int startX = chunkPos.getStartX();
+        final int startZ = chunkPos.getStartZ();
         // Create 5 floors, top to bottom.
-        int floorCount = LevelOneChunkGenerator.getFloorCount();
+        final int floorCount = LevelOneChunkGenerator.getFloorCount();
 
         // Create 4 smaller sections of the floor, layed out in a 2x2 pattern.
         // Each section will consist of the carpeting, the ceiling, two walls
@@ -101,11 +99,11 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
             for (int x = 1; x >= 0; x--) {
                 for (int z = 1; z >= 0; z--) {
                     //Make a Random object controlling the generation of the section.
-                    Random random = new Random(region.getSeed() + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), x + 4 * z + 20 * y));
+                    final Random random = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, x + 4 * z + 20 * y));
                     // Decide the arrangement of the walls of the section.
                     // The two numbers with an F directly after them denote the probability of
                     // an eastern wall and a southern wall generating, respectively.
-                    int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
+                    final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
 
                     // Check if the arrangement includes the eastern wall
                     // and create eastern wall if includes.
@@ -134,12 +132,12 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     // Check if you're not on the eastern edge of the chunk. If you aren't, proceed.
                     if (x != 3) {
                         // Check one block east whether there's a wall there. If so, a pillar will always be generated.
-                        pillar = pillar || region.getBlockState(new BlockPos(startX + x * 8 + 8, 2 + 8 * y, startZ + z * 8 + 7))!=Blocks.AIR.getDefaultState();
+                        pillar = pillar || !region.getBlockState(new BlockPos(startX + x * 8 + 8, 2 + 8 * y, startZ + z * 8 + 7)).isAir();
                     }
                     // Check if you're not on the southern edge of the chunk. If you aren't, proceed.
                     if (z != 3) {
                         // Check one block south whether there's a wall there. If so, a pillar will always be generated.
-                        pillar = pillar || region.getBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 8))!=Blocks.AIR.getDefaultState();
+                        pillar = pillar || !region.getBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 8)).isAir();
                     }
                     // If you're on the southeasternmost spot on the chunk, always make a pillar.
                     pillar = pillar || (x == 3 && z == 3);
@@ -174,10 +172,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                 }
             }
             // Create an unique random Object for the current floor.
-            Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(
-                    chunk.getPos().getStartX(),
-                    chunk.getPos().getStartZ(),
-                    y));
+            final Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, y));
             //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
             //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
             if (fullFloorRandom.nextFloat() < 0.1F & false) {
@@ -189,21 +184,35 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
 
                 //The number with an F directly after it denotes the probability of an empty room being generated regardless.
-                if (fullFloorRandom.nextFloat() < 0.6F) roomNumber=0;
+                if (fullFloorRandom.nextFloat() < 0.6F) roomNumber = 0;
 
                 String roomName = "backrooms_large_" + roomNumber;
                 if (roomNumber > regularRooms) roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
-                BlockRotation rotation = dir.equals(Direction.NORTH) ? BlockRotation.COUNTERCLOCKWISE_90 : dir.equals(Direction.EAST) ? BlockRotation.NONE : dir.equals(Direction.SOUTH) ? BlockRotation.CLOCKWISE_90 : BlockRotation.CLOCKWISE_180;
-                //Define some variables to be used later.
-                int sizeX = dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeX : this.loadedStructures.get(roomName).sizeZ;
-                int sizeY = this.loadedStructures.get(roomName).sizeY;
-                int sizeZ = dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeZ : this.loadedStructures.get(roomName).sizeX;
+                BlockRotation rotation = switch (dir) {
+                    case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
+                    case EAST -> BlockRotation.NONE;
+                    case SOUTH -> BlockRotation.CLOCKWISE_90;
+                    default -> BlockRotation.CLOCKWISE_180;
+                };
+
+                // Get size of current room.
+                var currentRoom = this.loadedStructures.get(roomName);
+
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+                final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
+                if(isEastOrWestDirection) {
+                    sizeX = currentRoom.sizeX;
+                    sizeZ = currentRoom.sizeZ;
+                } else {
+                    sizeX = currentRoom.sizeZ;
+                    sizeZ = currentRoom.sizeX;
+                }
                 if (6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
                     //Choose a spot in the chunk.
-                    int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
-                    int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
+                    final int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
+                    final int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
                     //Fill the area the room will be placed in with air.
                     if (roomNumber <= regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
@@ -250,10 +259,6 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
     private void replace(Block block, Chunk chunk, BlockPos pos) {
         chunk.setBlockState(pos, block.getDefaultState(), false);
-    }
-
-    private boolean checkBiome(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
-        return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
     }
 
     @Override

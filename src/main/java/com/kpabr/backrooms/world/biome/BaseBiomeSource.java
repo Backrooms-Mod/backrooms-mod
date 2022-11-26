@@ -30,7 +30,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
         this.seed = seed;
         this.biomeList = biomeList;
 
-        ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
+       final  ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
         this.noise = new SimplexNoiseSampler(chunkRandom);
     }
 
@@ -38,10 +38,6 @@ public abstract class BaseBiomeSource extends BiomeSource {
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
         double noiseAt = BaseBiomeSource.getNoiseAt(this.noise, x, y, z);
         return biomeList.findNearest(noiseAt);
-    }
-
-    public boolean matches(long seed) {
-        return this.seed == seed;
     }
 
     public static double getNoiseAt(SimplexNoiseSampler perlinNoiseSampler, int x, int y, int z) {

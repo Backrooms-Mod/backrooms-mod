@@ -18,7 +18,6 @@ import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -59,6 +58,7 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
 
 
     private final long worldSeed;
+    private static final int ROOF_BEGIN_Y = 6 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
     public ParkingGarageChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
@@ -75,7 +75,6 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
-
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
         // If you're adding new type of structure then don't use blocks other than described below from our mod!
@@ -86,12 +85,14 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
         // BackroomsBlocks.FLUORESCENT_LIGHT -> any light source
         // BackroomsBlocks.MOLDY_WOOLEN_CARPET -> random blocks(you can just replace them with carpet)
 
-        ChunkPos chunkPos = chunk.getPos();
-        //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
-        int startX = chunkPos.getStartX();
-        int startZ = chunkPos.getStartZ();
+        final ChunkPos chunkPos = chunk.getPos();
+        // Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
+        final int startX = chunkPos.getStartX();
+        final int endX = startX + 16;
+        final int startZ = chunkPos.getStartZ();
+        final int endZ = startZ + 16;
 
-        //Create 5 floors, top to bottom.
+        // Create 5 floors, top to bottom.
         final int floorCount = LevelOneChunkGenerator.getFloorCount();
         for (int y = floorCount; y >= 0; y--) {
             //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
@@ -115,14 +116,10 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
                     }
                     //Place a ceiling light at the correct height.
                     region.setBlockState(new BlockPos(startX + x * 4 + 1, 6 + 8 * y, startZ + z * 4 + 1), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
-                    //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
             //Create an unique Random object for the current floor.
-            Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(
-                    chunk.getPos().getStartX(),
-                    chunk.getPos().getStartZ(),
-                    y));
+            final Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, y));
 
             if(fullFloorRandom.nextFloat() < 0.1F & false){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
                 // Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
@@ -133,6 +130,7 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
 
                 // Choose the room that will be placed.
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
+
                 // The number with an F directly after it denotes the probability of an empty room being generated regardless.
                 if(fullFloorRandom.nextFloat() < 0.6F) roomNumber = 0;
                 String roomName = "backrooms_large_" + roomNumber;
@@ -140,18 +138,28 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
 
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
-                BlockRotation rotation = dir.equals(Direction.NORTH)
-                        ? BlockRotation.COUNTERCLOCKWISE_90
-                        : dir.equals(Direction.EAST)
-                            ? BlockRotation.NONE
-                            : dir.equals(Direction.SOUTH)
-                                ? BlockRotation.CLOCKWISE_90
-                                : BlockRotation.CLOCKWISE_180;
-                //Define some variables to be used later.
-                int sizeX = dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeX : this.loadedStructures.get(roomName).sizeZ;
-                int sizeY = this.loadedStructures.get(roomName).sizeY;
-                int sizeZ = dir.equals(Direction.EAST) || dir.equals(Direction.WEST) ? this.loadedStructures.get(roomName).sizeZ : this.loadedStructures.get(roomName).sizeX;
-                if (6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
+                BlockRotation rotation = switch(dir) {
+                    case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
+                    case EAST -> BlockRotation.NONE;
+                    case SOUTH -> BlockRotation.CLOCKWISE_90;
+                    default -> BlockRotation.CLOCKWISE_180;
+                };
+
+                // Get size of current room.
+                var currentRoom = this.loadedStructures.get(roomName);
+
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+                final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
+                if(isEastOrWestDirection) {
+                    sizeX = currentRoom.sizeX;
+                    sizeZ = currentRoom.sizeZ;
+                } else {
+                    sizeX = currentRoom.sizeZ;
+                    sizeZ = currentRoom.sizeX;
+                }
+
+                // Only generate the structure if it has enough vertical space to generate.
+                if (6 * y + sizeY < ROOF_BEGIN_Y) {
                     //Choose a spot in the chunk.
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
@@ -202,30 +210,24 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
         chunk.setBlockState(pos, block.getDefaultState(), false);
     }
 
-    private boolean checkBiome(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
-        return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
-    }
-
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
-        ChunkPos chunkPos = chunk.getPos();
+        final ChunkPos chunkPos = chunk.getPos();
 
+        // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                // controls every block in the chunk
-                for (int y = 0; y < chunk.getHeight(); y++) {
-                    BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                    BlockState block = chunk.getBlockState(pos);
+                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
+                    final BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                    final BlockState block = chunk.getBlockState(pos);
 
                     if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
-                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
+                    } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()
+                            || block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
-                    } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
+                    } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()
+                            || block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     }
                 }
