@@ -94,6 +94,10 @@
       "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Секунды между следующими шагами цикла убогих",
       "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс заспавнится плесневелой плитке в багровых корридорах",
 
+      "text.autoconfig.backrooms.category.Gameplay": "Геймплей",
+      "text.autoconfig.backrooms.category.default": "Обычные опции",
+      "text.autoconfig.backrooms.category.Render": "Клиент",
+
       "subtitles.entity.hound.idle": "Гончая воет",
       "subtitles.entity.hound.attack": "Гончая атакует",
       "subtitles.entity.hound.hurt": "Гончая получила урон",
