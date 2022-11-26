@@ -50,8 +50,11 @@ public class AlmondWaterItem extends Item {
 
 			int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
 			WretchedComponent wretched = WRETCHED.get(user);
-			wretched.remove(almondMilkRestoring+1); // +1 because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately
-			BackroomsMod.applyWretchedCycle((ServerPlayerEntity) user);
+
+			// add 1 to almondMilkRestoring because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately
+			wretched.remove(almondMilkRestoring + 1);
+
+			BackroomsMod.applyWretchedCycle((ServerPlayerEntity)user);
 			if(wretched.getValue() < 24 && wretched.getValue()+almondMilkRestoring >= 24) {
 				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
 			} else if(wretched.getValue() < 50 && wretched.getValue()+almondMilkRestoring >= 50) {
@@ -59,22 +62,18 @@ public class AlmondWaterItem extends Item {
 			} else if(wretched.getValue() < 75 && wretched.getValue()+almondMilkRestoring >= 75) {
 				user.removeStatusEffect(BackroomStatusEffects.WRETCHED);
 			}
-
 		}
 
 		if (stack.isEmpty()) {
 			return new ItemStack(Items.GLASS_BOTTLE);
-		} else {
-			if (user instanceof PlayerEntity && !((PlayerEntity)user).getAbilities().creativeMode) {
-				ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
-				PlayerEntity playerEntity = (PlayerEntity)user;
-				if (!playerEntity.getInventory().insertStack(itemStack)) {
-					playerEntity.dropItem(itemStack, false);
-				}
-			}
-
-			return stack;
 		}
+		else if (user instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
+			ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
+			if (!player.getInventory().insertStack(itemStack)) {
+				player.dropItem(itemStack, false);
+			}
+		}
+		return stack;
 	}
 
 	public int getMaxUseTime(ItemStack stack) {

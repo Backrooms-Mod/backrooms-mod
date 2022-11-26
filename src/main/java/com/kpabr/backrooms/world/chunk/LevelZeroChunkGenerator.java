@@ -8,7 +8,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
-import com.google.common.collect.ImmutableMap;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.mojang.datafixers.util.Either;
@@ -205,14 +204,16 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                                     : BlockRotation.CLOCKWISE_180;
 
                 //Calculate 3 dimensional size
-                boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
-                int sizeY = this.loadedStructures.get(roomName).sizeY, sizeX, sizeZ;
+                var currentRoom = this.loadedStructures.get(roomName);
+
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+                final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
                 if(isEastOrWestDirection) {
-                    sizeX = this.loadedStructures.get(roomName).sizeX;
-                    sizeZ = this.loadedStructures.get(roomName).sizeZ;
+                    sizeX = currentRoom.sizeX;
+                    sizeZ = currentRoom.sizeZ;
                 } else {
-                    sizeX = this.loadedStructures.get(roomName).sizeZ;
-                    sizeZ = this.loadedStructures.get(roomName).sizeX;
+                    sizeX = currentRoom.sizeZ;
+                    sizeZ = currentRoom.sizeX;
                 }
                 // Place a structure only if it fits before the bedrock
                 if(6 * y + sizeY < ROOF_BEGIN_Y) {

@@ -1,5 +1,5 @@
 package com.kpabr.backrooms.config;
-import com.kpabr.backrooms.BackroomsMod;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
@@ -31,5 +31,4 @@ public class BackroomsConfig implements ConfigData {
     public static BackroomsConfig getInstance() {
         return AutoConfig.getConfigHolder(BackroomsConfig.class).getConfig();
     }
-
 }

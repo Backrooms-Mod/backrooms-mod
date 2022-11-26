@@ -60,60 +60,44 @@ public class BackroomsMod implements ModInitializer {
 
 		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
-			List<ServerPlayerEntity> players = server.getPlayerManager().getPlayerList();
 
-			for (ServerPlayerEntity player : players) {
-				// Iterating through every player
-				// And check if they're on the server for at least (wretchedCycleStepTime) seconds
-				if((player.age % (20*BackroomsConfig.getInstance().wretchedCycleStepTime)) == 0 && player.age != 0) {
+			// Iterating through every player
+			// And check if they're on the server for at least (wretchedCycleStepTime) seconds
+			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+				if((player.age % (20 * BackroomsConfig.getInstance().wretchedCycleStepTime)) == 0 && player.age != 0) {
                     applyWretchedCycle(player);
 				}
 			}
 		});
 	}
 
-	/*@Override
-	public void registerModDimensions(Map<Identifier, ExtraDimension> registry) {
-		registry.put(Level0.LEVEL_0_ID, new Level0());
-	}*/
-
 	public static Identifier id(String id) {
 		return new Identifier("backrooms", id);
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
-		if(player.interactionManager.getGameMode().equals(GameMode.CREATIVE) || player.interactionManager.getGameMode().equals(GameMode.SPECTATOR)) {
+		if(player.interactionManager.getGameMode() == GameMode.CREATIVE || player.interactionManager.getGameMode() == GameMode.SPECTATOR) {
 			return;
 		}
-
-		if(!Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "backrooms")) {
-			if(Objects.equals(player.getWorld().getRegistryKey().getValue().getNamespace(), "minecraft")) {
-				WretchedComponent wretched = WRETCHED.get(player);
-				if(wretched.getValue() <= 0) {
-					return;
-				}
-				wretched.decrement();
-				return;
-			}
-		}
-
 		WretchedComponent wretched = WRETCHED.get(player);
-		if(wretched.getValue() >= 100) {
+
+		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("minecraft")) {
+			if(wretched.getValue() > 0) wretched.decrement();
 			return;
 		}
-		wretched.increment();
-		if(wretched.getValue() >= 24 && wretched.getValue() <= 49 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
-			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999999));
 
-		} else if(wretched.getValue() >= 50 && wretched.getValue() <= 74 && !player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
+		if(wretched.getValue() >= 100) return;
+		wretched.increment();
+
+		if(wretched.getValue() >= 24 && wretched.getValue() < 50 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
+			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999999));
+		} else if(wretched.getValue() >= 50 && wretched.getValue() < 75 && !player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
 			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
 			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.ROTTEN, 9999999));
-
 		} else if(wretched.getValue() >= 75 && !player.hasStatusEffect(BackroomStatusEffects.WRETCHED)) {
 			player.removeStatusEffect(BackroomStatusEffects.RAGGED);
 			player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
 			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.WRETCHED, 9999999));
 		}
-		LOGGER.info(String.valueOf(wretched.getValue())); // debugging reasons
 	}
 }
