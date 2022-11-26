@@ -198,7 +198,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 };
 
                 // Calculate size of current room
-                var currentRoom = this.loadedStructures.get(roomName);
+                final var currentRoom = this.loadedStructures.get(roomName);
 
                 int sizeY = currentRoom.sizeY, sizeX, sizeZ;
                 final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
