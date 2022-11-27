@@ -6,6 +6,6 @@ public interface WretchedComponent extends Component {
     int getValue();
     void setValue(int value);
     void remove(int amount);
-    void increment();
+    boolean increment();
     void decrement();
 }

@@ -4,6 +4,7 @@ package com.kpabr.backrooms;
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.entity.living.WretchLivingEntity;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
@@ -11,7 +12,11 @@ import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -86,8 +91,11 @@ public class BackroomsMod implements ModInitializer {
 			return;
 		}
 
-		if(wretched.getValue() >= 100) return;
-		wretched.increment();
+		if(wretched.increment()) {
+			wretched.remove(100);
+			WretchLivingEntity wretch = BackroomsEntities.WRETCHED.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
+			player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
+		}
 
 		if(wretched.getValue() >= 24 && wretched.getValue() < 50 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
 			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.RAGGED, 9999999));

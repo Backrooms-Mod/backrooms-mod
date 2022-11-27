@@ -1,6 +1,5 @@
 package com.kpabr.backrooms.component;
 
-import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.nbt.NbtCompound;
 
 public class PlayerWretchedComponent implements WretchedComponent {
@@ -18,23 +17,18 @@ public class PlayerWretchedComponent implements WretchedComponent {
 
     @Override
     public void remove(int amount) {
-        if(this.wretched - amount < 0) {
-            this.wretched = 0;
-        } else {
-            this.wretched -= amount;
-        }
+        this.wretched -= amount;
+        this.wretched = Math.max(this.wretched, 0);
     }
 
     @Override
-    public void increment() {
-        if(this.wretched + 1 > 100) {
-            this.wretched++;
-        }
+    public boolean increment() {
+        return ++this.wretched == 100;
     }
 
     @Override
     public void decrement() {
-        this.wretched--;
+        --this.wretched;
     }
 
     @Override
