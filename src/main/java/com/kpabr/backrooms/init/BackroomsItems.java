@@ -31,7 +31,7 @@ public class BackroomsItems {
 
 
 	private static <I extends Item> I add(String name, I item) {
-		ITEMS.put(new Identifier(BackroomsMod.ModId, name), item);
+		ITEMS.put(BackroomsMod.id(name), item);
 		return item;
 	}
 

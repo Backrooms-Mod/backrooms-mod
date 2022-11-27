@@ -121,7 +121,7 @@ public class BackroomsBlocks {
 	public static final Block WHITE_CARPETING = add("white_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_CARPETING = add("red_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	private static <B extends Block, T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
-		Identifier id = new Identifier(BackroomsMod.ModId, name);
+		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.put(id, blockEntity);
 		return blockEntity;
 	}
@@ -134,17 +134,17 @@ public class BackroomsBlocks {
 		add(name, block);
 		if (item != null) {
 			item.appendBlocks(Item.BLOCK_ITEMS, item);
-			ITEMS.put(new Identifier(name), item);
+			ITEMS.put(BackroomsMod.id(name), item);
 		}
 		return block;
 	}
 
 	private static <B extends Block> B addNoItem(String name, B block, ItemGroup tab) {
-		return Registry.register(Registry.BLOCK, new Identifier(BackroomsMod.ModId, name), block);
+		return Registry.register(Registry.BLOCK, BackroomsMod.id(name), block);
 	}
 
 	private static <B extends Block> B add(String name, B block) {
-		BLOCKS.put(new Identifier(BackroomsMod.ModId, name), block);
+		BLOCKS.put(BackroomsMod.id(name), block);
 		return block;
 	}
 

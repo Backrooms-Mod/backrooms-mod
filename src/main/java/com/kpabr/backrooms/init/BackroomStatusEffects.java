@@ -14,8 +14,8 @@ public class BackroomStatusEffects {
     public static final StatusEffect WRETCHED = new WretchedStatusEffect();
 
     public static void init() {
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(BackroomsMod.ModId, "ragged"), RAGGED);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(BackroomsMod.ModId, "rotten"), ROTTEN);
-        Registry.register(Registry.STATUS_EFFECT, new Identifier(BackroomsMod.ModId, "wretched"), WRETCHED);
+        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("ragged"), RAGGED);
+        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("rotten"), ROTTEN);
+        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("wretched"), WRETCHED);
     }
 }

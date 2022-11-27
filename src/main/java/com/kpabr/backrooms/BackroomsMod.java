@@ -47,11 +47,9 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded groups");
 		BackroomsItems.init();
 		LOGGER.info("Loaded items");
-		BackroomsProjectiles.init();
-		LOGGER.info("Loaded Projectiles, pew pew");
 		BackroomsEntities.init();
 		LOGGER.info("loaded your nightmares");
-		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, stongSimpleShaderId(), StrongLiminalShader.CODEC);
+		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
 
 		// registering every tick event
@@ -66,8 +64,8 @@ public class BackroomsMod implements ModInitializer {
 		});
 	}
 
-	private static Identifier stongSimpleShaderId() {
-		return new Identifier("backrooms", "stong_simple_shader");
+	public static Identifier id(String name) {
+		return new Identifier("backrooms", name);
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {

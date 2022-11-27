@@ -17,7 +17,7 @@ public class BackroomsFluids {
     public static final FlowableFluid ALMOND_WATER_FLOWING = add("almond_water_flowing", new AlmondWaterFluid.Flowing());
 
     private static <F extends FlowableFluid> F add(String name, F fluid) {
-        FLUIDS.put(new Identifier(BackroomsMod.ModId, name), fluid);
+        FLUIDS.put(BackroomsMod.id(name), fluid);
         return fluid;
     }
 

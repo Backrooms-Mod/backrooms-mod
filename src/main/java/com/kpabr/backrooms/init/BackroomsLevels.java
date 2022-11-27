@@ -47,7 +47,7 @@ public class BackroomsLevels {
     }
 
     public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld registerLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
-        final Identifier levelId = new Identifier(BackroomsMod.ModId, name);
+        final Identifier levelId = BackroomsMod.id(name);
         // Messy wrapper
         return get(levelId.getPath(), new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, 0.075F),
                 (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) -> new DimensionOptions(
