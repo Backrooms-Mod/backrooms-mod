@@ -9,9 +9,10 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class BackroomsProjectiles implements ModInitializer { //placeholder
+public class BackroomsProjectiles implements ModInitializer {
+    //placeholder
 
-    public static final EntityType<FireSaltProjectileEntity> FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE = Registry.register(
+    public static final EntityType<FireSaltProjectileEntity> FIRE_SALT_PROJECTILE_ENTITY_TYPE = Registry.register(
             Registry.ENTITY_TYPE,
             new Identifier("backrooms", "fire_salt_projectile"),
             FabricEntityTypeBuilder

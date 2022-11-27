@@ -18,6 +18,7 @@ public class PlayerWretchedComponent implements WretchedComponent {
     @Override
     public void remove(int amount) {
         this.wretched -= amount;
+        // If wretched value less than 0, assign it to zero.
         this.wretched = Math.max(this.wretched, 0);
     }
 
@@ -28,7 +29,7 @@ public class PlayerWretchedComponent implements WretchedComponent {
 
     @Override
     public void decrement() {
-        --this.wretched;
+        if(wretched != 0) --this.wretched;
     }
 
     @Override

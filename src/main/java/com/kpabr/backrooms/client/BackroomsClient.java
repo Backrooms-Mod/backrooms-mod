@@ -28,13 +28,9 @@ public class BackroomsClient implements ClientModInitializer {
 
 
 
-		/* Registers our particle client-side.
-		 * First argument is our particle's instance, created previously on ExampleMod.
-		 * Second argument is the particle's factory. The factory controls how the particle behaves.
-		 * In this example, we'll use FlameParticle's Factory.*/
 		ParticleFactoryRegistry.getInstance().register(BackroomsParticles.FIRESALT_PARTICLE, new FireSaltParticle.FireSaltFactory());
 
-		EntityRendererRegistry.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, FlyingItemEntityRenderer::new);
+		EntityRendererRegistry.register(BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENTITY_TYPE, FlyingItemEntityRenderer::new);
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.FIRESALT_CRYSTAL);
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BackroomsBlocks.TILEMOLD);
 		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.PYROIL, RenderLayer.getCutout());

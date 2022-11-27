@@ -121,7 +121,7 @@ public class BackroomsBlocks {
 	public static final Block WHITE_CARPETING = add("white_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).materialColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_CARPETING = add("red_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).materialColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	private static <B extends Block, T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
-		Identifier id = BackroomsMod.id(name);
+		Identifier id = new Identifier(BackroomsMod.ModId, name);
 		BLOCK_ENTITIES.put(id, blockEntity);
 		return blockEntity;
 	}
@@ -134,7 +134,7 @@ public class BackroomsBlocks {
 		add(name, block);
 		if (item != null) {
 			item.appendBlocks(Item.BLOCK_ITEMS, item);
-			ITEMS.put(BackroomsMod.id(name), item);
+			ITEMS.put(new Identifier(name), item);
 		}
 		return block;
 	}
@@ -144,7 +144,7 @@ public class BackroomsBlocks {
 	}
 
 	private static <B extends Block> B add(String name, B block) {
-		BLOCKS.put(BackroomsMod.id(name), block);
+		BLOCKS.put(new Identifier(BackroomsMod.ModId, name), block);
 		return block;
 	}
 
@@ -169,6 +169,7 @@ public class BackroomsBlocks {
 
 	private static void registerFlammableBlocks() {
 		FlammableBlockRegistry registry = FlammableBlockRegistry.getDefaultInstance();
+		registry.add(BackroomsBlocks.PYROIL, 1, 100);
 	}
 
 	private static void registerFuels() {

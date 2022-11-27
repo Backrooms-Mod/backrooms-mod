@@ -4,7 +4,6 @@ package com.kpabr.backrooms;
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
-import com.kpabr.backrooms.entity.living.WretchLivingEntity;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
@@ -13,19 +12,13 @@ import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Objects;
 
 import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
@@ -38,6 +31,8 @@ public class BackroomsMod implements ModInitializer {
 	public void onInitialize() {
 		BackroomsConfig.init();
 		LOGGER.info("Loaded config");
+		BackroomsLevels.init();
+		LOGGER.info("Loaded levels");
 		BackroomsSounds.init();
 		LOGGER.info("Loaded sounds");
 		BackroomsParticles.init();
@@ -54,18 +49,13 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded items");
 		BackroomsProjectiles.init();
 		LOGGER.info("Loaded Projectiles, pew pew");
-		BackroomsLevels.init();
-		LOGGER.info("Loaded levels");
-		BackroomsFlammableBlocks.init();
-		LOGGER.info("loaded FIRE");
 		BackroomsEntities.init();
 		LOGGER.info("loaded your nightmares");
-		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
+		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, stongSimpleShaderId(), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
 
 		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
-
 			// Iterating through every player
 			// And check if they're on the server for at least (wretchedCycleStepTime) seconds
 			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
@@ -76,8 +66,8 @@ public class BackroomsMod implements ModInitializer {
 		});
 	}
 
-	public static Identifier id(String id) {
-		return new Identifier("backrooms", id);
+	private static Identifier stongSimpleShaderId() {
+		return new Identifier("backrooms", "stong_simple_shader");
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
@@ -87,13 +77,11 @@ public class BackroomsMod implements ModInitializer {
 		WretchedComponent wretched = WRETCHED.get(player);
 
 		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("minecraft")) {
-			if(wretched.getValue() > 0) wretched.decrement();
+			wretched.decrement();
 			return;
-		}
-
-		if(wretched.increment()) {
+		} else if(wretched.increment()) {
 			wretched.remove(100);
-			WretchLivingEntity wretch = BackroomsEntities.WRETCHED.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
+			BackroomsEntities.WRETCHED.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
 			player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
 		}
 

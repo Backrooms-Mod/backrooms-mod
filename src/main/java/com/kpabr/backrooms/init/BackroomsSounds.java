@@ -1,9 +1,6 @@
 package com.kpabr.backrooms.init;
 
-import net.fabricmc.api.ModInitializer;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import static com.kpabr.backrooms.util.RegistryHelper.get;
 

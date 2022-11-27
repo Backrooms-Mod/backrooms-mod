@@ -2,7 +2,7 @@ package com.kpabr.backrooms.entity.projectile;
 
 import static com.kpabr.backrooms.init.BackroomsItems.FIRESALT;
 import static com.kpabr.backrooms.init.BackroomsParticles.FIRESALT_PARTICLE;
-import static com.kpabr.backrooms.init.BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE;
+import static com.kpabr.backrooms.init.BackroomsProjectiles.FIRE_SALT_PROJECTILE_ENTITY_TYPE;
 import static com.kpabr.backrooms.init.BackroomsSounds.FIRESALT_LAND_EVENT;
 
 import net.fabricmc.api.EnvType;
@@ -27,7 +27,7 @@ public class FireSaltProjectileEntity extends ThrownItemEntity {
     }
 
     public FireSaltProjectileEntity(World world, LivingEntity owner) {
-        super(FIRE_SALT_PROJECTILE_ENT_ENTITY_TYPE, owner, world);
+        super(FIRE_SALT_PROJECTILE_ENTITY_TYPE, owner, world);
     }
 
     @Override
