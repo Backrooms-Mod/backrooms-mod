@@ -223,9 +223,9 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
 
                 // Get size of current room
                 var currentRoom = this.loadedStructures.get(roomName);
-
-                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
                 final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+
                 if(isEastOrWestDirection) {
                     sizeX = currentRoom.sizeX;
                     sizeZ = currentRoom.sizeZ;
@@ -234,12 +234,12 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                     sizeZ = currentRoom.sizeX;
                 }
 
-                //Only generate the structure if it has enough vertical space to generate.
+                // Only generate the structure if it has enough vertical space to generate.
                 if(8 * y + sizeY < ROOF_BEGIN_Y) {
-                    //Choose a spot in the chunk.
+                    // Choose a spot in the chunk.
                     final int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     final int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
-                    //Fill the area the room will be placed in with air.
+                    // Fill the area the room will be placed in with air.
                     if(roomNumber < regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {
@@ -253,7 +253,7 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
                             }
                         }
                     }
-                    //Actually generate the room.
+                    // Actually generate the room.
                     generateNbt(region, new BlockPos(startX + x * 4, 2 + 8 * y, startZ + z * 4), roomName, rotation);
                 }
             }

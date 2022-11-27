@@ -25,12 +25,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -58,6 +56,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
 
     private final long worldSeed;
+    private static final int ROOF_BEGIN_Y = 6 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
     public WarehouseChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
@@ -199,9 +198,9 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
                 // Get size of current room.
                 var currentRoom = this.loadedStructures.get(roomName);
-
-                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
                 final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
+                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
+
                 if(isEastOrWestDirection) {
                     sizeX = currentRoom.sizeX;
                     sizeZ = currentRoom.sizeZ;
@@ -209,11 +208,13 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     sizeX = currentRoom.sizeZ;
                     sizeZ = currentRoom.sizeX;
                 }
-                if (6 * y + sizeY < 1 + 6 * (floorCount + 1)) { //Only generate the structure if it has enough vertical space to generate.
-                    //Choose a spot in the chunk.
+
+                // Only generate the structure if it has enough vertical space to generate.
+                if (6 * y + sizeY < ROOF_BEGIN_Y) {
+                    // Choose a spot in the chunk.
                     final int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     final int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
-                    //Fill the area the room will be placed in with air.
+                    // Fill the area the room will be placed in with air.
                     if (roomNumber <= regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {
@@ -242,6 +243,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         return 1;
     }
 
+
     @Override
     protected Identifier getBarrelLootTable() {
         return LootTables.SPAWN_BONUS_CHEST;
@@ -263,13 +265,14 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
-        ChunkPos chunkPos = chunk.getPos();
+        final ChunkPos chunkPos = chunk.getPos();
 
+        // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < chunk.getHeight(); y++) {    // controls every block in the chunk
-                    BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                    BlockState block = chunk.getBlockState(pos);
+                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
+                    final BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                    final BlockState block = chunk.getBlockState(pos);
 
                     if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
                         replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
