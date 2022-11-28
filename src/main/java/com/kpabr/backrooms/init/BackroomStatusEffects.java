@@ -5,7 +5,6 @@ import com.kpabr.backrooms.effect.RaggedStatusEffect;
 import com.kpabr.backrooms.effect.RottenStatusEffect;
 import com.kpabr.backrooms.effect.WretchedStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class BackroomStatusEffects {

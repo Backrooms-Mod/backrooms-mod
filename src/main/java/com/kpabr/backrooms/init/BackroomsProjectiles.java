@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.registry.Registry;
 
-public class BackroomsProjectiles {
+public class BackroomsProjectiles implements ModInitializer {
     //placeholder
 
     public static final EntityType<FireSaltProjectileEntity> FIRE_SALT_PROJECTILE_ENTITY_TYPE = Registry.register(
@@ -22,4 +22,8 @@ public class BackroomsProjectiles {
                     .trackedUpdateRate(10)
                     .build()
     );
+
+    @Override
+    public void onInitialize() {
+    }
 }

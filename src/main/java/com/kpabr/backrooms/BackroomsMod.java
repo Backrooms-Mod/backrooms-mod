@@ -31,8 +31,6 @@ public class BackroomsMod implements ModInitializer {
 	public void onInitialize() {
 		BackroomsConfig.init();
 		LOGGER.info("Loaded config");
-		BackroomsLevels.init();
-		LOGGER.info("Loaded levels");
 		BackroomsSounds.init();
 		LOGGER.info("Loaded sounds");
 		BackroomsParticles.init();
@@ -47,6 +45,8 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded groups");
 		BackroomsItems.init();
 		LOGGER.info("Loaded items");
+		BackroomsLevels.init();
+		LOGGER.info("Loaded levels");
 		BackroomsEntities.init();
 		LOGGER.info("loaded your nightmares");
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
