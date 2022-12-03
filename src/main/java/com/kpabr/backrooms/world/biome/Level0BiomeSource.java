@@ -1,6 +1,5 @@
 package com.kpabr.backrooms.world.biome;
 
-
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.BiomeList;
 import com.kpabr.backrooms.util.BiomeRegistryList;

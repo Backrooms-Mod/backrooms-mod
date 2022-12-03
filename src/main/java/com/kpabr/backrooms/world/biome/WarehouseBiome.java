@@ -1,7 +1,6 @@
 package com.kpabr.backrooms.world.biome;
 
 import com.kpabr.backrooms.init.BackroomsEntities;
-import com.kpabr.backrooms.init.BackroomsSounds;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;

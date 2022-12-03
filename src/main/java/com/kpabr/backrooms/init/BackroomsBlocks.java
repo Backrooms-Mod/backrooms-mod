@@ -3,24 +3,18 @@ package com.kpabr.backrooms.init;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 import com.kpabr.backrooms.fluid.BackroomsFluidBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 
-
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PortalSpawnerBlockEntity;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.SlabBlock;
-import net.minecraft.block.WallBlock;
+
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
