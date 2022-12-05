@@ -53,20 +53,13 @@ public class BackroomsLevels {
     }
 
     public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld registerLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
-        final Identifier levelId = BackroomsMod.id(name);
-        // Messy wrapper
-        return get(levelId.getPath(), new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, 0.075F),
-                (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) -> new DimensionOptions(
-                        dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()),
-                        createChunkGenerator(chunkGenerator, biomeSource, biomeRegistry, seed)
-                ),
-                DEFAULT_LEVEL_EFFECTS));
+        return registerLevelWithEffects(name, chunkGenerator, biomeSource, DEFAULT_LEVEL_EFFECTS);
     }
 
     public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld registerLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
         final Identifier levelId = BackroomsMod.id(name);
         // Messy wrapper
-        return get(levelId.getPath(), new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, 0.075F),
+        return get(levelId.getPath(), new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, /*0.075F*/0.000F),
                 (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->
                         new DimensionOptions(
                                 dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()),

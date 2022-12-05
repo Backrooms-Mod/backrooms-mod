@@ -74,13 +74,13 @@ public class BackroomsMod implements ModInitializer {
 		}
 		WretchedComponent wretched = WRETCHED.get(player);
 
-		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("minecraft")) {
-			wretched.decrement();
-			return;
-		} else if(wretched.increment()) {
+		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("backrooms") && wretched.increment()) {
 			wretched.remove(100);
 			BackroomsEntities.WRETCHED.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
 			player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
+			return;
+		} else {
+			wretched.decrement();
 		}
 
 		if(wretched.getValue() >= 24 && wretched.getValue() < 50 && !player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {

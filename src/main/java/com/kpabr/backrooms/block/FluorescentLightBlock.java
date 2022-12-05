@@ -4,15 +4,11 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,8 +24,8 @@ public class FluorescentLightBlock extends Block {
 	}
 
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-		state = (BlockState)state.cycle(LIT);
-		world.setBlockState(pos, state, 2);
+		state = state.cycle(LIT);
+		world.setBlockState(pos, state, 1, 0);
 
 		return ActionResult.success(world.isClient);
 	}
@@ -42,14 +38,14 @@ public class FluorescentLightBlock extends Block {
 	@Override
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
 		if (random.nextDouble() < 0.1D) {
-			world.setBlockState(pos, state.cycle(LIT));
+			world.setBlockState(pos, state.cycle(LIT), 1, 0);
+			final BlockState newState = world.getBlockState(pos);
 			for (Direction dir : Direction.values()) {
-				BlockPos blockPos = pos.offset(dir);
-				if (world.getBlockState(blockPos).isOf(this)) {
-					world.setBlockState(blockPos, world.getBlockState(pos));
+				final BlockPos currentDirectionBlock = pos.offset(dir);
+				if (world.getBlockState(currentDirectionBlock).isOf(this)) {
+					world.setBlockState(currentDirectionBlock, newState, 1, 0);
 				}
 			}
 		}
 	}
-
 }
