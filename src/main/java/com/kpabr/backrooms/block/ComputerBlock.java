@@ -25,7 +25,9 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
 
     public ComputerBlock(FabricBlockSettings fabricBlockSettings) {
         super(fabricBlockSettings);
-        setDefaultState(this.stateManager.getDefaultState().with(LIT, false).with(Properties.HORIZONTAL_FACING, Direction.NORTH));
+        setDefaultState(this.stateManager.getDefaultState()
+                .with(LIT, false)
+                .with(Properties.HORIZONTAL_FACING, Direction.NORTH));
     }
 
     @Override
@@ -49,7 +51,7 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
         if(type == BackroomsBlocks.COMPUTER_BLOCK_ENTITY) {
-            return (theWorld, blockPos, blockState, entity) -> ComputerBlockEntity.tick(theWorld, blockPos, blockState, (ComputerBlockEntity)(entity));
+            return (theWorld, blockPos, blockState, entity) -> ComputerBlockEntity.tick(theWorld, blockPos, blockState);
         }
         return null;
     }

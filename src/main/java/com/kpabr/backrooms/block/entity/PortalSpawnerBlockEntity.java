@@ -1,5 +1,6 @@
 package com.kpabr.backrooms.block.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,8 +19,8 @@ public class PortalSpawnerBlockEntity extends BlockEntity {
 		super(BackroomsBlocks.PORTAL_SPAWNER_BLOCK_ENTITY, pos, state);
 	}
 
-	public static void tick(World world, BlockPos pos, BlockState state, PortalSpawnerBlockEntity blockEntity) {
-		world.setBlockState(pos, Blocks.AIR.getDefaultState());
+	public static void tick(World world, BlockPos pos) {
+		world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
 	}
 
 }

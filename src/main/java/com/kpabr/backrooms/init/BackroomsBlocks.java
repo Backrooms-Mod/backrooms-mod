@@ -99,21 +99,20 @@ public class BackroomsBlocks {
 	public static final Block ALMOND_WATER_FLUID_BLOCK = addWithoutItem("almond_water_fluid_block", new BackroomsFluidBlock(BackroomsFluids.ALMOND_WATER_STILL, FabricBlockSettings.of(Material.WATER).noCollision().nonOpaque().dropsNothing()), ItemGroup.BUILDING_BLOCKS);
 
 	// 16 types of various carpetings
-	public static final Block BLACK_CARPETING = add("black_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.BLACK)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block BLUE_CARPETING = add("blue_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.BLUE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block BROWN_CARPETING = add("brown_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.BROWN)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CYAN_CARPETING = add("cyan_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.CYAN)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block GRAY_CARPETING = add("gray_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block GREEN_CARPETING = add("green_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.GREEN)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block LIGHT_BLUE_CARPETING = add("light_blue_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.LIGHT_BLUE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block LIGHT_GRAY_CARPETING = add("light_gray_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.LIGHT_GRAY)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block LIME_CARPETING = add("lime_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.LIME)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block MAGENTA_CARPETING = add("magenta_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.MAGENTA)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block ORANGE_CARPETING = add("orange_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block PINK_CARPETING = add("pink_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.PINK)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block PURPLE_CARPETING = add("purple_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.PURPLE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block WHITE_CARPETING = add("white_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block RED_CARPETING = add("red_carpeting", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block BLACK_CARPETING = add("black_carpeting", new CarpetingBlock(DyeColor.BLACK), ItemGroup.BUILDING_BLOCKS);
+	public static final Block BLUE_CARPETING = add("blue_carpeting", new CarpetingBlock(DyeColor.BLUE), ItemGroup.BUILDING_BLOCKS);
+	public static final Block BROWN_CARPETING = add("brown_carpeting", new CarpetingBlock(DyeColor.BROWN), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CYAN_CARPETING = add("cyan_carpeting", new CarpetingBlock(DyeColor.CYAN), ItemGroup.BUILDING_BLOCKS);
+	public static final Block GRAY_CARPETING = add("gray_carpeting", new CarpetingBlock(DyeColor.GRAY), ItemGroup.BUILDING_BLOCKS);
+	public static final Block GREEN_CARPETING = add("green_carpeting", new CarpetingBlock(DyeColor.GREEN), ItemGroup.BUILDING_BLOCKS);
+	public static final Block LIGHT_BLUE_CARPETING = add("light_blue_carpeting", new CarpetingBlock(DyeColor.LIGHT_BLUE), ItemGroup.BUILDING_BLOCKS);
+	public static final Block LIGHT_GRAY_CARPETING = add("light_gray_carpeting", new CarpetingBlock(DyeColor.LIGHT_GRAY), ItemGroup.BUILDING_BLOCKS);
+	public static final Block LIME_CARPETING = add("lime_carpeting", new CarpetingBlock(DyeColor.LIME), ItemGroup.BUILDING_BLOCKS);
+	public static final Block MAGENTA_CARPETING = add("magenta_carpeting", new CarpetingBlock(DyeColor.MAGENTA), ItemGroup.BUILDING_BLOCKS);
+	public static final Block ORANGE_CARPETING = add("orange_carpeting", new CarpetingBlock(DyeColor.ORANGE), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PINK_CARPETING = add("pink_carpeting", new CarpetingBlock(DyeColor.PINK), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PURPLE_CARPETING = add("purple_carpeting", new CarpetingBlock(DyeColor.PURPLE), ItemGroup.BUILDING_BLOCKS);
+	public static final Block WHITE_CARPETING = add("white_carpeting", new CarpetingBlock(DyeColor.WHITE), ItemGroup.BUILDING_BLOCKS);
 	private static <T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.put(id, blockEntity);

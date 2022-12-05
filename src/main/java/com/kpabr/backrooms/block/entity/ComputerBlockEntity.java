@@ -1,5 +1,6 @@
 package com.kpabr.backrooms.block.entity;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,14 +22,11 @@ public class ComputerBlockEntity extends BlockEntity {
     }
     
 
-    public static void tick(World world, BlockPos pos, BlockState state, ComputerBlockEntity blockEntity) {
+    public static void tick(World world, BlockPos pos, BlockState state) {
         if(world.isReceivingRedstonePower(pos)) {
-            world.setBlockState(pos, state.with(ComputerBlock.LIT, true));
-        }
-        else
-        {
-            world.setBlockState(pos, state.with(ComputerBlock.LIT, false));
+            world.setBlockState(pos, state.with(ComputerBlock.LIT, true), Block.FORCE_STATE, 0);
+        } else {
+            world.setBlockState(pos, state.with(ComputerBlock.LIT, false), Block.FORCE_STATE, 0);
         }
     }
-
 }

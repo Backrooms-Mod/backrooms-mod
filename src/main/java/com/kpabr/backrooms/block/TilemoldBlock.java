@@ -61,27 +61,20 @@ public class TilemoldBlock extends Block implements Waterloggable {
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
 		Direction direction = state.get(FACING);
-		switch (direction) {
-			case NORTH:
-				return this.northShape;
-			case SOUTH:
-				return this.southShape;
-			case EAST:
-				return this.eastShape;
-			case WEST:
-				return this.westShape;
-			case DOWN:
-				return this.downShape;
-			case UP:
-			default:
-				return this.upShape;
-		}
+		return switch (direction) {
+			case NORTH -> this.northShape;
+			case SOUTH -> this.southShape;
+			case EAST -> this.eastShape;
+			case WEST -> this.westShape;
+			case DOWN -> this.downShape;
+			case UP -> this.upShape;
+		};
 	}
 
 	@Override
 	public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-		Direction direction = state.get(FACING);
-		BlockPos blockPos = pos.offset(direction.getOpposite());
+		final Direction direction = state.get(FACING);
+		final BlockPos blockPos = pos.offset(direction.getOpposite());
 		return world.getBlockState(blockPos).isSideSolidFullSquare(world, blockPos, direction);
 	}
 
@@ -90,15 +83,19 @@ public class TilemoldBlock extends Block implements Waterloggable {
 		if (state.get(WATERLOGGED)) {
 			world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
+		if(direction == state.get(FACING).getOpposite() && !state.canPlaceAt(world, pos))
+			return Blocks.AIR.getDefaultState();
 
-		return direction == state.get(FACING).getOpposite() && !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
 	@Nullable
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
 		WorldAccess worldAccess = ctx.getWorld();
 		BlockPos blockPos = ctx.getBlockPos();
-		return this.getDefaultState().with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER).with(FACING, ctx.getSide());
+		return this.getDefaultState()
+				.with(WATERLOGGED, worldAccess.getFluidState(blockPos).getFluid() == Fluids.WATER)
+				.with(FACING, ctx.getSide());
 	}
 
 	@Override

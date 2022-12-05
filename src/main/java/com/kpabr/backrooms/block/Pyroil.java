@@ -2,7 +2,6 @@ package com.kpabr.backrooms.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.block.*;
@@ -10,16 +9,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.enums.WireConnection;
-import net.minecraft.client.particle.LavaEmberParticle;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
@@ -31,7 +26,6 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -45,11 +39,19 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
     //Idk what does that means, TODO:
-    private static final Map<Direction, VoxelShape> field_24414 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 1.0, 13.0), Direction.SOUTH, Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 16.0), Direction.EAST, Block.createCuboidShape(3.0, 0.0, 3.0, 16.0, 1.0, 13.0), Direction.WEST, Block.createCuboidShape(0.0, 0.0, 3.0, 13.0, 1.0, 13.0)));
-    private static final Map<Direction, VoxelShape> field_24415 = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, VoxelShapes.union(field_24414.get(Direction.NORTH), Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 16.0, 1.0)), Direction.SOUTH, VoxelShapes.union(field_24414.get(Direction.SOUTH), Block.createCuboidShape(3.0, 0.0, 15.0, 13.0, 16.0, 16.0)), Direction.EAST, VoxelShapes.union(field_24414.get(Direction.EAST), Block.createCuboidShape(15.0, 0.0, 3.0, 16.0, 16.0, 13.0)), Direction.WEST, VoxelShapes.union(field_24414.get(Direction.WEST), Block.createCuboidShape(0.0, 0.0, 3.0, 1.0, 16.0, 13.0))));
+    private static final Map<Direction, VoxelShape> field_24414 = Maps.newEnumMap(ImmutableMap.of(
+            Direction.NORTH, Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 1.0, 13.0),
+            Direction.SOUTH, Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 16.0),
+            Direction.EAST, Block.createCuboidShape(3.0, 0.0, 3.0, 16.0, 1.0, 13.0),
+            Direction.WEST, Block.createCuboidShape(0.0, 0.0, 3.0, 13.0, 1.0, 13.0)));
+    private static final Map<Direction, VoxelShape> field_24415 = Maps.newEnumMap(ImmutableMap.of(
+            Direction.NORTH, VoxelShapes.union(field_24414.get(Direction.NORTH), Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 16.0, 1.0)),
+            Direction.SOUTH, VoxelShapes.union(field_24414.get(Direction.SOUTH), Block.createCuboidShape(3.0, 0.0, 15.0, 13.0, 16.0, 16.0)),
+            Direction.EAST, VoxelShapes.union(field_24414.get(Direction.EAST), Block.createCuboidShape(15.0, 0.0, 3.0, 16.0, 16.0, 13.0)),
+            Direction.WEST, VoxelShapes.union(field_24414.get(Direction.WEST), Block.createCuboidShape(0.0, 0.0, 3.0, 1.0, 16.0, 13.0))));
 
     private static final Vec3d[] COLORS = Util.make(new Vec3d[16], (vec3ds) -> {
-        for(int i = 0; i <= 15; ++i) {
+        for(int i = 0; i < 16; ++i) {
             float r = (float) i / 15.0F;
             float g = r * 0.6F + (r > 0.0F ? 0.4F : 0.3F);
             float h = MathHelper.clamp(r * r * 0.7F - 0.5F, 0.0F, 1.0F);
@@ -63,8 +65,16 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
 
     public Pyroil(Settings settings) {
         super(settings);
-        this.setDefaultState(stateManager.getDefaultState().with(WIRE_CONNECTION_NORTH, WireConnection.NONE).with(WIRE_CONNECTION_EAST, WireConnection.NONE).with(WIRE_CONNECTION_SOUTH, WireConnection.NONE).with(WIRE_CONNECTION_WEST, WireConnection.NONE));
-        this.dotState = (getDefaultState().with(WIRE_CONNECTION_NORTH, WireConnection.SIDE)).with(WIRE_CONNECTION_EAST, WireConnection.SIDE).with(WIRE_CONNECTION_SOUTH, WireConnection.SIDE).with(WIRE_CONNECTION_WEST, WireConnection.SIDE);
+        this.setDefaultState(stateManager.getDefaultState()
+                .with(WIRE_CONNECTION_NORTH, WireConnection.NONE)
+                .with(WIRE_CONNECTION_EAST, WireConnection.NONE)
+                .with(WIRE_CONNECTION_SOUTH, WireConnection.NONE)
+                .with(WIRE_CONNECTION_WEST, WireConnection.NONE));
+        this.dotState = getDefaultState()
+                .with(WIRE_CONNECTION_NORTH, WireConnection.SIDE)
+                .with(WIRE_CONNECTION_EAST, WireConnection.SIDE)
+                .with(WIRE_CONNECTION_SOUTH, WireConnection.SIDE)
+                .with(WIRE_CONNECTION_WEST, WireConnection.SIDE);
 
         for (BlockState blockState : this.getStateManager().getStates()) {
             SHAPES.put(blockState, this.getShapeForState(blockState));
@@ -88,11 +98,9 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!oldState.isOf(state.getBlock()) && !world.isClient) {
-
             for (Direction direction : Direction.Type.VERTICAL) {
                 world.updateNeighborsAlways(pos.offset(direction), this);
             }
-
             this.updateOffsetNeighbors(world, pos);
         }
     }
@@ -102,19 +110,12 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     }
 
     private void updateOffsetNeighbors(World world, BlockPos pos) {
-        Iterator<Direction> horizontal_directions = Direction.Type.HORIZONTAL.iterator();
-        Direction direction;
-
-        while(horizontal_directions.hasNext()) {
-            direction = horizontal_directions.next();
+        for(Direction direction : Direction.Type.HORIZONTAL) {
             this.updateNeighbors(world, pos.offset(direction));
         }
 
-        horizontal_directions = Direction.Type.HORIZONTAL.iterator();
-
-        while(horizontal_directions.hasNext()) {
-            direction = horizontal_directions.next();
-            BlockPos blockPos = pos.offset(direction);
+        for(Direction direction : Direction.Type.HORIZONTAL) {
+            final BlockPos blockPos = pos.offset(direction);
             if (world.getBlockState(blockPos).isSolidBlock(world, blockPos)) {
                 this.updateNeighbors(world, blockPos.up());
             } else {
@@ -128,9 +129,8 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     private void updateNeighbors(World world, BlockPos pos) {
         if (world.getBlockState(pos).isOf(this)) {
             world.updateNeighborsAlways(pos, this);
-            Direction[] directions = Direction.values();
 
-            for (Direction direction : directions) {
+            for (Direction direction : Direction.values()) {
                 world.updateNeighborsAlways(pos.offset(direction), this);
             }
         }
@@ -141,12 +141,9 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         if (!moved && !state.isOf(newState.getBlock())) {
             super.onStateReplaced(state, world, pos, newState, moved);
             if (!world.isClient) {
-                Direction[] directions = Direction.values();
-
-                for (Direction direction : directions) {
+                for (Direction direction : Direction.values()) {
                     world.updateNeighborsAlways(pos.offset(direction), this);
                 }
-
                 this.updateOffsetNeighbors(world, pos);
             }
         }
@@ -182,8 +179,11 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         } else if (direction == Direction.UP) {
             return this.getPlacementState(world, state, pos);
         } else {
-            WireConnection wireConnection = this.getRenderConnectionType(world, pos, direction);
-            return wireConnection.isConnected() == state.get(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction)).isConnected() && !isFullyConnected(state) ? state.with(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction), wireConnection) : this.getPlacementState(world, this.dotState.with(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction), wireConnection), pos);
+            final WireConnection wireConnection = this.getRenderConnectionType(world, pos, direction);
+            return wireConnection.isConnected() == state.get(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction)).isConnected()
+                    &&
+                    !isFullyConnected(state) ? state.with(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction), wireConnection)
+                    : this.getPlacementState(world, this.dotState.with(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction), wireConnection), pos);
         }
     }
 
@@ -246,43 +246,59 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
 
     @Override
     public BlockState mirror(BlockState state, BlockMirror mirror) {
-        return switch (mirror) {
-            case LEFT_RIGHT ->
-                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH));
-            case FRONT_BACK ->
-                    state.with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
-            default -> super.mirror(state, mirror);
-        };
+        if(mirror == BlockMirror.LEFT_RIGHT)
+            return state
+                    .with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH))
+                    .with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH));
+        else if(mirror == BlockMirror.FRONT_BACK)
+            return state
+                    .with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST))
+                    .with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
+
+        return super.mirror(state, mirror);
     }
 
     @Override
     public BlockState rotate(BlockState state, BlockRotation rotation) {
         return switch (rotation) {
-            case CLOCKWISE_180 ->
-                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
-            case COUNTERCLOCKWISE_90 ->
-                    state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_SOUTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_WEST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_NORTH));
-            case CLOCKWISE_90 ->
-                    (state.with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_WEST))).with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_NORTH)).with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_EAST)).with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_SOUTH));
+            case CLOCKWISE_180 -> state
+                            .with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_SOUTH))
+                            .with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_WEST))
+                            .with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_NORTH))
+                            .with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_EAST));
+            case COUNTERCLOCKWISE_90 -> state
+                            .with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_EAST))
+                            .with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_SOUTH))
+                            .with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_WEST))
+                            .with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_NORTH));
+            case CLOCKWISE_90 -> state
+                            .with(WIRE_CONNECTION_NORTH, state.get(WIRE_CONNECTION_WEST))
+                            .with(WIRE_CONNECTION_EAST, state.get(WIRE_CONNECTION_NORTH))
+                            .with(WIRE_CONNECTION_SOUTH, state.get(WIRE_CONNECTION_EAST))
+                            .with(WIRE_CONNECTION_WEST, state.get(WIRE_CONNECTION_SOUTH));
             default -> state;
         };
     }
 
     private static boolean isFullyConnected(BlockState state) {
-        return state.get(WIRE_CONNECTION_NORTH).isConnected() && state.get(WIRE_CONNECTION_SOUTH).isConnected() && state.get(WIRE_CONNECTION_EAST).isConnected() && state.get(WIRE_CONNECTION_WEST).isConnected();
+        return  state.get(WIRE_CONNECTION_NORTH).isConnected() &&
+                state.get(WIRE_CONNECTION_SOUTH).isConnected() &&
+                state.get(WIRE_CONNECTION_EAST).isConnected() &&
+                state.get(WIRE_CONNECTION_WEST).isConnected();
     }
 
     private static boolean isNotConnected(BlockState state) {
-        return !state.get(WIRE_CONNECTION_NORTH).isConnected() && !state.get(WIRE_CONNECTION_SOUTH).isConnected() && !state.get(WIRE_CONNECTION_EAST).isConnected() && !state.get(WIRE_CONNECTION_WEST).isConnected();
+        return  !state.get(WIRE_CONNECTION_NORTH).isConnected() &&
+                !state.get(WIRE_CONNECTION_SOUTH).isConnected() &&
+                !state.get(WIRE_CONNECTION_EAST).isConnected() &&
+                !state.get(WIRE_CONNECTION_WEST).isConnected();
     }
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify) {
-        if (!world.isClient) {
-            if (!state.canPlaceAt(world, pos)) {
-                dropStacks(state, world, pos);
-                world.removeBlock(pos, false);
-            }
+        if (!world.isClient && !state.canPlaceAt(world, pos)) {
+            dropStacks(state, world, pos);
+            world.removeBlock(pos, false);
         }
     }
 
@@ -312,7 +328,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
         return this.canRunOnTop(world, blockPos, blockState);
     }
     private BlockState getDefaultWireState(BlockView world, BlockState state, BlockPos pos) {
-        boolean noBlocksOnTop = !world.getBlockState(pos.up()).isSolidBlock(world, pos);
+        final boolean noBlocksOnTop = !world.getBlockState(pos.up()).isSolidBlock(world, pos);
 
         for (Direction direction : Direction.Type.HORIZONTAL) {
             if (!state.get(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction)).isConnected()) {
@@ -332,17 +348,13 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     }
 
     protected static boolean connectsTo(BlockState state, @Nullable Direction dir) {
-        if (state.isOf(BackroomsBlocks.PYROIL)) {
-            return true;
-        } else {
-            return dir != null && state.emitsRedstonePower();
-        }
+        return state.isOf(BackroomsBlocks.PYROIL)
+                || dir != null && state.emitsRedstonePower();
     }
 
     private void addPoweredParticles(World world, Random random, BlockPos pos, Vec3d color, Direction direction, Direction direction2, float f, float g) {
         float h = g - f;
         if (!(random.nextFloat() >= 0.1F * h)) {
-            float i = 0.4375F;
             float j = f + h * random.nextFloat();
             double d = 0.5 + (double)(0.4375F * (float)direction.getOffsetX()) + (double)(j * (float)direction2.getOffsetX());
             double e = 0.5 + (double)(0.4375F * (float)direction.getOffsetY()) + (double)(j * (float)direction2.getOffsetY());
@@ -352,6 +364,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     }
 
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+
         for (Direction direction : Direction.Type.HORIZONTAL) {
             WireConnection wireConnection = state.get(DIRECTION_TO_WIRE_CONNECTION_PROPERTY.get(direction));
             switch (wireConnection) {
@@ -361,13 +374,10 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
                     this.addPoweredParticles(world, random, pos, COLORS[random.nextInt(2,16)], Direction.DOWN, direction, 0.0F, 0.5F);
                     break;
                 case NONE:
-                default:
                     this.addPoweredParticles(world, random, pos, COLORS[random.nextInt(2,16)], Direction.DOWN, direction, 0.0F, 0.3F);
             }
         }
     }
-
-
 
     @Nullable
     @Override

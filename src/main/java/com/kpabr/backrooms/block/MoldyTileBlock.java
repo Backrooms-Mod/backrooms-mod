@@ -2,9 +2,10 @@ package com.kpabr.backrooms.block;
 
 import java.util.Random;
 
-import net.minecraft.block.*;
 import com.kpabr.backrooms.init.BackroomsBlocks;
-import net.minecraft.block.AbstractBlock.Settings;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
@@ -13,7 +14,6 @@ import net.minecraft.util.math.Direction;
 
 public class MoldyTileBlock extends Block {
 	public static final int GROW_CHANCE = 5;
-	private static final Direction[] DIRECTIONS = Direction.values();
 
 	public MoldyTileBlock(Settings settings) {
 		super(settings);
@@ -24,19 +24,17 @@ public class MoldyTileBlock extends Block {
 	}
 
 	public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-		if (random.nextInt(5) == 0) {
-			Direction direction = DIRECTIONS[random.nextInt(DIRECTIONS.length)];
-			BlockPos blockPos = pos.offset(direction);
-			BlockState blockState = world.getBlockState(blockPos);
-			Block block = null;
+		if (random.nextInt(GROW_CHANCE) == 0) {
+			final Direction direction = Direction.random(random);
+			final BlockPos blockPos = pos.offset(direction);
+			final BlockState blockState = world.getBlockState(blockPos);
+
 			if (canGrowIn(blockState)) {
-				block = BackroomsBlocks.TILEMOLD;
-			}
-			if (block != null) {
-				BlockState blockState2 = (BlockState)((BlockState)block.getDefaultState().with(TilemoldBlock.FACING, direction)).with(TilemoldBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
+				BlockState blockState2 = BackroomsBlocks.TILEMOLD.getDefaultState()
+						.with(TilemoldBlock.FACING, direction)
+						.with(TilemoldBlock.WATERLOGGED, blockState.getFluidState().getFluid() == Fluids.WATER);
 				world.setBlockState(blockPos, blockState2);
 			}
-
 		}
 	}
 
