@@ -1,11 +1,8 @@
-package com.kpabr.backrooms.entity.renderer.living;
+package com.kpabr.backrooms.client.entity.renderer;
 
 import com.kpabr.backrooms.entity.living.HoundLivingEntity;
-import com.kpabr.backrooms.entity.models.living.HoundModel;
+import com.kpabr.backrooms.client.entity.model.HoundModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.entity.Entity;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class HoundEntityRenderer extends GeoEntityRenderer<HoundLivingEntity> {

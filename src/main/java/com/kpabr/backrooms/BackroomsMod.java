@@ -4,12 +4,15 @@ package com.kpabr.backrooms;
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.entity.living.HoundLivingEntity;
+import com.kpabr.backrooms.entity.living.WretchEntity;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -45,13 +48,12 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Loaded groups");
 		BackroomsItems.init();
 		LOGGER.info("Loaded items");
-		BackroomsLevels.init();
-		LOGGER.info("Loaded levels");
 		BackroomsEntities.init();
 		LOGGER.info("loaded your nightmares");
+		BackroomsLevels.init();
+		LOGGER.info("Loaded levels");
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Everything is loaded !");
-
 		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
 			// Iterating through every player
@@ -76,7 +78,7 @@ public class BackroomsMod implements ModInitializer {
 
 		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("backrooms") && wretched.increment()) {
 			wretched.remove(100);
-			BackroomsEntities.WRETCHED.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
+			BackroomsEntities.WRETCH.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
 			player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
 			return;
 		} else {
