@@ -103,6 +103,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     // The two numbers with an F directly after them denote the probability of
                     // an eastern wall and a southern wall generating, respectively.
                     final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
+                    final int shelfType = random.nextFloat() < 0.6F ? random.nextInt(4)+1 : 0;
 
                     // Check if the arrangement includes the eastern wall
                     // and create eastern wall if includes.
@@ -122,7 +123,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                             }
                         }
                     }
-                    // Boolean variable controlling whether a pillar in generated. Initially false.
+                    // Boolean variable controlling whether a pillar is generated. Initially false.
                     boolean pillar;
 
                     // If there's a wall in the current section, always create a pillar.
@@ -168,64 +169,6 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                             BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(),
                             Block.FORCE_STATE, 0); //Place a ceiling light.
                     //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
-                }
-            }
-            // Create an unique random Object for the current floor.
-            final Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, y));
-            //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
-            //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
-            if (fullFloorRandom.nextFloat() < 0.1F & false) {
-                //Define the amounts of regular and nofill rooms.
-                final int regularRooms = 12;
-                final int nofillRooms = 3;
-
-                //Choose the room that will be placed.
-                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
-
-                //The number with an F directly after it denotes the probability of an empty room being generated regardless.
-                if (fullFloorRandom.nextFloat() < 0.6F) roomNumber = 0;
-
-                String roomName = "backrooms_large_" + roomNumber;
-                if (roomNumber > regularRooms) roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
-                //Choose the rotation for the room.
-                Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
-                BlockRotation rotation = switch (dir) {
-                    case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
-                    case EAST -> BlockRotation.NONE;
-                    case SOUTH -> BlockRotation.CLOCKWISE_90;
-                    default -> BlockRotation.CLOCKWISE_180;
-                };
-
-                // Get size of current room.
-                var currentRoom = this.loadedStructures.get(roomName);
-                final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
-                int sizeY = currentRoom.sizeY, sizeX, sizeZ;
-
-                if(isEastOrWestDirection) {
-                    sizeX = currentRoom.sizeX;
-                    sizeZ = currentRoom.sizeZ;
-                } else {
-                    sizeX = currentRoom.sizeZ;
-                    sizeZ = currentRoom.sizeX;
-                }
-
-                // Only generate the structure if it has enough vertical space to generate.
-                if (6 * y + sizeY < ROOF_BEGIN_Y) {
-                    // Choose a spot in the chunk.
-                    final int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
-                    final int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
-                    // Fill the area the room will be placed in with air.
-                    if (roomNumber <= regularRooms) {
-                        for (int i = 0; i < sizeX; i++) {
-                            for (int j = 0; j < sizeY; j++) {
-                                for (int k = 0; k < sizeZ; k++) {
-                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
-                                }
-                            }
-                        }
-                    }
-                    //Actually generate the room.
-                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation);
                 }
             }
         }
