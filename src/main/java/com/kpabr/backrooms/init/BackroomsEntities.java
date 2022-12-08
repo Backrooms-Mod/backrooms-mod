@@ -11,6 +11,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class BackroomsEntities {
+    public static void init() {
+        FabricDefaultAttributeRegistry.register(WRETCH, WretchEntity.createWretchAttributes());
+        FabricDefaultAttributeRegistry.register(HOUND, HoundLivingEntity.createHoundAttributes());
+    }
 
     public static final EntityType<HoundLivingEntity> HOUND = Registry.register(Registry.ENTITY_TYPE,
             new Identifier("backrooms", "hound"),
@@ -19,11 +23,6 @@ public class BackroomsEntities {
 
     public static final EntityType<WretchEntity> WRETCH = Registry.register(Registry.ENTITY_TYPE,
             new Identifier("backrooms", "wretch"),
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.25f)).build()
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.85f)).build()
     );
-
-    public static void init() {
-        FabricDefaultAttributeRegistry.register(WRETCH, WretchEntity.createWretchedAttributes());
-        FabricDefaultAttributeRegistry.register(HOUND, HoundLivingEntity.createHoundAttributes());
-    }
 }
