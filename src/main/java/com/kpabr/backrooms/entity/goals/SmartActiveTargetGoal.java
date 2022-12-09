@@ -41,7 +41,7 @@ public class SmartActiveTargetGoal extends Goal {
     public boolean canStart() {
         this.findClosestTarget();
         // predicate is state, which can add multiple helpful conditions for player targeting
-        if(!this.mob.getVisibilityCache().canSee(this.targetPlayer) && predicate.test(targetPlayer)) {
+        if(this.targetPlayer != null && !this.mob.getVisibilityCache().canSee(this.targetPlayer) && predicate.test(targetPlayer)) {
             return false;
         }
         return this.targetPlayer != null;
@@ -58,7 +58,9 @@ public class SmartActiveTargetGoal extends Goal {
             entity = this.targetPlayer;
         }
 
-        if (!this.mob.canTarget(entity)) {
+        if(entity == null) {
+            return false;
+        } else if (!this.mob.canTarget(entity)) {
             return false;
         }
         else {
@@ -66,15 +68,21 @@ public class SmartActiveTargetGoal extends Goal {
             if (this.mob.squaredDistanceTo(entity) > distance * distance) {
                 return false;
             }
-            else if (this.checkVisibility) {
-                if (this.mob.getVisibilityCache().canSee(entity) || this.mob.squaredDistanceTo(entity) < 1.0F) {
-                    this.timeWithoutVisibility = 0;
-                } else if (++this.timeWithoutVisibility > toGoalTicks(maxTimeWithoutVisibility)) {
-                    return false;
-                }
+            else if(this.mob.squaredDistanceTo(entity) < 1.0F) {
+                this.mob.setTarget(entity);
+                return true;
             }
-            this.mob.setTarget(entity);
-            return true;
+            else {
+                if (this.checkVisibility) {
+                    if (this.mob.getVisibilityCache().canSee(entity)) {
+                        this.timeWithoutVisibility = 0;
+                    } else if (++this.timeWithoutVisibility > toGoalTicks(maxTimeWithoutVisibility)) {
+                        return false;
+                    }
+                }
+                this.mob.setTarget(entity);
+                return true;
+            }
         }
     }
 

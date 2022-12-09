@@ -48,9 +48,9 @@ public class WretchEntity extends HostileEntity implements IAnimatable {
     private PlayState predicate(AnimationEvent<WretchEntity> event) {
         if(event.isMoving()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.wretch.walk", true));
-            return PlayState.CONTINUE;
+        } else {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.wretch.idle", true));
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.wretch.idle", true));
         return PlayState.CONTINUE;
     }
 
@@ -66,7 +66,7 @@ public class WretchEntity extends HostileEntity implements IAnimatable {
     @Override
     public void registerControllers(AnimationData animationData) {
         var attackController = new AnimationController<>(this, "attackController", 0, this::attackPredicate);
-        var controller = new AnimationController<>(this, "controller", 0, this::predicate);
+        var controller = new AnimationController<>(this, "controller", 2, this::predicate);
 
         animationData.addAnimationController(attackController);
         animationData.addAnimationController(controller);
