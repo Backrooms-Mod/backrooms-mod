@@ -2,14 +2,13 @@ package com.kpabr.backrooms.world.biome;
 
 
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
-import com.kpabr.backrooms.util.BiomeList;
+import com.kpabr.backrooms.util.BiomeListBuilder;
 
 
 public class Level1BiomeSource extends BaseBiomeSource {
@@ -23,10 +22,10 @@ public class Level1BiomeSource extends BaseBiomeSource {
             ).apply(instance, instance.stable(Level1BiomeSource::new)));
 
     public Level1BiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        super(biomeRegistry, seed, new BiomeList()
-                .addEntry(BackroomsLevels.WAREHOUSE_BIOME, 1)
-                .addEntry(BackroomsLevels.PARKING_GARAGE_BIOME, 2)
-                .addEntry(BackroomsLevels.CEMENT_WALLS_BIOME, 6)
+        super(biomeRegistry, seed, new BiomeListBuilder()
+                .addBiome(BackroomsLevels.WAREHOUSE_BIOME, 1)
+                .addBiome(BackroomsLevels.PARKING_GARAGE_BIOME, 2)
+                .addBiome(BackroomsLevels.CEMENT_WALLS_BIOME, 6)
         );
     }
 

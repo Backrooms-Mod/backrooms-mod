@@ -15,7 +15,7 @@
   "item.backrooms.red_dotted_pattern.desc": "Czerwona tapeta z krokami",
   "item.backrooms.red_blank_pattern": "Wzór sztandaru",
   "item.backrooms.red_blank_pattern.desc": "Czerwona czysta tapeta",
-  "item.backrooms.almond_water": "Migdałowa woda",
+  "item.backrooms.almond_water_bottle": "Migdałowa woda",
   "item.backrooms.firesalt": "Ogniosól",
   "item.backrooms.tilemold_lump": "Bryłka kafelkowa",
   "item.backrooms.baked_tilemold_lump": "Upieczona bryłka kafelkowa",
@@ -59,7 +59,6 @@
   "block.backrooms.red_dotted_wallpaper": "Karmazynowa tapeta z kropkami",
   "block.backrooms.red_blank_wallpaper": "Gładka karmazynowa tapeta",
   "block.backrooms.office_door": "Gabinetowe drzwi",
-  "block.backrooms.portal_spawner": "Przwołacz portalu",
   "block.backrooms.tilemold": "Pleśń płytowa",
   "block.backrooms.fancy_pillar": "Ozdobny filar",
   "block.backrooms.firesalt_block": "Blok ogniosoli",
@@ -86,6 +85,5 @@
   "block.backrooms.orange_carpeting": "Pomarańczowa wykładzina",
   "block.backrooms.purple_carpeting": "Fioletowa wykładzina",
   "block.backrooms.white_carpeting": "Biała wykładzina",
-  "block.backrooms.computer": "Komputer",
-  "block.backrooms.snowy_glass": "Śnieżne szkło"
+  "block.backrooms.computer": "Komputer"
 }

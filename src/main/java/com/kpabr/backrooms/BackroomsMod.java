@@ -4,15 +4,12 @@ package com.kpabr.backrooms;
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
-import com.kpabr.backrooms.entity.living.HoundLivingEntity;
-import com.kpabr.backrooms.entity.living.WretchEntity;
 import com.kpabr.backrooms.init.*;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsGroups;
 import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -22,6 +19,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.GameMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import software.bernie.example.GeckoLibMod;
 
 import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
@@ -33,27 +31,18 @@ public class BackroomsMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		BackroomsConfig.init();
-		LOGGER.info("Loaded config");
 		BackroomsSounds.init();
-		LOGGER.info("Loaded sounds");
 		BackroomsParticles.init();
-		LOGGER.info("Loaded particles");
 		BackroomStatusEffects.init();
-		LOGGER.info("Loaded status effects");
-		BackroomsBlocks.init();
-		LOGGER.info("Loaded blocks");
+		BackroomsProjectiles.init();
 		BackroomsFluids.init();
-		LOGGER.info("Loaded fluids");
+		BackroomsBlocks.init();
 		BackroomsGroups.init();
-		LOGGER.info("Loaded groups");
 		BackroomsItems.init();
-		LOGGER.info("Loaded items");
 		BackroomsEntities.init();
-		LOGGER.info("loaded your nightmares");
 		BackroomsLevels.init();
-		LOGGER.info("Loaded levels");
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("stong_simple_shader"), StrongLiminalShader.CODEC);
-		LOGGER.info("Everything is loaded !");
+		LOGGER.info("Backrooms mod was loaded!");
 		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
 			// Iterating through every player
@@ -76,11 +65,15 @@ public class BackroomsMod implements ModInitializer {
 		}
 		WretchedComponent wretched = WRETCHED.get(player);
 
-		if(player.getWorld().getRegistryKey().getValue().getNamespace().equals("backrooms") && wretched.increment()) {
-			wretched.remove(100);
-			BackroomsEntities.WRETCH.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
-			player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
-			return;
+		final var currentWorld = player.getWorld().getRegistryKey().getValue().getNamespace();
+		if(currentWorld.equals("backrooms") && player.isAlive()) {
+			if(wretched.increment()) {
+				wretched.remove(100);
+				BackroomsEntities.WRETCH.spawn(player.getWorld(), null, null, player, player.getBlockPos(), SpawnReason.MOB_SUMMONED, false, false);
+				player.damage(BackroomsDamageSource.WRETCHED_CYCLE_DEATH, Float.MAX_VALUE);
+				player.removeStatusEffect(BackroomStatusEffects.WRETCHED);
+				return;
+			}
 		} else {
 			wretched.decrement();
 		}
@@ -95,5 +88,9 @@ public class BackroomsMod implements ModInitializer {
 			player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
 			player.addStatusEffect(new StatusEffectInstance(BackroomStatusEffects.WRETCHED, 9999999));
 		}
+	}
+
+	static {
+		GeckoLibMod.DISABLE_IN_DEV = true;
 	}
 }

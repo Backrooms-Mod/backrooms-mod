@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import com.kpabr.backrooms.BackroomsMod;
 import net.ludocrypt.limlib.api.LiminalWorld;
-import net.ludocrypt.limlib.api.world.maze.MazeComponent;
-import net.ludocrypt.limlib.api.world.maze.MazeGenerator;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -31,39 +29,25 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 public class RegistryHelper {
 
-    public static <T extends Block> T get(Identifier id, T block) {
-        return Registry.register(Registry.BLOCK, id, block);
+    public static <T extends LiminalWorld> T get(String id, T world) {
+        return get(BackroomsMod.id(id), world);
+    }
+    public static <T extends LiminalWorld> T get(Identifier id, T world) {
+        return Registry.register(LimlibRegistries.LIMINAL_WORLD, id, world);
     }
 
-    public static <T extends Block> T get(String id, T block) {
-        return Registry.register(Registry.BLOCK, BackroomsMod.id(id), block);
+    public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T chunkGenerator) {
+        return Registry.register(Registry.CHUNK_GENERATOR, BackroomsMod.id(id), chunkGenerator);
     }
 
-    public static <T extends LiminalWorld> T get(String id, T block) {
-        return Registry.register(LimlibRegistries.LIMINAL_WORLD, BackroomsMod.id(id), block);
+    public static RegistryKey<Biome> get(String id, Biome biome) {
+        Registry.register(BuiltinRegistries.BIOME, BackroomsMod.id(id), biome);
+        return RegistryKey.of(Registry.BIOME_KEY, BackroomsMod.id(id));
     }
 
     public static <T extends BlockEntity> BlockEntityType<T> get(String id, FabricBlockEntityTypeBuilder<T> builder) {
         Type<?> type = Util.getChoiceType(TypeReferences.BLOCK_ENTITY, id);
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, BackroomsMod.id(id), builder.build(type));
-    }
-
-    public static <T extends Block> T get(String id, T block, ItemGroup group) {
-        get(id, new BlockItem(block, new FabricItemSettings().group(group)));
-        return get(id, block);
-    }
-
-    public static <T extends Block> T get(String id, T block, FabricItemSettings settings) {
-        get(id, new BlockItem(block, settings));
-        return get(id, block);
-    }
-
-    public static <T extends Item> T get(String id, T item) {
-        return Registry.register(Registry.ITEM, BackroomsMod.id(id), item);
-    }
-
-    public static <E extends Entity, T extends EntityType<E>> T get(String id, T entity) {
-        return Registry.register(Registry.ENTITY_TYPE, BackroomsMod.id(id), entity);
     }
 
     public static <T extends PaintingMotive> T get(String id, T painting) {
@@ -78,19 +62,35 @@ public class RegistryHelper {
         return Registry.register(Registry.SOUND_EVENT, BackroomsMod.id(id), sound);
     }
 
-
-
-    public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T chunkGenerator) {
-        return Registry.register(Registry.CHUNK_GENERATOR, BackroomsMod.id(id), chunkGenerator);
+    @Deprecated
+    public static <T extends Block> T get(Identifier id, T block) {
+        return Registry.register(Registry.BLOCK, id, block);
     }
 
-    public static <C extends ChunkGenerator, M extends MazeComponent, T extends Codec<? extends MazeGenerator<C, M>>> T getMaze(String id, T mazeGenerator) {
-        return Registry.register(LimlibRegistries.LIMINAL_MAZE_GENERATOR, BackroomsMod.id(id), mazeGenerator);
+    @Deprecated
+    public static <T extends Block> T get(String id, T block) {
+        return Registry.register(Registry.BLOCK, BackroomsMod.id(id), block);
     }
 
-    public static RegistryKey<Biome> get(String id, Biome biome) {
-        Registry.register(BuiltinRegistries.BIOME, BackroomsMod.id(id), biome);
-        return RegistryKey.of(Registry.BIOME_KEY, BackroomsMod.id(id));
+    @Deprecated
+    public static <T extends Block> T get(String id, T block, ItemGroup group) {
+        get(id, new BlockItem(block, new FabricItemSettings().group(group)));
+        return get(id, block);
     }
 
+    @Deprecated
+    public static <T extends Block> T get(String id, T block, FabricItemSettings settings) {
+        get(id, new BlockItem(block, settings));
+        return get(id, block);
+    }
+
+    @Deprecated
+    public static <T extends Item> T get(String id, T item) {
+        return Registry.register(Registry.ITEM, BackroomsMod.id(id), item);
+    }
+
+    @Deprecated
+    public static <E extends Entity, T extends EntityType<E>> T get(String id, T entity) {
+        return Registry.register(Registry.ENTITY_TYPE, BackroomsMod.id(id), entity);
+    }
 }

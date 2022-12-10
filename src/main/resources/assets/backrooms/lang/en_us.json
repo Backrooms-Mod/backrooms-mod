@@ -15,14 +15,16 @@
       "item.backrooms.red_dotted_pattern.desc": "Red Dotted Wallpaper",
       "item.backrooms.red_blank_pattern": "Banner Pattern",
       "item.backrooms.red_blank_pattern.desc": "Red Blank Wallpaper",
-      "item.backrooms.almond_water": "Almond Water",
+      "item.backrooms.almond_water_bottle": "Almond Water",
       "item.backrooms.firesalt": "Firesalt",
       "item.backrooms.tilemold_lump": "Tilemold Lump",
       "item.backrooms.baked_tilemold_lump": "Baked Tilemold Lump",
       "item.backrooms.tainted_flesh": "Tainted Flesh",
       "item.backrooms.cooked_flesh": "Cooked Flesh",
       "item.backrooms.hound_spawn_egg": "Hound Spawn Egg",
+      "item.backrooms.wretch_spawn_egg": "Wretch Spawn Egg",
       "item.backrooms.almond_water_bucket": "Bucket of Almond Water",
+
       "block.backrooms.pyroil": "Pyroil",
       "block.backrooms.pipe": "Pipe",
       "block.backrooms.plasterwall": "Drywall",
@@ -62,7 +64,6 @@
       "block.backrooms.red_dotted_wallpaper": "Red Dotted Wallpaper",
       "block.backrooms.red_blank_wallpaper": "Red Blank Wallpaper",
       "block.backrooms.office_door": "Office Door",
-      "block.backrooms.portal_spawner": "Portal Spawner",
       "block.backrooms.tilemold": "Tilemold",
       "block.backrooms.fancy_pillar": "Fancy Pillar",
       "block.backrooms.firesalt_block": "Firesalt Block",
@@ -89,6 +90,7 @@
       "block.backrooms.orange_carpeting": "Orange Carpeting",
       "block.backrooms.purple_carpeting": "Purple Carpeting",
       "block.backrooms.white_carpeting": "White Carpeting",
+      "block.backrooms.computer": "Computer",
 
       "effect.backrooms.rotten": "Rotten",
       "effect.backrooms.ragged": "Ragged",
@@ -114,5 +116,4 @@
       "subtitles.entity.skin_stealer.kill": "Skin stealer kills mob",
       "subtitles.entity.skin_stealer.hurt": "Skin stealer hurts",
       "subtitles.entity.skin_stealer.death": "Skin stealer dies"
-
 }
