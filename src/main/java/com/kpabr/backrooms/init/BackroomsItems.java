@@ -37,7 +37,7 @@ public class BackroomsItems {
 	public static final Item HOUND_SPAWN_EGG = add("hound_spawn_egg",
 			new SpawnEggItem(BackroomsEntities.HOUND,16777215,8531483,new Item.Settings().group(ItemGroup.MISC)));
 	public static final Item WRETCH_SPAWN_EGG = add("wretch_spawn_egg",
-			new SpawnEggItem(BackroomsEntities.HOUND,Color.of(120, 5, 5), Color.of(89, 7, 7) ,
+			new SpawnEggItem(BackroomsEntities.WRETCH,Color.of(120, 5, 5), Color.of(89, 7, 7) ,
 					new Item.Settings().group(ItemGroup.MISC)));
 
 
