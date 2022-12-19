@@ -143,6 +143,7 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void storeStructures(ServerWorld world) {
         this.cementHallsChunkGenerator.storeStructures(world);
+        this.warehouseChunkGenerator.storeStructures(world);
     }
 
     @Override
