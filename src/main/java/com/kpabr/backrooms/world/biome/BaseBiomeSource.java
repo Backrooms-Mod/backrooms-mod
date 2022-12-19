@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.world.biome;
 
-import com.kpabr.backrooms.util.BiomeList;
+import com.kpabr.backrooms.util.BiomeListBuilder;
 import com.kpabr.backrooms.util.BiomeRegistryList;
 import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
@@ -19,7 +19,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
     protected final BiomeRegistryList biomeList;
     protected Registry<Biome> BIOME_REGISTRY;
 
-    public BaseBiomeSource(Registry<Biome> biomeRegistry, long seed, BiomeList biomeList) {
+    public BaseBiomeSource(Registry<Biome> biomeRegistry, long seed, BiomeListBuilder biomeList) {
         this(seed, BiomeRegistryList.from(biomeRegistry, biomeList));
         this.BIOME_REGISTRY = biomeRegistry;
     }

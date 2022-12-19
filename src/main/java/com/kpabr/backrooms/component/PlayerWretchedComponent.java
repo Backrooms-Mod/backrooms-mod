@@ -24,7 +24,8 @@ public class PlayerWretchedComponent implements WretchedComponent {
 
     @Override
     public boolean increment() {
-        return ++this.wretched == 100;
+        ++this.wretched;
+        return this.wretched == 100;
     }
 
     @Override

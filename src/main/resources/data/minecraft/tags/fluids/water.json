@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "backrooms:almond_water_still",
-    "backrooms:almond_water_flowing"
+    "backrooms:almond_water",
+    "backrooms:flowing_almond_water"
   ]
 }

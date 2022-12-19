@@ -1,9 +1,7 @@
 package com.kpabr.backrooms.init;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
-import com.kpabr.backrooms.fluid.BackroomsFluidBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -12,7 +10,6 @@ import net.fabricmc.fabric.api.registry.FuelRegistry;
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
-import com.kpabr.backrooms.block.entity.PortalSpawnerBlockEntity;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
 
 import net.minecraft.block.*;
@@ -28,9 +25,10 @@ import net.minecraft.util.registry.Registry;
 
 @SuppressWarnings("unused")
 public class BackroomsBlocks {
-	private static final Map<Identifier, BlockItem> ITEMS = new LinkedHashMap<>();
-	private static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
-	private static final Map<Identifier, BlockEntityType<?>> BLOCK_ENTITIES = new LinkedHashMap<>();
+
+	public static ArrayList<ItemEntry> ITEMS = new ArrayList<>();
+	private static final ArrayList<BlockEntityEntry> BLOCK_ENTITIES = new ArrayList<>();
+	private static final ArrayList<BlockEntry> BLOCKS = new ArrayList<>();
 
 	public static final Block CORK_TILE = add("cork_tile",
 			new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
@@ -66,9 +64,6 @@ public class BackroomsBlocks {
 
 	public static final Block HOTEL_CARPET = add("hotel_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block PORTAL_SPAWNER_BLOCK = add("portal_spawner", new PortalSpawnerBlock(FabricBlockSettings.copyOf(Blocks.END_PORTAL).dropsNothing()), ItemGroup.BUILDING_BLOCKS);
-	public static final BlockEntityType<PortalSpawnerBlockEntity> PORTAL_SPAWNER_BLOCK_ENTITY = add("portal_spawner", FabricBlockEntityTypeBuilder.create(PortalSpawnerBlockEntity::new, PORTAL_SPAWNER_BLOCK).build(null));
-
 	public static final Block COMPUTER = add("computer", new ComputerBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).mapColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> COMPUTER_BLOCK_ENTITY = add("computer", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 
@@ -89,14 +84,14 @@ public class BackroomsBlocks {
 	public static final Block PARKING_CEMENT_PILLAR = add("parking_cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(CEMENT_PILLAR).mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
-
-	public static final Block SNOWY_GLASS = add("snowy_glass", new SkyboxGlassBlock(FabricBlockSettings.copyOf(Blocks.GLASS)), ItemGroup.DECORATIONS);
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+	public static final Block IRON_DOOR = add("iron_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).mapColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block BEDROCK_BRICKS = add("bedrock_bricks", new Block(FabricBlockSettings.copy(Blocks.BEDROCK)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block ALMOND_WATER_FLUID_BLOCK = addWithoutItem("almond_water_fluid_block", new BackroomsFluidBlock(BackroomsFluids.ALMOND_WATER_STILL, FabricBlockSettings.of(Material.WATER).noCollision().nonOpaque().dropsNothing()), ItemGroup.BUILDING_BLOCKS);
+	public static final Block ALMOND_WATER = addWithoutItem("almond_water",
+			new FluidBlock(BackroomsFluids.STILL_ALMOND_WATER, FabricBlockSettings.copyOf(Blocks.WATER)));
 
 	// 16 types of various carpetings
 	public static final Block BLACK_CARPETING = add("black_carpeting", new CarpetingBlock(DyeColor.BLACK), ItemGroup.BUILDING_BLOCKS);
@@ -116,7 +111,7 @@ public class BackroomsBlocks {
 	public static final Block RED_CARPETING = add("red_carpeting", new CarpetingBlock(DyeColor.RED), ItemGroup.BUILDING_BLOCKS);
 	private static <T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
-		BLOCK_ENTITIES.put(id, blockEntity);
+		BLOCK_ENTITIES.add(new BlockEntityEntry(id, blockEntity));
 		return blockEntity;
 	}
 
@@ -128,28 +123,29 @@ public class BackroomsBlocks {
 		add(name, block);
 		if (item != null) {
 			item.appendBlocks(Item.BLOCK_ITEMS, item);
-			ITEMS.put(BackroomsMod.id(name), item);
+			ITEMS.add(new ItemEntry(BackroomsMod.id(name), item));
 		}
 		return block;
 	}
 
-	private static <B extends Block> B addWithoutItem(String name, B block, ItemGroup tab) {
-		return Registry.register(Registry.BLOCK, BackroomsMod.id(name), block);
+	private static <B extends Block> B addWithoutItem(String name, B block) {
+		BLOCKS.add(new BlockEntry(BackroomsMod.id(name), block));
+		return block;
 	}
 
 	private static <B extends Block> void add(String name, B block) {
-		BLOCKS.put(BackroomsMod.id(name), block);
+		BLOCKS.add(new BlockEntry(BackroomsMod.id(name), block));
 	}
 
 	public static void init() {
-		for (Identifier id : ITEMS.keySet()) {
-			Registry.register(Registry.ITEM, id, ITEMS.get(id));
+		for (ItemEntry entry : ITEMS) {
+			Registry.register(Registry.ITEM, entry.identifier, entry.item);
 		}
-		for (Identifier id : BLOCKS.keySet()) {
-			Registry.register(Registry.BLOCK, id, BLOCKS.get(id));
+		for (BlockEntry entry : BLOCKS) {
+			Registry.register(Registry.BLOCK, entry.identifier, entry.block);
 		}
-		for (Identifier id : BLOCK_ENTITIES.keySet()) {
-			Registry.register(Registry.BLOCK_ENTITY_TYPE, id, BLOCK_ENTITIES.get(id));
+		for (BlockEntityEntry entry : BLOCK_ENTITIES) {
+			Registry.register(Registry.BLOCK_ENTITY_TYPE, entry.identifier, entry.blockEntity);
 		}
 
 		registerCompostableBlocks();
@@ -169,4 +165,8 @@ public class BackroomsBlocks {
 		FuelRegistry registry = FuelRegistry.INSTANCE;
 		registry.add(PYROIL, 800);
 	}
+
+	private record ItemEntry(Identifier identifier, BlockItem item) { }
+	private record BlockEntry(Identifier identifier, Block block) { }
+	private record BlockEntityEntry(Identifier identifier, BlockEntityType<?> blockEntity) { }
 }

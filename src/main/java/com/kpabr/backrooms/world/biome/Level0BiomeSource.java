@@ -1,7 +1,7 @@
 package com.kpabr.backrooms.world.biome;
 
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.BiomeList;
+import com.kpabr.backrooms.util.BiomeListBuilder;
 import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -21,10 +21,10 @@ public class Level0BiomeSource extends BaseBiomeSource {
             ).apply(instance, instance.stable(Level0BiomeSource::new)));
 
     public Level0BiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        super(biomeRegistry, seed, new BiomeList()
-                .addEntry(BackroomsLevels.CRIMSON_WALLS_BIOME, 0.3)
-                .addEntry(BackroomsLevels.DECREPIT_BIOME, 0.4)
-                .addEntry(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
+        super(biomeRegistry, seed, new BiomeListBuilder()
+                .addBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, 0.3)
+                .addBiome(BackroomsLevels.DECREPIT_BIOME, 0.4)
+                .addBiome(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
         );
     }
 

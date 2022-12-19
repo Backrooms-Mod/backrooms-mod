@@ -40,7 +40,7 @@
         {
           "type": "minecraft:item",
           "weight": 10,
-          "name": "backrooms:almond_water"
+          "name": "backrooms:almond_water_bottle"
         }
       ]
     },

@@ -26,7 +26,6 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 
 public class BackroomsLevels {
-
     public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", CrimsonHallsBiome.create());
     public static final RegistryKey<Biome> LEVEL_ZERO_NORMAL_BIOME = get("normal_biome", LevelZeroNormalBiome.create());
     public static final RegistryKey<Biome> CRIMSON_WALLS_BIOME = get("crimson_walls", CrimsonHallsBiome.create());
@@ -37,10 +36,10 @@ public class BackroomsLevels {
     // Level 2 biomes
     public static final RegistryKey<Biome> PIPES_BIOME = get("pipes", PipesBiome.create());
 
-    public static final LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
-    public static final LiminalWorld LEVEL_0 = registerLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
-    public static final LiminalWorld LEVEL_1 = registerLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
-    public static final LiminalWorld LEVEL_2 = registerLevelWithEffects("level_2", LevelTwoChunkGenerator.class, LevelTwoBiomeSource.class, DEFAULT_LEVEL_EFFECTS);
+    public static LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
+    public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
+    public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
+    public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, LevelTwoBiomeSource.class);
 
     public static void init() {
         Registry.register(Registry.BIOME_SOURCE, "level_0_biome_source", Level0BiomeSource.CODEC);
@@ -48,18 +47,18 @@ public class BackroomsLevels {
         Registry.register(Registry.BIOME_SOURCE, "level_2_biome_source", LevelTwoBiomeSource.CODEC);
         get("level_0_chunk_generator", LevelZeroChunkGenerator.CODEC);
         get("level_1_chunk_generator", LevelOneChunkGenerator.CODEC);
-        // TODO: Level 2 chunk generator
         get("level_2_chunk_generator", LevelTwoChunkGenerator.CODEC);
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld registerLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
-        return registerLevelWithEffects(name, chunkGenerator, biomeSource, DEFAULT_LEVEL_EFFECTS);
+    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
+        return addLevelWithEffects(name, chunkGenerator, biomeSource, DEFAULT_LEVEL_EFFECTS);
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld registerLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
+    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld addLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
         final Identifier levelId = BackroomsMod.id(name);
+
         // Messy wrapper
-        return get(levelId.getPath(), new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, /*0.075F*/0.000F),
+        return get(levelId, new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, /*0.075F*/0.000F),
                 (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->
                         new DimensionOptions(
                                 dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()),
