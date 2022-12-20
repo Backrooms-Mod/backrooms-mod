@@ -61,6 +61,13 @@ public class BackroomsMod implements ModInitializer {
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
 		if(player.interactionManager.getGameMode() == GameMode.CREATIVE || player.interactionManager.getGameMode() == GameMode.SPECTATOR) {
+			if (player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
+				player.removeStatusEffect(BackroomStatusEffects.RAGGED);
+			} else if (player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
+				player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
+			} else if (player.hasStatusEffect(BackroomStatusEffects.WRETCHED)) {
+				player.removeStatusEffect(BackroomStatusEffects.WRETCHED);
+			}
 			return;
 		}
 		WretchedComponent wretched = WRETCHED.get(player);
