@@ -148,8 +148,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                     // Check if you're not on the southern edge of the chunk. If you aren't, proceed.
                     if(z != 3) {
                         // Check one block south whether there's a wall there. If so, a pillar will always be generated.
-                        pillar = pillar
-                                || !region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4)).isAir();
+                        pillar = pillar || !region.getBlockState(new BlockPos(startX + x * 4 + 3, 2 + 6 * y, startZ + z * 4 + 4)).isAir();
                     }
                     pillar = pillar || (random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
                     if (pillar) {
