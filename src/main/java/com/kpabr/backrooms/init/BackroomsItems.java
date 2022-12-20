@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.items.FireSalt;
 import com.kpabr.backrooms.items.AlmondWaterItem;
+import com.kpabr.backrooms.items.MaskItem;
 import com.kpabr.backrooms.util.Color;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -21,7 +22,7 @@ public class BackroomsItems {
 
 	public static final Item ALMOND_WATER = add("almond_water_bottle",
 			new AlmondWaterItem(new Item.Settings().group(ItemGroup.FOOD).food(
-					new FoodComponent.Builder().alwaysEdible().snack().saturationModifier(20).hunger(4).build()).maxCount(16)));
+					new FoodComponent.Builder().alwaysEdible().snack().saturationModifier(20).hunger(0).build()).maxCount(16)));
 	public static final Item FIRESALT = add("firesalt",
 			new FireSalt(new Item.Settings().group(ItemGroup.MISC)));
 	public static final Item TILEMOLD_LUMP = add("tilemold_lump",
@@ -39,7 +40,12 @@ public class BackroomsItems {
 	public static final Item WRETCH_SPAWN_EGG = add("wretch_spawn_egg",
 			new SpawnEggItem(BackroomsEntities.WRETCH,Color.of(120, 5, 5), Color.of(89, 7, 7) ,
 					new Item.Settings().group(ItemGroup.MISC)));
-
+	public static final Item COLOMBINA_MASK = add("colombina_mask",
+			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
+	public static final Item HARLEQUIN_MASK = add("harlequin_mask",
+			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
+	public static final Item SOCK_BUSKIN_MASK = add("sock_buskin_mask",
+			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
 
 	private static <I extends Item> I add(String name, I item) {
 		ITEMS.add(new ItemEntry(BackroomsMod.id(name), item));

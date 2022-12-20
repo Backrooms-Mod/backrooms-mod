@@ -25,49 +25,44 @@ import net.minecraft.world.World;
 import static com.kpabr.backrooms.BackroomsComponents.WRETCHED;
 
 public class AlmondWaterItem extends Item {
-	private static final int MAX_USE_TIME = 40;
-
 	public AlmondWaterItem(Settings settings) {
 		super(settings);
 	}
 
 	public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
 		super.finishUsing(stack, world, user);
-		if (user instanceof ServerPlayerEntity serverPlayerEntity) {
-			Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
-			serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat(this));
-		}
+		if (user instanceof ServerPlayerEntity player) {
+			final int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
+			final WretchedComponent wretched = WRETCHED.get(player);
 
-		if (!world.isClient) {
+			Criteria.CONSUME_ITEM.trigger(player, stack);
+			player.incrementStat(Stats.USED.getOrCreateStat(this));
+
 			user.removeStatusEffect(StatusEffects.POISON);
 			user.removeStatusEffect(StatusEffects.HUNGER);
 			user.removeStatusEffect(StatusEffects.NAUSEA);
 			user.removeStatusEffect(StatusEffects.WEAKNESS);
 			user.removeStatusEffect(StatusEffects.WITHER);
+
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1));
 			user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 30, 0));
 
-			final int almondMilkRestoring = BackroomsConfig.getInstance().almondMilkRestoring;
-			WretchedComponent wretched = WRETCHED.get(user);
+			if(wretched.getValue() < 24 && wretched.getValue() + almondMilkRestoring >= 24) {
+				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
+			} else if(wretched.getValue() < 50 && wretched.getValue() + almondMilkRestoring >= 50) {
+				user.removeStatusEffect(BackroomStatusEffects.ROTTEN);
+			} else if(wretched.getValue() < 75 && wretched.getValue() + almondMilkRestoring >= 75) {
+				user.removeStatusEffect(BackroomStatusEffects.WRETCHED);
+			}
 
 			// add 1 to almondMilkRestoring because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately
 			wretched.remove(almondMilkRestoring + 1);
-
-			BackroomsMod.applyWretchedCycle((ServerPlayerEntity)user);
-			if(wretched.getValue() < 24 && wretched.getValue()+almondMilkRestoring >= 24) {
-				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
-			} else if(wretched.getValue() < 50 && wretched.getValue()+almondMilkRestoring >= 50) {
-				user.removeStatusEffect(BackroomStatusEffects.ROTTEN);
-			} else if(wretched.getValue() < 75 && wretched.getValue()+almondMilkRestoring >= 75) {
-				user.removeStatusEffect(BackroomStatusEffects.WRETCHED);
-			}
-		}
-
-		if (stack.isEmpty()) {
+			BackroomsMod.applyWretchedCycle(player);
+		} else if (stack.isEmpty()) {
 			return new ItemStack(Items.GLASS_BOTTLE);
 		}
 		else if (user instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
-			ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
+			final ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
 			if (!player.getInventory().insertStack(itemStack)) {
 				player.dropItem(itemStack, false);
 			}

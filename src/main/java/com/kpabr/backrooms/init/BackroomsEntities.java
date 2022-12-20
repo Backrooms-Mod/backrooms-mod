@@ -1,7 +1,7 @@
 package com.kpabr.backrooms.init;
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.entity.living.HoundLivingEntity;
+import com.kpabr.backrooms.entity.living.HoundEntity;
 import com.kpabr.backrooms.entity.living.WretchEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 public class BackroomsEntities {
     private static final ArrayList<EntityEntry> ENTITIES = new ArrayList<>();
-    public static final EntityType<HoundLivingEntity> HOUND = add("hound",
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundLivingEntity::new).dimensions(EntityDimensions.fixed(1f, 1f)).build());
+    public static final EntityType<HoundEntity> HOUND = add("hound",
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundEntity::new).dimensions(EntityDimensions.fixed(1f, 1f)).build());
 
     public static final EntityType<WretchEntity> WRETCH = add("wretch",
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.85f)).build());
@@ -33,7 +33,7 @@ public class BackroomsEntities {
         }
 
         FabricDefaultAttributeRegistry.register(WRETCH, WretchEntity.createWretchAttributes());
-        FabricDefaultAttributeRegistry.register(HOUND, HoundLivingEntity.createHoundAttributes());
+        FabricDefaultAttributeRegistry.register(HOUND, HoundEntity.createHoundAttributes());
     }
 
     private record EntityEntry(Identifier identifier, EntityType<? extends LivingEntity> entity) {}

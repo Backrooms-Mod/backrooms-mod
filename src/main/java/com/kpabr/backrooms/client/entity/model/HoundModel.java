@@ -1,24 +1,24 @@
 package com.kpabr.backrooms.client.entity.model;
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.entity.living.HoundLivingEntity;
+import com.kpabr.backrooms.entity.living.HoundEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
-public class HoundModel extends AnimatedGeoModel<HoundLivingEntity> {
+public class HoundModel extends AnimatedGeoModel<HoundEntity> {
 
     @Override
-    public Identifier getModelLocation(HoundLivingEntity object) {
+    public Identifier getModelLocation(HoundEntity object) {
         return new Identifier(BackroomsMod.ModId, "geo/entities/hound.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(HoundLivingEntity object) {
+    public Identifier getTextureLocation(HoundEntity object) {
         return new Identifier(BackroomsMod.ModId, "textures/entity/hound.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(HoundLivingEntity animatable) {
+    public Identifier getAnimationFileLocation(HoundEntity animatable) {
         return new Identifier(BackroomsMod.ModId, "animations/entities/hound.animation.json");
     }
 }
