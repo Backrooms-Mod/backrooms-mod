@@ -11,6 +11,7 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,8 +31,7 @@ public class BackroomsBlocks {
 	private static final ArrayList<BlockEntityEntry> BLOCK_ENTITIES = new ArrayList<>();
 	private static final ArrayList<BlockEntry> BLOCKS = new ArrayList<>();
 
-	public static final Block CORK_TILE = add("cork_tile",
-			new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CORK_TILE = add("cork_tile", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.WHITE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block MOLDY_CORK_TILE = add("moldy_cork_tile", new MoldyTileBlock(FabricBlockSettings.copyOf(Blocks.BUDDING_AMETHYST).mapColor(DyeColor.WHITE).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block TILEMOLD = add("tilemold", new TilemoldBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.BROWN).strength(0F).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CEILING = add("fake_ceiling", new TileBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.WHITE).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF)), ItemGroup.BUILDING_BLOCKS);
@@ -45,6 +45,7 @@ public class BackroomsBlocks {
 	public static final Block WOOLEN_CARPET = add("moist_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CARPET = add("fake_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block MOLDY_WOOLEN_CARPET = add("moldy_carpet", new Block(FabricBlockSettings.copyOf(WOOLEN_CARPET)), ItemGroup.BUILDING_BLOCKS);
+
 	public static final Block CEMENT = add("cement", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SLAB = add("cement_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_STAIRS = add("cement_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
@@ -61,6 +62,9 @@ public class BackroomsBlocks {
 	public static final Block CEMENT_TILE_SLAB = add("cement_tile_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_TILE_STAIRS = add("cement_tile_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_TILE_WALL = add("cement_tile_wall", new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+
+	public static final Block CRATE = add("crate", new CrateBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = add("crate", FabricBlockEntityTypeBuilder.create(CrateBlockEntity::new, CRATE).build(null));
 
 	public static final Block HOTEL_CARPET = add("hotel_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 

@@ -62,6 +62,7 @@
       "block.backrooms.cut_cement_stairs": "Cut Cement Stairs",
       "block.backrooms.cut_cement_wall": "Cut Cement Wall",
       "block.backrooms.cement_sandwich": "Cement Sandwich",
+      "block.backrooms.crate": "Crate",
       "block.backrooms.red_patterned_wallpaper": "Crimson Wallpaper",
       "block.backrooms.red_striped_wallpaper": "Red Striped Wallpaper",
       "block.backrooms.red_dotted_wallpaper": "Red Dotted Wallpaper",
@@ -94,6 +95,8 @@
       "block.backrooms.purple_carpeting": "Purple Carpeting",
       "block.backrooms.white_carpeting": "White Carpeting",
       "block.backrooms.computer": "Computer",
+
+      "container.backrooms.crate": "Crate",
 
       "effect.backrooms.rotten": "Rotten",
       "effect.backrooms.ragged": "Ragged",

@@ -175,7 +175,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
             // Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
             if (fullFloorRandom.nextFloat() < 0.1F || true) {
                 //Define the amounts of regular and nofill rooms.
-                final int regularRooms = 12;
+                final int regularRooms = 13;
                 final int nofillRooms = 3;
                 //Choose the room that will be placed.
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
@@ -279,7 +279,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("backrooms_large", world, 0, 12); //Makes it so the large regular rooms can be used while generating.
+        store("backrooms_large", world, 0, 13); //Makes it so the large regular rooms can be used while generating.
         store("backrooms_large_nofill", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.
     }
 
