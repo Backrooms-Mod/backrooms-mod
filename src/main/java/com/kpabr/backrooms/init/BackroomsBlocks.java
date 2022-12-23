@@ -123,7 +123,6 @@ public class BackroomsBlocks {
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
-	public static final Block IRON_DOOR = add("iron_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).mapColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
