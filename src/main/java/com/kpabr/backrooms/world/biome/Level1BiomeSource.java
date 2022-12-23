@@ -2,6 +2,7 @@ package com.kpabr.backrooms.world.biome;
 
 
 import com.kpabr.backrooms.init.BackroomsLevels;
+import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.RegistryOps;
@@ -23,9 +24,9 @@ public class Level1BiomeSource extends BaseBiomeSource {
 
     public Level1BiomeSource(Registry<Biome> biomeRegistry, long seed) {
         super(biomeRegistry, seed, new BiomeListBuilder()
-                .addBiome(BackroomsLevels.WAREHOUSE_BIOME, 1)
-                .addBiome(BackroomsLevels.PARKING_GARAGE_BIOME, 2)
-                .addBiome(BackroomsLevels.CEMENT_WALLS_BIOME, 6)
+                .addBiome(BackroomsLevels.WAREHOUSE_BIOME, 0.1)
+                .addBiome(BackroomsLevels.PARKING_GARAGE_BIOME, 0.2)
+                .addBiome(BackroomsLevels.CEMENT_WALLS_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
         );
     }
 
