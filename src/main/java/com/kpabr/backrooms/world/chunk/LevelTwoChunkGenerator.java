@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.noise.PerlinNoiseSampler;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
@@ -30,8 +31,8 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.random.SimpleRandom;
 
-import java.nio.channels.Pipe;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -56,11 +57,13 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
     private final long worldSeed;
     private final static int ROOF_Y = 45;
     private final static int FLOOR_Y = 38;
+    private final PerlinNoiseSampler perlinNoise;
     private final static BlockState pipeNorthState = BackroomsBlocks.PIPE.getDefaultState().with(PipeBlock.EAST, false).with(PipeBlock.WEST, false).with(PipeBlock.UP, false).with(PipeBlock.DOWN, false);
     private final static BlockState pipeWestState = BackroomsBlocks.PIPE.getDefaultState().with(PipeBlock.SOUTH, false).with(PipeBlock.NORTH, false).with(PipeBlock.UP, false).with(PipeBlock.DOWN, false);
     public LevelTwoChunkGenerator(BiomeSource biomeSource, long worldSeed) {
         super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_two"), LiminalUtil.createMultiNoiseSampler());
         this.worldSeed = worldSeed;
+        perlinNoise = new PerlinNoiseSampler(new SimpleRandom(worldSeed));
     }
 
     @Override
@@ -71,91 +74,16 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
         final int startZ = pos.getStartZ();
 
         // Getting chunk direction with pseudo random int for current chunk
-        final Random random = new Random(region.getSeed() + MathHelper.hashCode(startX, 0, startZ));
-        final Direction dir = Direction.fromHorizontal(random.nextInt(4));
-        final boolean isDirEastOrWest = dir == Direction.WEST || dir == Direction.EAST;
 
-        // Fill roof and floor of level with bedrock bricks.
-        fillRectZX(region, chunk, pos, 16, 16, 0, 0, FLOOR_Y, BackroomsBlocks.BEDROCK_BRICKS);
-        fillRectZX(region, chunk, pos, 16, 16, 0, 0, ROOF_Y, BackroomsBlocks.BEDROCK_BRICKS);
+        // Generate paths up to yMax * 16
+        final double noise = perlinNoise.sample(startX, 0, startZ, 0, 40);
+        BackroomsMod.LOGGER.info(Double.toString(noise));
 
-        for(int y = FLOOR_Y + 1; y <= ROOF_Y - 1; y++) {
-            fillRectZX(region, chunk, pos, 16, 16, 0, 0, y, Blocks.LIGHT_GRAY_TERRACOTTA);
-        }
-
-        // Generate main corridors
-        if(isDirEastOrWest) {
-            // generate real floor and roof
-            fillRectZX(region, chunk, pos, 16, 3, 0, 6, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-            fillRectZX(region, chunk, pos, 16, 3, 0, 6, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-
-            // Fill with air a corridor where player can move
-            for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                fillRectZX(region, chunk, pos, 16, 3, 0, 6, y);
-            }
-            fillRectZX(region, chunk, pos, 16, 1, 0, 6, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeWestState);
+        if (noise < 0) {
+            fillRectZX(region, chunk, pos, 16, 4, 0, 6, 0, Blocks.STONE);
         } else {
-            fillRectZX(region, chunk, pos, 3, 16, 6, 0, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-            fillRectZX(region, chunk, pos, 3, 16, 6, 0, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-            // Fill with air a corridor where  can move
-            for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                fillRectZX(region, chunk, pos, 3, 16, 6, 0, y);
-            }
-            fillRectZX(region, chunk, pos, 1, 16, 6, 0, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeNorthState);
+            fillRectZX(region, chunk, pos, 4, 16, 6, 0, 0, Blocks.STONE);
         }
-
-        // Generate "bridges" between perpendicular corridors
-        if(isDirEastOrWest) {
-            final ChunkPos northChunk = region.getChunk(pos.x, pos.z - 1).getPos();
-            final ChunkPos southChunk = region.getChunk(pos.x, pos.z + 1).getPos();
-            // Generate connection between this chunk and northern chunk if northern chunk direction is south or north
-            if(isChunkDirectionNorthOrSouth(region, northChunk)) {
-                fillRectZX(region, chunk, pos, 3, 6, 6, 0, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-                fillRectZX(region, chunk, pos, 3, 6, 6, 0, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-                // Fill with air a corridor where player can move
-                for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                    fillRectZX(region, chunk, pos, 3, 6, 7, 0, y);
-                }
-                fillRectZX(region, chunk, pos, 1, 6, 7, 0, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeNorthState);
-            }
-            
-            // Generate connection between this chunk and southern chunk if southern chunk direction is south or north
-            if(isChunkDirectionNorthOrSouth(region, southChunk)) {
-                fillRectZX(region, chunk, pos, 3, 7, 6, 9, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-                fillRectZX(region, chunk, pos, 3, 7, 6, 9, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-                // Fill with air a corridor where player can move
-                for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                    fillRectZX(region, chunk, pos, 3, 7, 6, 9, y);
-                }
-                fillRectZX(region, chunk, pos, 1, 7, 6, 9, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeNorthState);
-            }
-        } else {
-            final ChunkPos westChunk = region.getChunk(pos.x - 1, pos.z).getPos();
-            final ChunkPos eastChunk = region.getChunk(pos.x + 1, pos.z).getPos();
-
-            // Generate connection between this chunk and western chunk if western chunk direction is east or west
-            if(isChunkDirectionEastOrWest(region, westChunk)) {
-                fillRectZX(region, chunk, pos, 6, 3, 0, 6, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-                fillRectZX(region, chunk, pos, 6, 3, 0, 6, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-                // Fill with air a corridor where player can move
-                for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                    fillRectZX(region, chunk, pos, 7, 3, 0, 6, y);
-                }
-                fillRectZX(region, chunk, pos, 6, 1, 0, 6, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeWestState);
-            }
-            // Generate connection between this chunk and eastern chunk if eastern chunk direction is east or west
-            if(isChunkDirectionEastOrWest(region, eastChunk)) {
-                fillRectZX(region, chunk, pos, 7, 3, 9, 6, FLOOR_Y + 1, BackroomsBlocks.CEMENT_TILES);
-                fillRectZX(region, chunk, pos, 7, 3, 9, 6, ROOF_Y - 1, BackroomsBlocks.CEMENT_TILES);
-                // Fill with air a corridor where player can move
-                for(int y = FLOOR_Y + 2; y < ROOF_Y - 1; y++) {
-                    fillRectZX(region, chunk, pos, 7, 3, 9, 6, y);
-                }
-                // Fill bridge with pipes
-                fillRectZX(region, chunk, pos, 6, 1, 9, 6, ROOF_Y - 2, BackroomsBlocks.PIPE, pipeWestState);
-            }
-        }
-
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -179,7 +107,10 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
         }
     }
 
-    // Fabulously optimized setBlockState function
+    /**
+     * Fabulously optimized setBlockState function, don't use it if you aren't sure,
+     * that old block state is AIR and your block isn't BlockEntity
+     */
     private void setBlockState(ChunkRegion region, Chunk chunk, BlockState state, BlockPos pos) {
         final BlockState blockState = chunk.setBlockState(pos, state, false);
         region.toServerWorld().onBlockChanged(pos, blockState, state);

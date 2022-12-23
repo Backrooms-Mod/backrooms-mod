@@ -19,6 +19,7 @@ import net.minecraft.item.SpawnEggItem;
 
 public class BackroomsItems {
 	public static ArrayList<ItemEntry> ITEMS = new ArrayList<>();
+	public static ArrayList<BlockItem> BLOCK_ITEMS = new ArrayList<>();
 
 	public static final Item ALMOND_WATER = add("almond_water_bottle",
 			new AlmondWaterItem(new Item.Settings().group(ItemGroup.FOOD).food(
@@ -40,15 +41,19 @@ public class BackroomsItems {
 	public static final Item WRETCH_SPAWN_EGG = add("wretch_spawn_egg",
 			new SpawnEggItem(BackroomsEntities.WRETCH,Color.of(120, 5, 5), Color.of(89, 7, 7) ,
 					new Item.Settings().group(ItemGroup.MISC)));
-	public static final Item COLOMBINA_MASK = add("colombina_mask",
-			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
-	public static final Item HARLEQUIN_MASK = add("harlequin_mask",
-			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
-	public static final Item SOCK_BUSKIN_MASK = add("sock_buskin_mask",
-			new MaskItem(new Item.Settings().group(ItemGroup.MISC)));
+	public static final Item COLOMBINA_MASK = add(
+			new MaskItem(BackroomsBlocks.COLOMBINA_MASK, new Item.Settings().group(ItemGroup.DECORATIONS).maxCount(1)));
+	public static final Item HARLEQUIN_MASK = add(
+			new MaskItem(BackroomsBlocks.HARLEQUIN_MASK, new Item.Settings().group(ItemGroup.DECORATIONS).maxCount(1)));
+	public static final Item SOCK_BUSKIN_MASK = add(
+			new MaskItem(BackroomsBlocks.SOCK_BUSKIN_MASK, new Item.Settings().group(ItemGroup.DECORATIONS).maxCount(1)));
 
 	private static <I extends Item> I add(String name, I item) {
 		ITEMS.add(new ItemEntry(BackroomsMod.id(name), item));
+		return item;
+	}
+	private static<T extends BlockItem> Item add(T item) {
+		BLOCK_ITEMS.add(item);
 		return item;
 	}
 
@@ -56,7 +61,11 @@ public class BackroomsItems {
 		for (ItemEntry entry : ITEMS) {
 			Registry.register(Registry.ITEM, entry.identifier, entry.item);
 		}
+		for (BlockItem item : BLOCK_ITEMS) {
+			Registry.register(Registry.ITEM, Registry.BLOCK.getId(item.getBlock()), item);
+		}
 	}
 
 	private record ItemEntry(Identifier identifier, Item item) {}
+
 }

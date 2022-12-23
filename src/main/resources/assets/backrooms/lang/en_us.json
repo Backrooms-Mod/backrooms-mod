@@ -24,9 +24,6 @@
       "item.backrooms.hound_spawn_egg": "Hound Spawn Egg",
       "item.backrooms.wretch_spawn_egg": "Wretch Spawn Egg",
       "item.backrooms.almond_water_bucket": "Bucket of Almond Water",
-      "item.backrooms.colombina_mask": "Colombina Mask",
-      "item.backrooms.harlequin_mask": "Harlequin Mask",
-      "item.backrooms.sock_buskin_mask": "Sock Buskin Mask",
 
       "block.backrooms.pyroil": "Pyroil",
       "block.backrooms.pipe": "Pipe",
@@ -94,6 +91,9 @@
       "block.backrooms.purple_carpeting": "Purple Carpeting",
       "block.backrooms.white_carpeting": "White Carpeting",
       "block.backrooms.computer": "Computer",
+      "block.backrooms.colombina_mask": "Colombina Mask",
+      "block.backrooms.harlequin_mask": "Harlequin Mask",
+      "block.backrooms.sock_buskin_mask": "Sock Buskin Mask",
 
       "effect.backrooms.rotten": "Rotten",
       "effect.backrooms.ragged": "Ragged",

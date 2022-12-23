@@ -2,6 +2,7 @@ package com.kpabr.backrooms.init;
 
 import java.util.ArrayList;
 
+import com.kpabr.backrooms.block.entity.MaskBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
@@ -9,6 +10,7 @@ import net.fabricmc.fabric.api.registry.FuelRegistry;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.*;
+import com.kpabr.backrooms.block.MaskBlock.MaskType;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
 import com.kpabr.backrooms.block.entity.PyroilLineBlockEntity;
 
@@ -45,41 +47,73 @@ public class BackroomsBlocks {
 	public static final Block WOOLEN_CARPET = add("moist_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FAKE_CARPET = add("fake_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW).noCollision()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block MOLDY_WOOLEN_CARPET = add("moldy_carpet", new Block(FabricBlockSettings.copyOf(WOOLEN_CARPET)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT = add("cement", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_SLAB = add("cement_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_STAIRS = add("cement_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_WALL = add("cement_wall", new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CUT_CEMENT = add("cut_cement", new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CUT_CEMENT_SLAB = add("cut_cement_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CUT_CEMENT_STAIRS = add("cut_cement_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CUT_CEMENT_WALL = add("cut_cement_wall", new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_BRICKS = add("cement_bricks", new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_BRICK_SLAB = add("cement_brick_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_BRICK_STAIRS = add("cement_brick_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_BRICK_WALL = add("cement_brick_wall", new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_TILES = add("cement_tiles", new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_TILE_SLAB = add("cement_tile_slab", new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_TILE_STAIRS = add("cement_tile_stairs", new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block CEMENT_TILE_WALL = add("cement_tile_wall", new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT = add("cement",
+			new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_SLAB = add("cement_slab",
+			new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_STAIRS = add("cement_stairs",
+			new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_WALL = add("cement_wall",
+			new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CUT_CEMENT = add("cut_cement",
+			new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CUT_CEMENT_SLAB = add("cut_cement_slab",
+			new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CUT_CEMENT_STAIRS = add("cut_cement_stairs",
+			new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CUT_CEMENT_WALL = add("cut_cement_wall",
+			new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_BRICKS = add("cement_bricks",
+			new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_BRICK_SLAB = add("cement_brick_slab",
+			new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_BRICK_STAIRS = add("cement_brick_stairs",
+			new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_BRICK_WALL = add("cement_brick_wall",
+			new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_TILES = add("cement_tiles",
+			new Block(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_TILE_SLAB = add("cement_tile_slab",
+			new SlabBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_TILE_STAIRS = add("cement_tile_stairs",
+			new BackroomsStairsBlock(CEMENT.getDefaultState(),FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block CEMENT_TILE_WALL = add("cement_tile_wall",
+			new WallBlock(FabricBlockSettings.copyOf(CEMENT)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block HOTEL_CARPET = add("hotel_carpet", new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block HOTEL_CARPET = add("hotel_carpet",
+			new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block COMPUTER = add("computer", new ComputerBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).mapColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
-	public static final BlockEntityType<ComputerBlockEntity> COMPUTER_BLOCK_ENTITY = add("computer", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
+	public static final Block COMPUTER = add("computer",
+			new ComputerBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_TORCH).collidable(true).mapColor(DyeColor.YELLOW).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+	public static final BlockEntityType<ComputerBlockEntity> COMPUTER_BLOCK_ENTITY = add("computer",
+			FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 
+	public static final Block HARLEQUIN_MASK = addWithoutItem("harlequin_mask",
+			new MaskBlock(MaskType.HARLEQUIN, FabricBlockSettings.of(Material.DECORATION).strength(1.0F).nonOpaque().noCollision()));
+	public static final Block COLOMBINA_MASK = addWithoutItem("colombina_mask",
+			new MaskBlock(MaskType.COLOMBINA, FabricBlockSettings.of(Material.DECORATION).strength(1.0F).nonOpaque().noCollision()));
+	public static final Block SOCK_BUSKIN_MASK = addWithoutItem("sock_buskin_mask",
+			new MaskBlock(MaskType.SOCK_BUSKIN, FabricBlockSettings.of(Material.DECORATION).strength(1.0F).nonOpaque().noCollision()));
+	public static final BlockEntityType<MaskBlockEntity> MASK = add("mask", FabricBlockEntityTypeBuilder
+					.create(MaskBlockEntity::new, HARLEQUIN_MASK, COLOMBINA_MASK, SOCK_BUSKIN_MASK)
+					.build(null));
+	public static final Block PYROIL = add("pyroil",
+			new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PIPE = add("pipe",
+			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block PYROIL = add("pyroil", new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block PIPE = add("pipe", new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
+	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil",
+			FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
 
-	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil", FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
-
-	public static final Block RED_PATTERNED_WALLPAPER = add("red_patterned_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).mapColor(DyeColor.YELLOW).sounds(BlockSoundGroup.STEM)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block RED_STRIPED_WALLPAPER = add("red_striped_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).sounds(BlockSoundGroup.STEM)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block RED_PATTERNED_WALLPAPER = add("red_patterned_wallpaper",
+			new WallpaperBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).mapColor(DyeColor.YELLOW).sounds(BlockSoundGroup.STEM)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block RED_STRIPED_WALLPAPER = add("red_striped_wallpaper",
+			new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).sounds(BlockSoundGroup.STEM)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block RED_DOTTED_WALLPAPER = add("red_dotted_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_BLANK_WALLPAPER = add("red_blank_wallpaper", new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroup.BUILDING_BLOCKS);
 
-	public static Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).strength(2.0F, 8.0F).requiresTool().mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_PILLAR = add("cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block PARKING_CEMENT_PILLAR = add("parking_cement_pillar", new PillarBlock(FabricBlockSettings.copyOf(CEMENT_PILLAR).mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
