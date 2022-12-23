@@ -24,6 +24,7 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.FacingBlock;
 import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import net.minecraft.block.WallMountedBlock;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 
 import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
@@ -183,7 +184,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                                 if (region.getBlockState(pos) == Blocks.GOLD_BLOCK.getDefaultState()) {
                                     Block[] common = new Block[]{Blocks.STONE_BUTTON, Blocks.LEVER, Blocks.FLOWER_POT, Blocks.REDSTONE_TORCH, Blocks.RAIL, Blocks.STONE_PRESSURE_PLATE, Blocks.AIR, Blocks.WHITE_CONCRETE_POWDER, Blocks.BOOKSHELF};
                                     Block[] uncommon = new Block[]{Blocks.COBWEB, Blocks.CAULDRON, Blocks.TORCH, Blocks.REDSTONE_WIRE, Blocks.CANDLE, Blocks.CRAFTING_TABLE, Blocks.FURNACE, Blocks.REPEATER, Blocks.COMPARATOR, Blocks.LOOM};
-                                    Block[] rare = new Block[]{Blocks.COMPOSTER, Blocks.SKELETON_SKULL, Blocks.ZOMBIE_HEAD, Blocks.BREWING_STAND, Blocks.DAYLIGHT_DETECTOR, Blocks.LANTERN, Blocks.PISTON, Blocks.OBSERVER, Blocks.LIGHTNING_ROD, BackroomsBlocks.FIRESALT_CRYSTAL};
+                                    Block[] rare = new Block[]{Blocks.COMPOSTER, Blocks.SKELETON_SKULL, Blocks.ZOMBIE_HEAD, Blocks.BREWING_STAND, Blocks.DAYLIGHT_DETECTOR, Blocks.LANTERN, Blocks.PISTON, Blocks.OBSERVER, Blocks.LIGHTNING_ROD, BackroomsBlocks.FIRESALT_CRYSTAL, BackroomsBlocks.CRATE};
                                     Block[] validPots = new Block[]{Blocks.POTTED_DANDELION, Blocks.POTTED_POPPY, Blocks.POTTED_BLUE_ORCHID, Blocks.POTTED_SPRUCE_SAPLING, Blocks.POTTED_CACTUS, Blocks.POTTED_RED_MUSHROOM, Blocks.POTTED_AZALEA_BUSH, Blocks.POTTED_BAMBOO};
                                     Block[] validConcretePowder = new Block[]{Blocks.YELLOW_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER,  Blocks.WHITE_CONCRETE_POWDER};
                                     Block[] validCandles = new Block[]{Blocks.CANDLE, Blocks.YELLOW_CANDLE, Blocks.RED_CANDLE, Blocks.BLUE_CANDLE, Blocks.BROWN_CANDLE, Blocks.GREEN_CANDLE, Blocks.WHITE_CANDLE};
@@ -215,7 +216,6 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                                         region.setBlockState(pos, (BlockState)(BlockState)validCandles[random.nextInt(validCandles.length)].getDefaultState().with(CandleBlock.LIT, true).with(CandleBlock.CANDLES, random.nextInt(4) + 1), Block.FORCE_STATE, 0);
                                     }
                                     else if(chosenBlock==Blocks.REPEATER||chosenBlock==Blocks.COMPARATOR||chosenBlock==Blocks.FURNACE){
-
                                         region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
                                     }
                                     else if(chosenBlock==Blocks.PISTON||chosenBlock==Blocks.OBSERVER){
@@ -226,6 +226,12 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                                     }
                                     else if(chosenBlock==Blocks.SKELETON_SKULL||chosenBlock==Blocks.ZOMBIE_HEAD){
                                         region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), 0);
+                                    }
+                                    else if(chosenBlock==BackroomsBlocks.CRATE){
+                                        region.setBlockState(pos, chosenBlock.getDefaultState(), 0);
+                                        if (region.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
+                                            lootTable.setLootTable(this.getBarrelLootTable(), region.getSeed() + MathHelper.hashCode(pos));
+                                        }
                                     }
                                     else{
                                         replace(chosenBlock, chunk, pos);
