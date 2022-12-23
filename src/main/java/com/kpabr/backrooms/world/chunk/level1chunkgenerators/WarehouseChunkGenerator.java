@@ -15,17 +15,21 @@ import net.minecraft.block.enums.RailShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+
 import net.minecraft.block.CandleBlock;
 import net.minecraft.block.RailBlock;
+import net.minecraft.block.SkullBlock;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.FacingBlock;
 import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import net.minecraft.block.WallMountedBlock;
+
 import net.minecraft.loot.LootTables;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.structure.StructureManager;
 import net.minecraft.tag.BlockTags;
@@ -219,6 +223,9 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                                     }
                                     else if(chosenBlock==Blocks.RAIL){
                                         region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(RailBlock.SHAPE, railShapes[random.nextInt(2)]), Block.FORCE_STATE, 0);
+                                    }
+                                    else if(chosenBlock==Blocks.SKELETON_SKULL||chosenBlock==Blocks.ZOMBIE_HEAD){
+                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), 0);
                                     }
                                     else{
                                         replace(chosenBlock, chunk, pos);
