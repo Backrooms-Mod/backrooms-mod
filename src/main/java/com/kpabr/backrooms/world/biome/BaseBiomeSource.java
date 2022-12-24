@@ -30,7 +30,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
         this.seed = seed;
         this.biomeList = biomeList;
 
-       final  ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
+        final ChunkRandom chunkRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
         this.noise = new SimplexNoiseSampler(chunkRandom);
     }
 
