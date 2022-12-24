@@ -31,8 +31,9 @@ public class LevelTwoBiomeSource extends BiomeSource {
     protected final BiomeRegistryList biomeList;
     protected Registry<Biome> BIOME_REGISTRY;
 
-    public Level0BiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        super(biomeRegistry, seed, new BiomeListBuilder() // Custom needed
+    public LevelTwoBiomeSource(Registry<Biome> biomes, Long seed) {
+        this(biomes, seed, new BiomeListBuilder()
+                .addBiome(BackroomsLevels.PIPES_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
         );
     }
 
