@@ -27,13 +27,11 @@ import net.minecraft.block.WallMountedBlock;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 
 import net.minecraft.loot.LootTables;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.IntProperty;
-import net.minecraft.state.property.Properties;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -51,9 +49,7 @@ import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
@@ -70,7 +66,16 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
          ).apply(instance, instance.stable(WarehouseChunkGenerator::new))
     );
 
-
+    private static final Block[] validCandles = new Block[]{Blocks.CANDLE, Blocks.YELLOW_CANDLE, Blocks.RED_CANDLE, Blocks.BLUE_CANDLE, Blocks.BROWN_CANDLE, Blocks.GREEN_CANDLE, Blocks.WHITE_CANDLE};
+    private static final Block[] common = new Block[]{Blocks.STONE_BUTTON, Blocks.LEVER, Blocks.FLOWER_POT, Blocks.REDSTONE_TORCH, Blocks.RAIL, Blocks.STONE_PRESSURE_PLATE, Blocks.AIR, Blocks.WHITE_CONCRETE_POWDER, Blocks.BOOKSHELF};
+    private static final Block[] uncommon = new Block[]{Blocks.COBWEB, Blocks.CAULDRON, Blocks.TORCH, Blocks.REDSTONE_WIRE, Blocks.CANDLE, Blocks.CRAFTING_TABLE, Blocks.FURNACE, Blocks.REPEATER, Blocks.COMPARATOR, Blocks.LOOM};
+    private static final Block[] rare = new Block[]{Blocks.COMPOSTER, Blocks.SKELETON_SKULL, Blocks.ZOMBIE_HEAD, Blocks.BREWING_STAND, Blocks.DAYLIGHT_DETECTOR, Blocks.LANTERN, Blocks.PISTON, Blocks.OBSERVER, Blocks.LIGHTNING_ROD, BackroomsBlocks.FIRESALT_CRYSTAL, BackroomsBlocks.CRATE};
+    private static final Block[] validPots = new Block[]{Blocks.POTTED_DANDELION, Blocks.POTTED_POPPY, Blocks.POTTED_BLUE_ORCHID, Blocks.POTTED_SPRUCE_SAPLING, Blocks.POTTED_CACTUS, Blocks.POTTED_RED_MUSHROOM, Blocks.POTTED_AZALEA_BUSH, Blocks.POTTED_BAMBOO};
+    private static final Block[] validConcretePowder = new Block[]{Blocks.YELLOW_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER,  Blocks.WHITE_CONCRETE_POWDER};
+    private static final BlockState[] rails = new BlockState[]{
+            Blocks.RAIL.getDefaultState().with(RailBlock.SHAPE, RailShape.NORTH_SOUTH),
+            Blocks.RAIL.getDefaultState().with(RailBlock.SHAPE, RailShape.EAST_WEST)
+    };
     private final long worldSeed;
     private static final int ROOF_BEGIN_Y = 6 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
     public WarehouseChunkGenerator(BiomeSource biomeSource, long worldSeed) {
@@ -152,8 +157,8 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                         }
                     }
                     if(shelfType - (shelfType & 3) != 0){
-                        Direction dir = Direction.fromHorizontal((shelfType - (shelfType & 3)) / 4 - 1);
-                        BlockRotation rotation = switch(dir) {
+                        final Direction dir = Direction.fromHorizontal((shelfType - (shelfType & 3)) / 4 - 1);
+                        final BlockRotation rotation = switch(dir) {
                             case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
                             case EAST -> BlockRotation.NONE;
                             case SOUTH -> BlockRotation.CLOCKWISE_90;
@@ -163,7 +168,6 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                         generateNbt(region, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_" + ((shelfType & 3) + 4), rotation); //Actually generate the shelf.
                         //commented former code: generateNbt(region, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_5", BlockRotation.NONE);
                     }
-
                     //Generate the edges of the shelves.
                     if((wallType & 1) == 0) {
                         shelfEdge(region, new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 6), Direction.EAST, 1, shelfType, eastShelfType);
@@ -180,70 +184,63 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                             region.setBlockState(new BlockPos(startX + x * 8 + i, 1 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
                             region.setBlockState(new BlockPos(startX + x * 8 + i, 8 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
                             for(int k = 0; k < 6; k++){
-                                BlockPos pos = new BlockPos(startX + x * 8 + i, 2 + 8 * y + k, startZ + z * 8 + j);
-                                if (region.getBlockState(pos) == Blocks.GOLD_BLOCK.getDefaultState()) {
-                                    Block[] common = new Block[]{Blocks.STONE_BUTTON, Blocks.LEVER, Blocks.FLOWER_POT, Blocks.REDSTONE_TORCH, Blocks.RAIL, Blocks.STONE_PRESSURE_PLATE, Blocks.AIR, Blocks.WHITE_CONCRETE_POWDER, Blocks.BOOKSHELF};
-                                    Block[] uncommon = new Block[]{Blocks.COBWEB, Blocks.CAULDRON, Blocks.TORCH, Blocks.REDSTONE_WIRE, Blocks.CANDLE, Blocks.CRAFTING_TABLE, Blocks.FURNACE, Blocks.REPEATER, Blocks.COMPARATOR, Blocks.LOOM};
-                                    Block[] rare = new Block[]{Blocks.COMPOSTER, Blocks.SKELETON_SKULL, Blocks.ZOMBIE_HEAD, Blocks.BREWING_STAND, Blocks.DAYLIGHT_DETECTOR, Blocks.LANTERN, Blocks.PISTON, Blocks.OBSERVER, Blocks.LIGHTNING_ROD, BackroomsBlocks.FIRESALT_CRYSTAL, BackroomsBlocks.CRATE};
-                                    Block[] validPots = new Block[]{Blocks.POTTED_DANDELION, Blocks.POTTED_POPPY, Blocks.POTTED_BLUE_ORCHID, Blocks.POTTED_SPRUCE_SAPLING, Blocks.POTTED_CACTUS, Blocks.POTTED_RED_MUSHROOM, Blocks.POTTED_AZALEA_BUSH, Blocks.POTTED_BAMBOO};
-                                    Block[] validConcretePowder = new Block[]{Blocks.YELLOW_CONCRETE_POWDER, Blocks.RED_CONCRETE_POWDER, Blocks.BLUE_CONCRETE_POWDER, Blocks.BROWN_CONCRETE_POWDER, Blocks.GREEN_CONCRETE_POWDER,  Blocks.WHITE_CONCRETE_POWDER};
-                                    Block[] validCandles = new Block[]{Blocks.CANDLE, Blocks.YELLOW_CANDLE, Blocks.RED_CANDLE, Blocks.BLUE_CANDLE, Blocks.BROWN_CANDLE, Blocks.GREEN_CANDLE, Blocks.WHITE_CANDLE};
-                                    RailShape[] railShapes = new RailShape[]{RailShape.NORTH_SOUTH, RailShape.EAST_WEST};
-                                    int blockType = random.nextInt(11);
+                                final BlockPos pos = new BlockPos(startX + x * 8 + i, 2 + 8 * y + k, startZ + z * 8 + j);
+                                final BlockState state = region.getBlockState(pos);
+                                if (state.isOf(Blocks.GOLD_BLOCK)) {
+                                    final int blockType = random.nextInt(11);
                                     Block chosenBlock;
-                                    if(blockType<7) {
+                                    if(blockType < 7) {
                                         chosenBlock = common[random.nextInt(common.length)];
                                     }
-                                    else if(blockType<10) {
+                                    else if(blockType < 10) {
                                         chosenBlock = uncommon[random.nextInt(uncommon.length)];
                                     }
-                                    else{
+                                    else {
                                         chosenBlock = rare[random.nextInt(rare.length)];
                                     }
-                                    if(chosenBlock==Blocks.STONE_BUTTON||chosenBlock==Blocks.LEVER){
-                                        region.setBlockState(pos, (BlockState)(BlockState)chosenBlock.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.FLOOR).with(WallMountedBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+
+                                    if(chosenBlock == Blocks.STONE_BUTTON || chosenBlock == Blocks.LEVER) {
+                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.FLOOR).with(WallMountedBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.FLOWER_POT){
+                                    else if(chosenBlock == Blocks.FLOWER_POT) {
                                         region.setBlockState(pos, validPots[random.nextInt(validPots.length)].getDefaultState(), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.WHITE_CONCRETE_POWDER){
+                                    else if(chosenBlock == Blocks.WHITE_CONCRETE_POWDER) {
                                         region.setBlockState(pos, validConcretePowder[random.nextInt(validConcretePowder.length)].getDefaultState(), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==BackroomsBlocks.FIRESALT_CRYSTAL){
-                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(FiresaltCrystalBlock.FACING, Direction.UP), Block.FORCE_STATE, 0);
+                                    else if(chosenBlock == BackroomsBlocks.FIRESALT_CRYSTAL) {
+                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(FiresaltCrystalBlock.FACING, Direction.UP), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.CANDLE){
-                                        region.setBlockState(pos, (BlockState)(BlockState)validCandles[random.nextInt(validCandles.length)].getDefaultState().with(CandleBlock.LIT, true).with(CandleBlock.CANDLES, random.nextInt(4) + 1), Block.FORCE_STATE, 0);
+                                    else if(chosenBlock == Blocks.CANDLE) {
+                                        region.setBlockState(pos, validCandles[random.nextInt(validCandles.length)].getDefaultState().with(CandleBlock.LIT, true).with(CandleBlock.CANDLES, random.nextInt(4) + 1), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.REPEATER||chosenBlock==Blocks.COMPARATOR||chosenBlock==Blocks.FURNACE){
-                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+                                    else if(chosenBlock == Blocks.REPEATER || chosenBlock == Blocks.COMPARATOR || chosenBlock == Blocks.FURNACE) {
+                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.PISTON||chosenBlock==Blocks.OBSERVER){
-                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(FacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+                                    else if(chosenBlock == Blocks.PISTON || chosenBlock == Blocks.OBSERVER){
+                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(FacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.RAIL){
-                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(RailBlock.SHAPE, railShapes[random.nextInt(2)]), Block.FORCE_STATE, 0);
+                                    else if(chosenBlock == Blocks.RAIL){
+                                        region.setBlockState(pos, rails[random.nextInt(2)], Block.FORCE_STATE, 0);
                                     }
-                                    else if(chosenBlock==Blocks.SKELETON_SKULL||chosenBlock==Blocks.ZOMBIE_HEAD){
-                                        region.setBlockState(pos, (BlockState)chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), 0);
+                                    else if(chosenBlock == Blocks.SKELETON_SKULL || chosenBlock == Blocks.ZOMBIE_HEAD){
+                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), 0);
                                     }
-                                    else if(chosenBlock==BackroomsBlocks.CRATE){
+                                    else if(chosenBlock == BackroomsBlocks.CRATE){
                                         region.setBlockState(pos, chosenBlock.getDefaultState(), 0);
                                         if (region.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
                                             lootTable.setLootTable(this.getBarrelLootTable(), region.getSeed() + MathHelper.hashCode(pos));
                                         }
                                     }
                                     else{
-                                        replace(chosenBlock, chunk, pos);
+                                        replace(region, chosenBlock, chunk, pos);
                                     }
                                 }
                             }
                         }
                     }
-
                     //Place a ceiling light at the correct height.
                     region.setBlockState(new BlockPos(startX + x * 8 + 3, 8 + 8 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
-                    //Commented former code: generateNbt(region, chunkPos.getStartPos().add(x * 4, 1+6*y, z * 4), "backrooms_" + ((random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 1 : 0) * 2));
                 }
             }
         }
@@ -254,6 +251,17 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     public void storeStructures(ServerWorld world) {
         store("warehouse", world, 4, 6); //Makes it so the shelves can be used while generating
         store("warehouse_sliver", world, 4, 6);
+    }
+
+    @Override
+    protected void modifyStructure(ChunkRegion region, BlockPos pos, BlockState state, NbtCompound nbt) {
+        if(!state.isAir()) {
+            if (state.isOf(Blocks.BARRIER)) {
+                region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
+            } else {
+                region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
+            }
+        }
     }
 
     @Override
@@ -277,14 +285,15 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         return world.getTopY();
     }
 
-    private void replace(Block block, Chunk chunk, BlockPos pos) {
-        chunk.setBlockState(pos, block.getDefaultState(), false);
+    private void replace(ChunkRegion region, Block block, Chunk chunk, BlockPos pos) {
+        final BlockState oldState = chunk.setBlockState(pos, block.getDefaultState(), false);
+        region.toServerWorld().onBlockChanged(pos, oldState, block.getDefaultState());
     }
 
     private void shelfEdge(ChunkRegion region, BlockPos pos, Direction direction, int shelfDirection, int shelfType, int adjacentShelfType) {
         if ((shelfType - (shelfType & 3)) / 4 - 1 == shelfDirection) {
             for (int j = 0; j < (shelfType & 3) + 4; j++) {
-                region.setBlockState(pos.add(new BlockPos(0,j,0)), (BlockState)(BlockState)Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
+                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
             }
             if((adjacentShelfType - (adjacentShelfType & 3)) / 4 - 1 == shelfDirection) {
                 if ((adjacentShelfType & 3) != (shelfType & 3)){
@@ -299,7 +308,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         }
         else if((adjacentShelfType - (adjacentShelfType & 3)) / 4 - 1 == shelfDirection){
             for (int j = 0; j < (adjacentShelfType & 3) + 4; j++) {
-                region.setBlockState(pos.add(new BlockPos(0,j,0)), (BlockState)(BlockState)Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction.getOpposite()).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
+                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction.getOpposite()).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
             }
         }
     }
@@ -316,18 +325,23 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     final BlockState block = chunk.getBlockState(pos);
 
                     if (block == BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
+                        replace(region, BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
                     } else if (block == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT, chunk, pos);
+                        replace(region, BackroomsBlocks.CEMENT, chunk, pos);
                     } else if (block == BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT, chunk, pos);
+                        replace(region, BackroomsBlocks.CEMENT, chunk, pos);
                     } else if (block == BackroomsBlocks.CORK_TILE.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                        replace(region, BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     } else if (block == BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState()) {
-                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                        replace(region, BackroomsBlocks.CEMENT_TILES, chunk, pos);
                     }
                 }
             }
         }
     }
+
+    public interface PentaConsumer<K, V, S, T, I> {
+        void accept(K k, V v, S s, T t, I i);
+    }
+
 }
