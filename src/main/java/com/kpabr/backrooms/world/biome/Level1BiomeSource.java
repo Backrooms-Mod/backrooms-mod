@@ -37,7 +37,7 @@ public class Level1BiomeSource extends BaseBiomeSource {
 
     @Override
     public BiomeSource withSeed(long seed) {
-        return new Level0BiomeSource(BIOME_REGISTRY, seed);
+        return new Level1BiomeSource(BIOME_REGISTRY, seed);
     }
 }
 

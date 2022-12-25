@@ -36,8 +36,7 @@ public class BackroomsClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
 				BackroomsBlocks.FIRESALT_CRYSTAL,
 				BackroomsBlocks.TILEMOLD,
-				BackroomsBlocks.PYROIL,
-				BackroomsBlocks.IRON_DOOR);
+				BackroomsBlocks.PYROIL);
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
 				BackroomsBlocks.OFFICE_DOOR,
 				BackroomsBlocks.HARLEQUIN_MASK,

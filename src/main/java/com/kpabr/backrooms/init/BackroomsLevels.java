@@ -50,11 +50,11 @@ public class BackroomsLevels {
         get("level_2_chunk_generator", LevelTwoChunkGenerator.CODEC);
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
+    public static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
         return addLevelWithEffects(name, chunkGenerator, biomeSource, DEFAULT_LEVEL_EFFECTS);
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld addLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
+    public static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> LiminalWorld addLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
         final Identifier levelId = BackroomsMod.id(name);
 
         // Messy wrapper

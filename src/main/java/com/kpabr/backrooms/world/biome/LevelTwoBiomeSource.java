@@ -20,19 +20,19 @@ public class LevelTwoBiomeSource extends BaseBiomeSource {
                             .forGetter((biomeSource) -> biomeSource.seed)
             ).apply(instance, instance.stable(LevelTwoBiomeSource::new)));
 
-    public LevelTwoBiomeSource(Registry<Biome> biomeRegistry, long seed) {
-        super(biomeRegistry, seed, new BiomeListBuilder()
+
+    public LevelTwoBiomeSource(Registry<Biome> biomes, long seed) {
+        super(biomes, seed, new BiomeListBuilder()
                 .addBiome(BackroomsLevels.PIPES_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
         );
     }
 
     @Override
-    protected Codec<? extends BiomeSource> getCodec() {
-        return CODEC;
-    }
-
-    @Override
     public BiomeSource withSeed(long seed) {
         return new LevelTwoBiomeSource(BIOME_REGISTRY, seed);
+    }
+    @Override
+    protected Codec<? extends BiomeSource> getCodec() {
+        return CODEC;
     }
 }

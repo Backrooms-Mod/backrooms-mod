@@ -16,6 +16,7 @@ import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.loot.LootTables;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -141,14 +142,14 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
     }
 
     @Override
-    public void storeStructures(ServerWorld world) {
-        this.cementHallsChunkGenerator.storeStructures(world);
-        this.warehouseChunkGenerator.storeStructures(world);
+    public int chunkRadius() {
+        return 1;
     }
 
     @Override
-    public int chunkRadius() {
-        return 1;
+    public void storeStructures(ServerWorld world) {
+        this.cementHallsChunkGenerator.storeStructures(world);
+        this.warehouseChunkGenerator.storeStructures(world);
     }
 
     @Override
