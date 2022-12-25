@@ -4,7 +4,6 @@
         "backrooms:cement_wall",
         "backrooms:cut_cement_wall",
         "backrooms:cement_brick_wall",
-        "backrooms:cement_tile_wall",
-        "backrooms:pyroil"
+        "backrooms:cement_tile_wall"
     ]
 }
