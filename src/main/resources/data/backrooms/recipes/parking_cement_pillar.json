@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PY",
+    "PB"
+  ],
+  "key": {
+    "P": {
+      "item": "backrooms:cement_pillar"
+    },
+    "Y": {
+      "item": "minecraft:yellow_concrete"
+    },
+    "B": {
+      "item": "minecraft:black_concrete"
+    }
+  },
+  "result": {
+    "item": "backrooms:parking_cement_pillar",
+    "count": 4
+  }
+}

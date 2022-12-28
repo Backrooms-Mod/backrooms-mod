@@ -204,8 +204,8 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
             //Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
             if (fullFloorRandom.nextFloat() < 0.2F) {
                 //Define the amounts of regular and nofill rooms.
-                final int regularRooms = 2;
-                final int noFillRooms = 0;
+                final int regularRooms = 1;
+                final int noFillRooms = 1;
                 //Choose the room that will be placed.
                 int roomNumber = (fullFloorRandom.nextInt(regularRooms + noFillRooms));
                 String roomName = "cement_walls_" + roomNumber;
@@ -263,8 +263,8 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        store("cement_walls", world, 0, 1); //Makes it so the large regular rooms can be used while generating.
-        store("cement_walls_nofill", world, 1, 0); //Makes it so the large nofill rooms can be used while generating.*/
+        store("cement_walls", world, 0, 0); //Makes it so the large regular rooms can be used while generating.
+        store("cement_walls_nofill", world, 0, 0); //Makes it so the large nofill rooms can be used while generating.*/
     }
 
     @Override
