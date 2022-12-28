@@ -16,7 +16,6 @@ import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.loot.LootTables;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
@@ -103,8 +102,8 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
 
         final ChunkPos chunkPos = chunk.getPos();
         //Define a position for checking biomes
-        final BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
-        
+        final BlockPos biomePos = chunkPos.getBlockPos(0, 4, 4);
+
         //Save the first and last x and z position of the chunk. Note: positive x means east, positive z means south.
         final int startX = chunkPos.getStartX();
         final int endX = startX + 16;

@@ -36,7 +36,7 @@ public abstract class BaseBiomeSource extends BiomeSource {
 
     @Override
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
-        double noiseAt = BaseBiomeSource.getNoiseAt(this.noise, x, y, z);
+        double noiseAt = getNoiseAt(this.noise, x, y, z);
         return biomeList.findNearest(noiseAt);
     }
 

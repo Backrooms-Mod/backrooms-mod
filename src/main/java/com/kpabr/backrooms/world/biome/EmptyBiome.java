@@ -6,20 +6,20 @@ import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 
-public class PipesBiome {
+public class EmptyBiome {
     public static Biome create() {
-        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
-        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
+        final SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
+        final GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
+        final BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
                 .skyColor(Color.of(36, 36, 36))
                 .waterColor(13548960)
                 .waterFogColor(13548960)
                 .fogColor(Color.of(36, 36, 36))
                 .grassColor(13818488);
-                //TODO: make loop sound for level two;
+        //TODO: make loop sound for level two;
 
         // Configure level 2 default biome
-        Biome.Builder biome = new Biome.Builder()
+        final Biome.Builder biome = new Biome.Builder()
                 .spawnSettings(spawnSettings.build())
                 .generationSettings(generationSettings.build())
                 .effects(biomeEffects.build())
@@ -27,10 +27,9 @@ public class PipesBiome {
                 .precipitation(Biome.Precipitation.NONE)
                 .category(Biome.Category.NONE)
 
-                .temperature(15.0F)
+                .temperature(30.0F)
                 .downfall(0.0F);
 
         return biome.build();
     }
-
 }
