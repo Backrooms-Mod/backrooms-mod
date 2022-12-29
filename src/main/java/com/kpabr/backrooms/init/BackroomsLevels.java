@@ -35,10 +35,6 @@ public class BackroomsLevels {
 
     // Level 2 biomes
     public static final RegistryKey<Biome> PIPES_BIOME = get("pipes", PipesBiome.create());
-    public static final RegistryKey<Biome> HOT_PIPES_BIOME = get("hot_pipes", PipesBiome.create());
-    public static final RegistryKey<Biome> COLD_PIPES_BIOME = get("cold_pipes", PipesBiome.create());
-    public static final RegistryKey<Biome> EMPTY_BIOME = get("empty", EmptyBiome.create());
-
     public static LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
     public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
     public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);

@@ -2,11 +2,8 @@ package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsBlocks;
-import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
@@ -21,7 +18,6 @@ import net.minecraft.server.world.ChunkHolder.Unloaded;
 import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureManager;
-import net.minecraft.structure.StructureSet;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -29,12 +25,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
@@ -265,11 +259,6 @@ public class CementHallsChunkGenerator extends AbstractNbtChunkGenerator {
     public void storeStructures(ServerWorld world) {
         store("cement_walls", world, 0, 0); //Makes it so the large regular rooms can be used while generating.
         store("cement_walls_nofill", world, 0, 0); //Makes it so the large nofill rooms can be used while generating.*/
-    }
-
-    @Override
-    public int chunkRadius() {
-        return 1;
     }
 
     @Override

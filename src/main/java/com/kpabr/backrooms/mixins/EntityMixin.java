@@ -10,7 +10,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -32,7 +31,7 @@ public abstract class EntityMixin {
     public abstract @Nullable MinecraftServer getServer();
 
     @Inject(method="tick", at=@At(value = "HEAD"))
-    private void backrooms_tick(CallbackInfo ci) {
+    private void backroomsTick(CallbackInfo ci) {
         World world = ((Entity) (Object) this).world;
         Entity entity = ((Entity) (Object) this);
         if (entity instanceof ServerPlayerEntity) {
