@@ -120,23 +120,20 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
             //Create an unique Random object for the current floor.
             final Random fullFloorRandom = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, y));
 
-            if(fullFloorRandom.nextFloat() < 0.1F & false){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
-                // Place a large (7x7 or bigger) room in the current chunk at the current floor. Both dimensions of the base of the room must be of the form 4x-1.
-
-                // Define the amounts of regular and nofill rooms.
-                final int regularRooms = 12;
-                final int nofillRooms = 3;
-
-                // Choose the room that will be placed.
-                int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
-
-                // The number with an F directly after it denotes the probability of an empty room being generated regardless.
-                if(fullFloorRandom.nextFloat() < 0.6F) roomNumber = 0;
-                String roomName = "backrooms_large_" + roomNumber;
-                if (roomNumber > regularRooms) roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
-
+            if(fullFloorRandom.nextFloat() < 0.1F){ //Check whether a random number between zero and one is less than the number with an F directly after it. Currently, for debugging reasons, a "|| true" has been placed, which means that the following code will be excecuted anyways.
+                final int regularRooms = 1;
+                final int noFillRooms = 0;
+                //Choose the room that will be placed.
+                int roomNumber = (fullFloorRandom.nextInt(regularRooms + noFillRooms));
+                String roomName = "parking_garage_" + roomNumber;
+                if(roomNumber >= regularRooms) {
+                    roomName = "parking_garage_nofill_" + (roomNumber - regularRooms);
+                }
                 //Choose the rotation for the room.
                 Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
+                if(roomNumber==0){
+                    dir = Direction.fromHorizontal(fullFloorRandom.nextInt(2)*2+1);
+                }
                 BlockRotation rotation = switch(dir) {
                     case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
                     case EAST -> BlockRotation.NONE;
@@ -158,22 +155,25 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
                 }
 
                 // Only generate the structure if it has enough vertical space to generate.
-                if (6 * y + sizeY < ROOF_BEGIN_Y) {
+                if (8 * y + sizeY < ROOF_BEGIN_Y) {
                     //Choose a spot in the chunk.
                     int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
                     int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
+                    if(roomNumber==0){
+                        x = fullFloorRandom.nextInt(2)*2;
+                    }
                     //Fill the area the room will be placed in with air.
                     if(roomNumber <= regularRooms) {
                         for (int i = 0; i < sizeX; i++) {
                             for (int j = 0; j < sizeY; j++) {
                                 for (int k = 0; k < sizeZ; k++) {
-                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
+                                    region.setBlockState(new BlockPos(startX + x * 4 + i, 2 + 8 * y + j, startZ + z * 4 + k), Blocks.AIR.getDefaultState(), Block.FORCE_STATE, 0);
                                 }
                             }
                         }
                     }
                     // Actually generate the room.
-                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation);
+                    generateNbt(region, new BlockPos(startX + x * 4, 2 + 8 * y, startZ + z * 4), roomName, rotation);
                 }
             }
         }
@@ -182,8 +182,8 @@ public class ParkingGarageChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public void storeStructures(ServerWorld world) {
-        /*store("warehouse", world, 0, 5); //Makes it so the large regular rooms can be used while generating.
-        store("cement_halls", world, 1, 3); //Makes it so the large nofill rooms can be used while generating.*/
+        store("parking_garage", world, 0, 0); //Makes it so the large regular rooms can be used while generating.
+        //store("parking_garage_nofill", world, 0, 0); //Makes it so the large nofill rooms can be used while generating.*/
     }
 
     @Override

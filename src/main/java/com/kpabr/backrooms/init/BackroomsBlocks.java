@@ -125,7 +125,7 @@ public class BackroomsBlocks {
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).mapColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.ORANGE).noCollision()), ItemGroup.BUILDING_BLOCKS);
+	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block BEDROCK_BRICKS = add("bedrock_bricks", new Block(FabricBlockSettings.copy(Blocks.BEDROCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block ALMOND_WATER = addWithoutItem("almond_water",
 			new FluidBlock(BackroomsFluids.STILL_ALMOND_WATER, FabricBlockSettings.copyOf(Blocks.WATER)));
