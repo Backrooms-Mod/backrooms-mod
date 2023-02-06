@@ -35,6 +35,11 @@ public class FireSaltProjectileEntity extends ThrownItemEntity {
         return FIRESALT;
     }
 
+    @Override
+    public boolean isOnFire() {
+        return true;
+    }
+
     @Environment(EnvType.CLIENT)
     private ParticleEffect getParticleParameters() { // particles WIP
         return FIRESALT_PARTICLE;
