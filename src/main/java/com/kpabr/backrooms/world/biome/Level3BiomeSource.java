@@ -25,18 +25,18 @@ public class Level3BiomeSource extends BiomeSource {
 
     private final long seed;
     protected Registry<Biome> BIOME_REGISTRY;
-    private final RegistryEntry<Biome> MEGALOPHOBIA_BIOME;
+    private final RegistryEntry<Biome> ELECTRICAL_STATION_BIOME;
 
     public Level3BiomeSource(Registry<Biome> registry, long seed) {
         super(Stream.of(
-                registry.getOrCreateEntry(BackroomsLevels.MEGALOPHOBIA_BIOME)));
-        MEGALOPHOBIA_BIOME = registry.getOrCreateEntry(BackroomsLevels.MEGALOPHOBIA_BIOME);
+                registry.getOrCreateEntry(BackroomsLevels.ELECTRICAL_STATION_BIOME)));
+        ELECTRICAL_STATION_BIOME = registry.getOrCreateEntry(BackroomsLevels.ELECTRICAL_STATION_BIOME);
         this.seed = seed;
     }
 
     @Override
     public RegistryEntry<Biome> getBiome(int x, int y, int z, MultiNoiseUtil.MultiNoiseSampler noise) {
-        return MEGALOPHOBIA_BIOME;
+        return ELECTRICAL_STATION_BIOME;
     }
 
     public BiomeSource withSeed(long seed) {
