@@ -6,6 +6,7 @@ import net.minecraft.util.math.Direction;
 
 public class ElectricalStationRoom {
 	public int eastWallX, westWallX, southWallZ, northWallZ;
+	public boolean eastHallway, southHallway;
 	public ElectricalStationRoom(int floor, int startX, int startZ, long seed) {
 		Random random = new Random(seed + MathHelper.hashCode(startX, startZ, floor));
 		int temporaryX = random.nextInt(10)+3;
@@ -14,6 +15,8 @@ public class ElectricalStationRoom {
 		this.westWallX = Math.min(temporaryX - 2, temporaryX - random.nextInt(temporaryX - 1));
 		this.southWallZ = Math.max(temporaryZ + 2, temporaryZ + random.nextInt(14 - temporaryZ));
 		this.northWallZ = Math.min(temporaryZ - 2, temporaryZ - random.nextInt(temporaryZ - 1));
+		this.eastHallway = random.nextInt(3) < 2;
+		this.southHallway = random.nextInt(3) < 2;
 	}
 
 	public ElectricalStationRoom() {}
@@ -23,6 +26,18 @@ public class ElectricalStationRoom {
 		this.westWallX = westX;
 		this.southWallZ = southZ;
 		this.northWallZ = northZ;
+	}
+	public void setValues(boolean east, boolean south) {
+		this.eastHallway = east;
+		this.southHallway = south;
+	}
+	public void setValues(int eastX, int westX, int southZ, int northZ, boolean east, boolean south) {
+		this.eastWallX = eastX;
+		this.westWallX = westX;
+		this.southWallZ = southZ;
+		this.northWallZ = northZ;
+		this.eastHallway = east;
+		this.southHallway = south;
 	}
 
 	public static ElectricalStationRoom hallwayBetween(ElectricalStationRoom room1, ElectricalStationRoom room2, Direction direction){
@@ -54,6 +69,9 @@ public class ElectricalStationRoom {
 			else {
 				result.setValues(0, 15, 0, 15);
 			}
+		}
+		if((direction==Direction.EAST && !room1.eastHallway) || (direction==Direction.WEST && !room2.eastHallway) || (direction==Direction.SOUTH && !room1.southHallway) || (direction==Direction.NORTH && !room2.southHallway)){
+			result.setValues(0, 15, 0, 15);
 		}
 		return result;
 	}
