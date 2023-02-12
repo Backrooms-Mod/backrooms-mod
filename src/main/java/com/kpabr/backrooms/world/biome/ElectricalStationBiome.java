@@ -8,7 +8,8 @@ import net.minecraft.world.biome.SpawnSettings;
 
 public class ElectricalStationBiome {
     public static Biome create() {
-        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
+        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder()
+                .spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
         BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
                 .skyColor(Color.of(36, 36, 36))
