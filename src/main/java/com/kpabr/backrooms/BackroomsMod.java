@@ -5,6 +5,8 @@ import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.*;
+import name.trimsky.lib_ai.LibAI;
+import name.trimsky.lib_ai.example.LibAIMod;
 import net.fabricmc.api.ModInitializer;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsGroups;
@@ -30,6 +32,8 @@ public class BackroomsMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		LibAI.initialize();
+
 		BackroomsConfig.init();
 		BackroomsSounds.init();
 		BackroomsParticles.init();
@@ -45,6 +49,7 @@ public class BackroomsMod implements ModInitializer {
 		LOGGER.info("Backrooms mod was loaded!");
 		// registering every tick event
 		ServerTickEvents.END_SERVER_TICK.register((server) -> {
+
 			// Iterating through every player
 			// And check if they're on the server for at least (wretchedCycleStepTime) seconds
 			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
@@ -56,11 +61,11 @@ public class BackroomsMod implements ModInitializer {
 	}
 
 	public static Identifier id(String name) {
-		return new Identifier("backrooms", name);
+		return new Identifier(ModId, name);
 	}
 
 	public static void applyWretchedCycle(ServerPlayerEntity player) {
-		if(player.interactionManager.getGameMode() == GameMode.CREATIVE || player.interactionManager.getGameMode() == GameMode.SPECTATOR) {
+		if(player.isCreative() || player.isSpectator()) {
 			if (player.hasStatusEffect(BackroomStatusEffects.RAGGED)) {
 				player.removeStatusEffect(BackroomStatusEffects.RAGGED);
 			} else if (player.hasStatusEffect(BackroomStatusEffects.ROTTEN)) {
@@ -99,5 +104,6 @@ public class BackroomsMod implements ModInitializer {
 
 	static {
 		GeckoLibMod.DISABLE_IN_DEV = true;
+		LibAIMod.DISABLE_IN_DEV_ENVIRONMENT = true;
 	}
 }

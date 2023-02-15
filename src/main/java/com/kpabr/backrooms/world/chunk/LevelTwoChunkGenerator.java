@@ -490,7 +490,9 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
      */
     private void setBlockState(ChunkRegion region, Chunk chunk, BlockState state, BlockPos pos) {
         final BlockState blockState = chunk.setBlockState(pos, state, false);
-        region.toServerWorld().onBlockChanged(pos, blockState, state);
+        if(blockState != null) {
+            region.toServerWorld().onBlockChanged(pos, blockState, state);
+        }
     }
 
 

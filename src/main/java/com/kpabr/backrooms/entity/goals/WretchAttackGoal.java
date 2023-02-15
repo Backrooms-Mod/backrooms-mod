@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.entity.goals;
 
-import com.kpabr.backrooms.entity.living.WretchEntity;
+import com.kpabr.backrooms.entity.WretchEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.util.Hand;

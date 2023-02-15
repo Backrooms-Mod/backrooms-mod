@@ -107,10 +107,12 @@
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing",
       "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle",
       "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance to spawn moldy cork in crimson halls",
+      "text.autoconfig.backrooms.option.aiDebug": "Enable ai debugging",
 
       "text.autoconfig.backrooms.category.Gameplay": "Gameplay",
       "text.autoconfig.backrooms.category.default": "Default",
       "text.autoconfig.backrooms.category.Render": "Client",
+      "text.autoconfig.backrooms.category.Miscellaneous": "Miscellaneous",
 
       "subtitles.entity.hound.idle": "Hound growls",
       "subtitles.entity.hound.attack": "Hound attacks",

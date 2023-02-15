@@ -9,5 +9,4 @@ public class LevelsApi {
     public static<T extends AbstractNbtChunkGenerator, S extends BaseBiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
         return BackroomsLevels.addLevel(name, chunkGenerator, biomeSource);
     }
-
 }

@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.entity.projectile;
+package com.kpabr.backrooms.entity;
 
 import static com.kpabr.backrooms.init.BackroomsItems.FIRESALT;
 import static com.kpabr.backrooms.init.BackroomsParticles.FIRESALT_PARTICLE;

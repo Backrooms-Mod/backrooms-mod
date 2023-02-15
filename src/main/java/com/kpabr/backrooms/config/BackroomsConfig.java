@@ -24,6 +24,9 @@ public class BackroomsConfig implements ConfigData {
     @ConfigEntry.Category("Render")
     public boolean disableStrongShaders = true;
 
+    @ConfigEntry.Category("Miscellaneous")
+    public boolean aiDebug = false;
+
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);
     }

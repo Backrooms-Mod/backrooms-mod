@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.client.entity.renderer;
 
-import com.kpabr.backrooms.entity.living.WretchEntity;
+import com.kpabr.backrooms.entity.WretchEntity;
 import com.kpabr.backrooms.client.entity.model.WretchModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;

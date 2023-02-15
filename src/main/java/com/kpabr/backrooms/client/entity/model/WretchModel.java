@@ -1,7 +1,7 @@
 package com.kpabr.backrooms.client.entity.model;
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.entity.living.WretchEntity;
+import com.kpabr.backrooms.entity.WretchEntity;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

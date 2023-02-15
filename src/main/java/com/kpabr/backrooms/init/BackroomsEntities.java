@@ -1,8 +1,8 @@
 package com.kpabr.backrooms.init;
 
 import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.entity.living.HoundEntity;
-import com.kpabr.backrooms.entity.living.WretchEntity;
+import com.kpabr.backrooms.entity.HoundEntity;
+import com.kpabr.backrooms.entity.WretchEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;

@@ -1,9 +1,8 @@
-package com.kpabr.backrooms.entity.living;
+package com.kpabr.backrooms.entity;
 
 import com.kpabr.backrooms.entity.goals.HoundAttackGoal;
 import com.kpabr.backrooms.entity.goals.HoundRunningGoal;
 import com.kpabr.backrooms.entity.goals.ControlGoal;
-import com.kpabr.backrooms.init.BackroomsSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -14,7 +13,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;

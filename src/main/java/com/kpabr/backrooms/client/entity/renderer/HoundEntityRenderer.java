@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.client.entity.renderer;
 
-import com.kpabr.backrooms.entity.living.HoundEntity;
+import com.kpabr.backrooms.entity.HoundEntity;
 import com.kpabr.backrooms.client.entity.model.HoundModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
