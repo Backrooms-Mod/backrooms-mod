@@ -60,6 +60,7 @@
       "block.backrooms.cut_cement_wall": "Cut Cement Wall",
       "block.backrooms.cement_sandwich": "Cement Sandwich",
       "block.backrooms.crate": "Crate",
+      "block.backrooms.copper_pipe": "Copper Pipe",
       "block.backrooms.red_patterned_wallpaper": "Crimson Wallpaper",
       "block.backrooms.red_striped_wallpaper": "Red Striped Wallpaper",
       "block.backrooms.red_dotted_wallpaper": "Red Dotted Wallpaper",
@@ -104,7 +105,7 @@
 
       "text.autoconfig.backrooms.option.disableStrongShaders": "Disable strong shaders",
       "text.autoconfig.backrooms.option.suffocationChance": "Suffocation chance",
-      "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing",
+      "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing the wretched meter",
       "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Seconds between increasing of wretched cycle",
       "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance to spawn moldy cork in crimson halls",
       "text.autoconfig.backrooms.option.aiDebug": "Enable ai debugging",

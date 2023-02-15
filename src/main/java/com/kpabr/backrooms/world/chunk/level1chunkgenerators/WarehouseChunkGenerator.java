@@ -3,6 +3,7 @@ package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsBlocks;
+import com.kpabr.backrooms.init.BackroomsLootTables;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
@@ -272,7 +273,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     protected Identifier getBarrelLootTable() {
-        return LootTables.SPAWN_BONUS_CHEST;
+        return BackroomsLootTables.CRATE;
     }
 
     @Override

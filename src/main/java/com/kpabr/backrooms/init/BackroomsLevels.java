@@ -8,9 +8,11 @@ import java.util.OptionalLong;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.world.biome.*;
+import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelTwoChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelThreeChunkGenerator;
+import com.kpabr.backrooms.world.chunk.level0chunkgenerators.MegalophobiaChunkGenerator;
 import net.ludocrypt.limlib.api.LiminalEffects;
 import net.ludocrypt.limlib.api.LiminalWorld;
 import net.ludocrypt.limlib.api.render.LiminalBaseEffects;
@@ -26,12 +28,14 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 
 public class BackroomsLevels {
-    public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", CrimsonHallsBiome.create());
+    public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", DecrepitBiome.create());
+    public static final RegistryKey<Biome> MEGALOPHOBIA_BIOME = get("megalophobia", MegalophobiaBiome.create());
     public static final RegistryKey<Biome> LEVEL_ZERO_NORMAL_BIOME = get("normal_biome", LevelZeroNormalBiome.create());
     public static final RegistryKey<Biome> CRIMSON_WALLS_BIOME = get("crimson_walls", CrimsonHallsBiome.create());
     public static final RegistryKey<Biome> CEMENT_WALLS_BIOME = get("cement_walls", CementHallsBiome.create());
     public static final RegistryKey<Biome> PARKING_GARAGE_BIOME = get("parking_garage", ParkingGarageBiome.create());
     public static final RegistryKey<Biome> WAREHOUSE_BIOME = get("warehouse", WarehouseBiome.create());
+    public static final RegistryKey<Biome> ELECTRICAL_STATION_BIOME = get("electrical_station", ElectricalStationBiome.create());
 
     // Level 2 biomes
     public static final RegistryKey<Biome> PIPES_BIOME = get("pipes", PipesBiome.create());
@@ -39,14 +43,17 @@ public class BackroomsLevels {
     public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
     public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
     public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, LevelTwoBiomeSource.class);
+    public static final LiminalWorld LEVEL_3 = addLevel("level_3", LevelThreeChunkGenerator.class, Level3BiomeSource.class);
 
     public static void init() {
         Registry.register(Registry.BIOME_SOURCE, "level_0_biome_source", Level0BiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, "level_1_biome_source", Level1BiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, "level_2_biome_source", LevelTwoBiomeSource.CODEC);
+        Registry.register(Registry.BIOME_SOURCE, "level_3_biome_source", Level3BiomeSource.CODEC);
         get("level_0_chunk_generator", LevelZeroChunkGenerator.CODEC);
         get("level_1_chunk_generator", LevelOneChunkGenerator.CODEC);
         get("level_2_chunk_generator", LevelTwoChunkGenerator.CODEC);
+        get("level_3_chunk_generator", LevelThreeChunkGenerator.CODEC);
     }
 
     public static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {

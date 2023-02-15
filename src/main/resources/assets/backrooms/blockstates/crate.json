@@ -1,6 +1,9 @@
 {
 	"variants": {
-		"": {
+		"open=true": {
+			"model": "backrooms:block/crate_open"
+		},
+		"open=false": {
 			"model": "backrooms:block/crate"
 		}
 	}

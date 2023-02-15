@@ -35,7 +35,7 @@ public class BackroomsItems {
 	public static final Item COOKED_FLESH = add("cooked_flesh",
 			new Item(new Item.Settings().group(ItemGroup.FOOD).food(new FoodComponent.Builder().saturationModifier(3).hunger(5).meat().build())));
 	public static final Item ALMOND_WATER_BUCKET = add("almond_water_bucket",
-			new BucketItem(BackroomsFluids.STILL_ALMOND_WATER, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
+			new BucketItem(BackroomsFluids.STILL_ALMOND_WATER, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1).group(ItemGroup.MISC)));
 	public static final Item HOUND_SPAWN_EGG = add("hound_spawn_egg",
 			new SpawnEggItem(BackroomsEntities.HOUND,16777215,8531483,new Item.Settings().group(ItemGroup.MISC)));
 	public static final Item WRETCH_SPAWN_EGG = add("wretch_spawn_egg",

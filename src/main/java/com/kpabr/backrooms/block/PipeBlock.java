@@ -1,10 +1,12 @@
 package com.kpabr.backrooms.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ConnectingBlock;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
@@ -22,7 +24,7 @@ import net.minecraft.world.WorldAccess;
 
 import java.util.Map;
 
-public class PipeBlock extends Block {
+public class PipeBlock extends Block implements Waterloggable{
 	public static final BooleanProperty NORTH = ConnectingBlock.NORTH;
 	public static final BooleanProperty EAST = ConnectingBlock.EAST;
 	public static final BooleanProperty SOUTH = ConnectingBlock.SOUTH;
@@ -30,18 +32,11 @@ public class PipeBlock extends Block {
 	public static final BooleanProperty UP = ConnectingBlock.UP;
 	public static final BooleanProperty DOWN = ConnectingBlock.DOWN;
 	private static final Map<Direction, BooleanProperty> FACING_PROPERTIES = ConnectingBlock.FACING_PROPERTIES;
+	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
 	public PipeBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, true).with(EAST, true).with(SOUTH, true).with(WEST, true).with(UP, true).with(DOWN, true));
-	}
-
-
-
-	@Override
-	public boolean canPathfindThrough(BlockState state, BlockView world, BlockPos pos, NavigationType type) {
-		if(type == NavigationType.LAND) return false;
-		return super.canPathfindThrough(state, world, pos, type);
+		this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, true).with(EAST, true).with(SOUTH, true).with(WEST, true).with(UP, true).with(DOWN, true).with(WATERLOGGED, false));
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -53,11 +48,15 @@ public class PipeBlock extends Block {
 				.with(NORTH, blockView.getBlockState(blockPos.north()).isOf(this))
 				.with(EAST, blockView.getBlockState(blockPos.east()).isOf(this))
 				.with(SOUTH, blockView.getBlockState(blockPos.south()).isOf(this))
-				.with(WEST, blockView.getBlockState(blockPos.west()).isOf(this));
+				.with(WEST, blockView.getBlockState(blockPos.west()).isOf(this))
+				.with(WATERLOGGED, blockView.getFluidState(blockPos).getFluid() == Fluids.WATER);
 	}
 
 	@SuppressWarnings("deprecation")
 	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+		if (state.get(WATERLOGGED)) {
+			world. createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+		}
 		if(neighborState.isOf(this)) return state.with(FACING_PROPERTIES.get(direction), true);
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
@@ -85,9 +84,12 @@ public class PipeBlock extends Block {
 	}
 
 	protected void appendProperties(Builder<Block, BlockState> builder) {
-		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST);
+		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST, WATERLOGGED);
 	}
-
+	@Override
+	public FluidState getFluidState(BlockState state) {
+		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+	}
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {
