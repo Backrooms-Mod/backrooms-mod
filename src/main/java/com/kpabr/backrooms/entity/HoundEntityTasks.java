@@ -8,23 +8,22 @@ import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.NotNull;
 
-import static com.kpabr.backrooms.entity.WretchEntity.AnimationEnum;
-
 import java.util.Objects;
 
-public final class WretchEntityTasks {
-    private static final double SPEED_WHEN_IDLING_PER_SECOND = 0.9d;
-    private static final double SPEED_WHEN_FOLLOWING_PER_SECOND = 0.9d;
-    private static final double SPEED_WHEN_PLAYER_HID_PER_SECOND = 1.0d;
-    private static final long ATTACK_ANIMATION_LENGTH_IN_MS = 583;
+import static com.kpabr.backrooms.entity.HoundEntity.AnimationEnum;
 
+public final class HoundEntityTasks {
+    private static final double SPEED_WHEN_IDLING_PER_SECOND = 0.9d;
+    private static final double SPEED_WHEN_FOLLOWING_PER_SECOND = 2.8d;
+    private static final double SPEED_WHEN_PLAYER_HID_PER_SECOND = 1.0d;
+    private static final long ATTACK_ANIMATION_LENGTH_IN_MS = 480;
     /**
      * All information about all entities tasks presented in dev channel
      */
-    static final class IdleTask extends SingleTask<WretchEntity> {
+    static final class IdleTask extends SingleTask<HoundEntity> {
         private static final double CHANCE_TO_MOVE = 0.5d;
 
-        public IdleTask(WretchEntity owner) {
+        public IdleTask(HoundEntity owner) {
             super(owner);
             this.owner.setAiTask(new LiteralText("Idling:Nothing"));
         }
@@ -40,7 +39,7 @@ public final class WretchEntityTasks {
                 if(randomPath != null && this.owner.getNavigation().startMovingTo(
                         randomPath.x, randomPath.y, randomPath.z, SPEED_WHEN_IDLING_PER_SECOND))
                 {
-                    this.owner.setAnimation(AnimationEnum.MOVING);
+                    this.owner.setAnimation(AnimationEnum.WALKING);
                     this.owner.setAiTask(new LiteralText("Idling:Moving"));
                 }
                 else
@@ -59,10 +58,10 @@ public final class WretchEntityTasks {
             if (player != null && this.owner.canSee(player) && !player.isCreative() && !player.isSpectator()) {
                 // I messed up something in the check, and it didn't work lol
                 //if (Math.abs(MathUtil.getYawBetweenEntities(this.owner, player) - this.owner.getYaw()) <= 180) {
-                    this.controller.popState();
-                    this.controller.pushState(new AttackingTask(this.owner, player));
-                    this.owner.getNavigation().stop();
-                    return true;
+                this.controller.popState();
+                this.controller.pushState(new AttackingTask(this.owner, player));
+                this.owner.getNavigation().stop();
+                return true;
                 //}
             }
             return false;
@@ -73,19 +72,19 @@ public final class WretchEntityTasks {
         }
     }
 
-    static final class AttackingTask extends SingleTask<WretchEntity> {
+    static final class AttackingTask extends SingleTask<HoundEntity> {
         private static final int cooldownBetweenAttacks = 25; // In ticks
 
         @NotNull
         private final PlayerEntity targetPlayer;
         private int cooldown; // In ticks
 
-        public AttackingTask(WretchEntity owner, @NotNull PlayerEntity targetPlayer) {
+        public AttackingTask(HoundEntity owner, @NotNull PlayerEntity targetPlayer) {
             super(owner);
             this.targetPlayer = Objects.requireNonNull(targetPlayer, "targetPlayer parameter must be not null!");;
             this.cooldown = 0;
 
-            owner.setAiTask(new LiteralText("Attacking:Nothing"));
+            this.owner.setAiTask(new LiteralText("Attacking:Nothing"));
         }
 
         @Override
@@ -96,7 +95,6 @@ public final class WretchEntityTasks {
             {
                 this.owner.getNavigation().stop();
                 this.owner.setAnimation(AnimationEnum.IDLING);
-
                 this.controller.popState();
                 return;
             }
@@ -123,8 +121,8 @@ public final class WretchEntityTasks {
 
                 if(this.owner.getNavigation().startMovingTo(this.targetPlayer, SPEED_WHEN_FOLLOWING_PER_SECOND))
                 {
-                    this.owner.setAnimation(AnimationEnum.MOVING);
-                    this.owner.setAiTask(new LiteralText("Attacking:Moving"));
+                    this.owner.setAnimation(AnimationEnum.RUNNING);
+                    this.owner.setAiTask(new LiteralText("Attacking:Running"));
                 }
             }
         }
@@ -146,7 +144,7 @@ public final class WretchEntityTasks {
                 this.owner.setAnimationCallback(
                         () -> {
                             this.cooldown = cooldownBetweenAttacks;
-                            this.owner.setAnimation(AnimationEnum.MOVING);
+                            this.owner.setAnimation(AnimationEnum.IDLING);
                         },
                         ATTACK_ANIMATION_LENGTH_IN_MS);
             } else {
@@ -155,13 +153,15 @@ public final class WretchEntityTasks {
         }
     }
 
-    static final class SearchingPlayerTask extends SingleTask<WretchEntity> {
+    static final class SearchingPlayerTask extends SingleTask<HoundEntity> {
         private final PlayerEntity targetPlayer;
+        private static final long LOOK_ANIMATION_LENGTH_IN_MS = 480;
+        private boolean isAnimationDone = false;
 
-        public SearchingPlayerTask(WretchEntity owner, PlayerEntity targetPlayer) {
+        public SearchingPlayerTask(HoundEntity owner, PlayerEntity targetPlayer) {
             super(owner);
             this.targetPlayer = targetPlayer;
-            owner.setAiTask(new LiteralText("Searching player"));
+            this.owner.setAiTask(new LiteralText("Searching"));
         }
 
         @Override
@@ -170,8 +170,21 @@ public final class WretchEntityTasks {
                 this.controller.popState();
                 this.controller.pushState(new AttackingTask(this.owner, this.targetPlayer));
             } else if (this.owner.getNavigation().isIdle()) {
-                // TODO: Search animation
-                this.controller.popState();
+                if(this.isAnimationDone) {
+                    this.controller.popState();
+                } else {
+                    this.owner.setAiTask(new LiteralText("Searching:Looking"));
+
+                    this.owner.setAnimation(AnimationEnum.LOOKING);
+                    this.owner.setAnimationCallback(
+                            () -> {
+                                this.owner.setAnimation(AnimationEnum.IDLING);
+                                this.isAnimationDone = true;
+                            },
+                            LOOK_ANIMATION_LENGTH_IN_MS);
+
+                    this.controller.popState();
+                }
             }
         }
     }

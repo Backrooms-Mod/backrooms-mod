@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class BackroomsEntities {
     private static final ArrayList<EntityEntry> ENTITIES = new ArrayList<>();
     public static final EntityType<HoundEntity> HOUND = add("hound",
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundEntity::new).dimensions(EntityDimensions.fixed(1f, 1f)).build());
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundEntity::new).dimensions(EntityDimensions.fixed(0.76f, 1.0f)).build());
 
     public static final EntityType<WretchEntity> WRETCH = add("wretch",
             FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.85f)).build());

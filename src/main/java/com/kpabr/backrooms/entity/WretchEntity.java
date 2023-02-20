@@ -1,6 +1,5 @@
 package com.kpabr.backrooms.entity;
 
-import com.google.common.collect.ImmutableBiMap;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.util.SACallbackManager;
 import com.kpabr.backrooms.util.ServerAnimationCallback;
@@ -34,69 +33,28 @@ public final class WretchEntity extends PathAwareEntity implements IAnimatable {
             DataTracker.registerData(WretchEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Optional<Text>> AI_TASK =
             DataTracker.registerData(WretchEntity.class, TrackedDataHandlerRegistry.OPTIONAL_TEXT_COMPONENT);
-    private static final ImmutableBiMap<Integer, Consumer<AnimationEvent<WretchEntity>>> animationValue = new ImmutableBiMap.Builder<Integer, Consumer<AnimationEvent<WretchEntity>>>()
-            .put(AnimationEnum.IDLING.ordinal(), (event) -> event.getController().setAnimation(
-                    new AnimationBuilder().addAnimation("animation.wretch.idle", true)))
-
-            .put(AnimationEnum.MOVING.ordinal(), (event) -> event.getController().setAnimation(
-                    new AnimationBuilder().addAnimation("animation.wretch.walk", true)))
-
-            .put(AnimationEnum.ATTACKING.ordinal(), (event) -> event.getController().setAnimation(
-                    new AnimationBuilder().addAnimation("animation.wretch.attack", false)))
-
-            .put(AnimationEnum.SEARCHING.ordinal(), (event) -> event.getController().setAnimation(
-                    new AnimationBuilder().addAnimation("animation.wretch.search", true)))
-
-            .buildOrThrow();
 
     private final AnimationFactory factory = new AnimationFactory(this);
-    private final long uniqueId;
+    public final long uniqueId;
 
     public WretchEntity(EntityType<WretchEntity> entityType, World world) {
         super(entityType, world);
         this.ignoreCameraFrustum = true;
 
         this.uniqueId = LibAI.generateNewUniqueId(world, new WretchEntityTasks.IdleTask(this));
-        this.dataTracker.startTracking(CURRENT_ANIMATION, AnimationEnum.IDLING.ordinal());
-        this.dataTracker.startTracking(AI_TASK, Optional.empty());
-    }
-
-    public void setAnimation(AnimationEnum animationEnum) {
-        this.dataTracker.set(CURRENT_ANIMATION, animationEnum.ordinal());
-    }
-    public void setAiTask(@NotNull Text text) {
-        this.dataTracker.set(AI_TASK, Optional.of(text));
-    }
-    public Text getAiTask() {
-        return this.dataTracker.get(AI_TASK).orElse(null);
-    }
-
-    @Override
-    public Text getName() {
-        if(BackroomsConfig.getInstance().aiDebug) {
-            MutableText customName = super.getName().copy();
-            Text aiTask = this.getAiTask();
-            if (aiTask != null) customName.append(aiTask);
-
-            return customName;
-        } else {
-            return super.getName();
-        }
-    }
-
-    public void setAnimationCallback(ServerAnimationCallback callback, long milliseconds) {
-        SACallbackManager.addNewCallback(callback, milliseconds);
-    }
-
-    @Range(from = 0, to = 3)
-    public int getAnimation() {
-        return this.dataTracker.get(CURRENT_ANIMATION);
     }
 
     @Override
     public void onRemoved() {
         LibAI.removeEntity(this.world, uniqueId);
         super.onRemoved();
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(CURRENT_ANIMATION, AnimationEnum.IDLING.ordinal());
+        this.dataTracker.startTracking(AI_TASK, Optional.empty());
     }
 
     public static DefaultAttributeContainer.Builder createWretchAttributes() {
@@ -109,9 +67,51 @@ public final class WretchEntity extends PathAwareEntity implements IAnimatable {
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0);
     }
 
+    @Range(from = 0, to = 3)
+    public int getAnimation() {
+        return this.dataTracker.get(CURRENT_ANIMATION);
+    }
+
+    public void setAnimation(AnimationEnum animationEnum) {
+        this.dataTracker.set(CURRENT_ANIMATION, animationEnum.ordinal());
+    }
+
+    /**
+     * @return Current AI task
+     */
+    public Text getAiTask() {
+        return this.dataTracker.get(AI_TASK).orElse(null);
+    }
+
+    public void setAiTask(@NotNull Text text) {
+        this.dataTracker.set(AI_TASK, Optional.of(text));
+    }
+
+    @Override
+    public Text getName() {
+        MutableText firstName = super.getName().copy();
+
+        if(BackroomsConfig.getInstance().aiDebug) {
+            Text aiTask = this.getAiTask();
+            firstName.append("; ");
+            if (aiTask != null) firstName.append(aiTask);
+            return firstName;
+        }
+        return firstName;
+    }
+
+    @Override
+    public boolean isCustomNameVisible() {
+        return super.isCustomNameVisible() || BackroomsConfig.getInstance().aiDebug;
+    }
+
+    public void setAnimationCallback(ServerAnimationCallback callback, long milliseconds) {
+        SACallbackManager.addNewCallback(callback, milliseconds);
+    }
+
     private PlayState predicate(AnimationEvent<WretchEntity> event) {
-        final var currentAnimation = animationValue.get(this.getAnimation());
-        currentAnimation.accept(event);
+        AnimationEnum.values()[this.getAnimation()]
+                .animation.accept(event);
 
         return PlayState.CONTINUE;
     }
@@ -128,9 +128,22 @@ public final class WretchEntity extends PathAwareEntity implements IAnimatable {
     }
 
     public enum AnimationEnum {
-        IDLING,
-        MOVING,
-        ATTACKING,
-        SEARCHING,
+        IDLING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.wretch.idle", true))),
+
+        MOVING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.wretch.walk", true))),
+
+        ATTACKING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.wretch.attack", false))),
+
+        SEARCHING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.wretch.search", false))),
+        NONE((event) -> {});
+
+        private final Consumer<AnimationEvent<WretchEntity>> animation;
+        AnimationEnum(Consumer<AnimationEvent<WretchEntity>> animation) {
+            this.animation = animation;
+        }
     }
 }

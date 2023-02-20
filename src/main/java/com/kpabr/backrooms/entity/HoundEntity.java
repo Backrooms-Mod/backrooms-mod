@@ -1,20 +1,22 @@
 package com.kpabr.backrooms.entity;
 
-import com.kpabr.backrooms.entity.goals.HoundAttackGoal;
-import com.kpabr.backrooms.entity.goals.HoundRunningGoal;
-import com.kpabr.backrooms.entity.goals.ControlGoal;
+import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.util.SACallbackManager;
+import com.kpabr.backrooms.util.ServerAnimationCallback;
+import name.trimsky.lib_ai.LibAI;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.AnimationState;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -23,130 +25,123 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.Random;
+import java.util.Optional;
+import java.util.function.Consumer;
 
-public class HoundEntity extends HostileEntity implements IAnimatable {
-    private final Random random = new Random(123456);
-    private Long lookaroundtimerON = random.nextLong(6000L);
-    private Long lookaroundtimerOFF = 50L;
-    public Long LookaroundtimerFOR = 0L;
+public class HoundEntity extends PathAwareEntity implements IAnimatable {
+    private static final TrackedData<Integer> CURRENT_ANIMATION =
+            DataTracker.registerData(HoundEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Optional<Text>> AI_TASK =
+            DataTracker.registerData(HoundEntity.class, TrackedDataHandlerRegistry.OPTIONAL_TEXT_COMPONENT);
 
-    private static final TrackedData<Boolean> IS_INVICINITY_OF_PLAYER = DataTracker.registerData(HoundEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> IS_LOOKING_AROUND = DataTracker.registerData(HoundEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
+    public final long uniqueId;
 
-    public HoundEntity(EntityType<? extends HostileEntity> entityType, World world) {
+    public HoundEntity(EntityType<HoundEntity> entityType, World world) {
         super(entityType, world);
         this.experiencePoints = 1;
+        this.ignoreCameraFrustum = true;
+
+        this.uniqueId = LibAI.generateNewUniqueId(world, new HoundEntityTasks.IdleTask(this));
+    }
+
+    @Override
+    public void onRemoved() {
+        LibAI.removeEntity(this.world, uniqueId);
+        super.onRemoved();
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
-        this.dataTracker.startTracking(IS_INVICINITY_OF_PLAYER, false);
-        this.dataTracker.startTracking(IS_LOOKING_AROUND, false);
+        this.dataTracker.startTracking(CURRENT_ANIMATION, AnimationEnum.IDLING.ordinal());
+        this.dataTracker.startTracking(AI_TASK, Optional.empty());
+    }
+
+    public static DefaultAttributeContainer.Builder createHoundAttributes() {
+        return HostileEntity.createMobAttributes()
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 60)
+                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.134);
+    }
+
+    @Range(from = 0, to = 4)
+    public int getAnimation() {
+        return this.dataTracker.get(CURRENT_ANIMATION);
+    }
+
+    public void setAnimation(AnimationEnum animationEnum) {
+        this.dataTracker.set(CURRENT_ANIMATION, animationEnum.ordinal());
+    }
+
+    /**
+     * @return Current AI task
+     */
+    public Text getAiTask() {
+        return this.dataTracker.get(AI_TASK).orElse(null);
+    }
+
+    public void setAiTask(@NotNull Text text) {
+        this.dataTracker.set(AI_TASK, Optional.of(text));
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public Text getName() {
+        MutableText firstName = super.getName().copy();
 
-        if (LookaroundtimerFOR != 0) {
-            this.setVelocity(0, 0, 0);
-            --LookaroundtimerFOR;
+        if(BackroomsConfig.getInstance().aiDebug) {
+            Text aiTask = this.getAiTask();
+            firstName.append("; ");
+            if (aiTask != null) firstName.append(aiTask);
+            return firstName;
         }
-
-        if (--lookaroundtimerON <= 0) {
-            if (!this.isLooking()) {
-                this.lookaroundtimerON = random.nextLong(6000L);
-                this.LookaroundtimerFOR = 50L;
-                this.setIsLooking(true);
-            }
-        }
-        if (this.isLooking()) {
-            if (--lookaroundtimerOFF <= 0) {
-                this.setIsLooking(false);
-                this.lookaroundtimerOFF = 50L;
-            }
-        }
+        return firstName;
     }
 
-
-    public static DefaultAttributeContainer.Builder createHoundAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 4)
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 60)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.4)
-                .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 25);
+    @Override
+    public boolean isCustomNameVisible() {
+        return super.isCustomNameVisible() || BackroomsConfig.getInstance().aiDebug;
     }
 
+    public void setAnimationCallback(ServerAnimationCallback callback, long milliseconds) {
+        SACallbackManager.addNewCallback(callback, milliseconds);
+    }
 
     private PlayState predicate(AnimationEvent<HoundEntity> event) {
-        if (isLooking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.look", false));
-            return PlayState.CONTINUE;
-        }
-        if (event.isMoving()) {
-            if (isInVicinity()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.run", true));
-            } else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.walk", true));
-            }
-            return PlayState.CONTINUE;
-        }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.idle", true));
-        return PlayState.CONTINUE;
-    }
+        AnimationEnum.values()[this.getAnimation()]
+                .animation.accept(event);
 
-    private PlayState attackPredicate(AnimationEvent<HoundEntity> event) {
-        if(this.handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hound.attack", false));
-            this.handSwinging = false;
-        }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        var attackController = new AnimationController<>(this, "attackController", 0, this::attackPredicate);
         var controller = new AnimationController<>(this, "controller", 2, this::predicate);
-
-        animationData.addAnimationController(attackController);
         animationData.addAnimationController(controller);
     }
 
     @Override
     public AnimationFactory getFactory() {
-        return factory;
+        return this.factory;
     }
 
-    @Override
-    protected void initGoals() {
-        this.goalSelector.add(0, new RevengeGoal(this));
-        this.goalSelector.add(3, new HoundAttackGoal(this, 0.4f));
-        this.goalSelector.add(1, new HoundRunningGoal(this, 1f, true, 1));
-        this.goalSelector.add(2, new ControlGoal(this));
-        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 20.0f));
-        this.goalSelector.add(3, new WanderAroundFarGoal(this, 0.4f, 1));
+    public enum AnimationEnum {
+        IDLING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.hound.idle", true))),
+        WALKING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.hound.walk", true))),
+        RUNNING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.hound.run", true))),
+        ATTACKING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.hound.attack", false))),
+        LOOKING((event) -> event.getController().setAnimation(
+                new AnimationBuilder().addAnimation("animation.hound.look", false)));
 
-        this.targetSelector.add(1, new ActiveTargetGoal<>(this, PlayerEntity.class, false));
-    }
-
-    public void setIsInvicinityOfPlayer(boolean isInvicinityOfPlayer) {
-        this.dataTracker.set(IS_INVICINITY_OF_PLAYER, isInvicinityOfPlayer);
-    }
-
-    public void setIsLooking(boolean isLooking) {
-        this.dataTracker.set(IS_LOOKING_AROUND, isLooking);
-    }
-
-    public boolean isInVicinity() {
-        return this.dataTracker.get(IS_INVICINITY_OF_PLAYER);
-    }
-
-    public boolean isLooking() {
-        return this.dataTracker.get(IS_LOOKING_AROUND);
+        private final Consumer<AnimationEvent<HoundEntity>> animation;
+        AnimationEnum(Consumer<AnimationEvent<HoundEntity>> animation) {
+            this.animation = animation;
+        }
     }
 }
 
