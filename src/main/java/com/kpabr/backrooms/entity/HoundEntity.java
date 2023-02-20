@@ -1,17 +1,20 @@
 package com.kpabr.backrooms.entity;
 
 import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.init.BackroomsSounds;
 import com.kpabr.backrooms.util.SACallbackManager;
 import com.kpabr.backrooms.util.ServerAnimationCallback;
 import name.trimsky.lib_ai.LibAI;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
@@ -119,6 +122,21 @@ public class HoundEntity extends PathAwareEntity implements IAnimatable {
     public void registerControllers(AnimationData animationData) {
         var controller = new AnimationController<>(this, "controller", 2, this::predicate);
         animationData.addAnimationController(controller);
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return BackroomsSounds.HOUND_HURT;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return BackroomsSounds.HOUND_DEATH;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return BackroomsSounds.HOUND_IDLE;
     }
 
     @Override

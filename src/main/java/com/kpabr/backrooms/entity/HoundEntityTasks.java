@@ -1,5 +1,6 @@
 package com.kpabr.backrooms.entity;
 
+import com.kpabr.backrooms.init.BackroomsSounds;
 import name.trimsky.lib_ai.tasks.SingleTask;
 import net.minecraft.entity.ai.FuzzyTargeting;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -81,7 +82,7 @@ public final class HoundEntityTasks {
 
         public AttackingTask(HoundEntity owner, @NotNull PlayerEntity targetPlayer) {
             super(owner);
-            this.targetPlayer = Objects.requireNonNull(targetPlayer, "targetPlayer parameter must be not null!");;
+            this.targetPlayer = Objects.requireNonNull(targetPlayer, "targetPlayer parameter must be not null!");
             this.cooldown = 0;
 
             this.owner.setAiTask(new LiteralText("Attacking:Nothing"));
@@ -139,6 +140,10 @@ public final class HoundEntityTasks {
         private void attackPlayer() {
             if(this.owner.tryAttack(this.targetPlayer)) {
                 this.owner.setAiTask(new LiteralText("Attacking:Attacking"));
+                this.owner.playSound(
+                        BackroomsSounds.HOUND_ATTACK,
+                        1.0f,
+                        (this.owner.getRandom().nextFloat() - this.owner.getRandom().nextFloat()) * 0.2F + 1.0F);
 
                 this.owner.setAnimation(AnimationEnum.ATTACKING);
                 this.owner.setAnimationCallback(
