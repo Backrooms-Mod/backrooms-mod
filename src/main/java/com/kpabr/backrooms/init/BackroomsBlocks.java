@@ -84,6 +84,9 @@ public class BackroomsBlocks {
 	public static final Block HOTEL_CARPET = add("hotel_carpet",
 			new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
+	public static final Block MACHINERY_BLOCK = add("machinery_block",
+			new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
+
 	public static final Block CRATE = add("crate", new CrateBlock(FabricBlockSettings.copyOf(CEMENT).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = add("crate", FabricBlockEntityTypeBuilder.create(CrateBlockEntity::new, CRATE).build(null));
 
