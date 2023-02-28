@@ -1,0 +1,47 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "backrooms:block/roof_wiring"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/roof_wiring_edge"
+      },
+      "when": {
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/roof_wiring_edge",
+        "uvlock": "true",
+        "y": 90
+      },
+      "when": {
+        "east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/roof_wiring_edge",
+        "uvlock": "true",
+        "y": 180
+      },
+      "when": {
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "backrooms:block/roof_wiring_edge",
+        "uvlock": "true",
+        "y": 270
+      },
+      "when": {
+        "west": "false"
+      }
+    }
+  ]
+}

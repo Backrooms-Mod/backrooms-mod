@@ -1,0 +1,32 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"wiring_background": "backrooms:block/wiring_background",
+		"wiring_overlay": "backrooms:block/wiring_overlay",
+		"wiring_frame_overlay": "backrooms:block/wiring_frame_overlay",
+		"wiring_edge": "backrooms:block/wiring_edge",
+		"particle": "backrooms:block/wiring_block"
+	},
+	"elements": [
+		{   "from": [ 0, 15.9, 0 ],
+			"to": [ 16, 15.9, 16 ],
+			"faces": {
+				"down":  { "uv": [ 0, 16, 16,  0 ], "texture": "#wiring_background" },
+				"up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#wiring_background" }
+			}
+		},
+		{   "from": [ 0, 15, 0 ],
+			"to": [ 16, 15, 16 ],
+			"faces": {
+				"down":  { "uv": [ 0, 16, 16,  0 ], "texture": "#wiring_overlay" },
+				"up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#wiring_overlay" }
+			}
+		},
+		{   "from": [ 0, 14, 0 ],
+			"to": [ 16, 16, 16 ],
+			"faces": {
+				"down":  { "uv": [ 0, 16, 16, 0 ], "texture": "#wiring_frame_overlay" }
+			}
+		}
+	]
+}

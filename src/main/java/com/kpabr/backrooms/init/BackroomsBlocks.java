@@ -85,7 +85,8 @@ public class BackroomsBlocks {
 			new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block MACHINERY_BLOCK = add("machinery_block",
-			new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
+			new MachineryBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
+	public static final Block ROOF_WIRING = add("roof_wiring", new RoofWiringBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.BROWN).strength(0F).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRATE = add("crate", new CrateBlock(FabricBlockSettings.copyOf(CEMENT).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = add("crate", FabricBlockEntityTypeBuilder.create(CrateBlockEntity::new, CRATE).build(null));
