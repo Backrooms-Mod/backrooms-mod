@@ -2,6 +2,7 @@ package com.kpabr.backrooms.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
@@ -25,7 +26,19 @@ public class MachineryBlock extends Block {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		state = state.cycle(POWERED);
 		world.setBlockState(pos, state, 1, 0);
-
+		if((Boolean)state.get(POWERED)){
+			for (int i = -14; i <= 14; i++) {
+				for (int j = 0; j <= 4; j++) {
+					for (int k = -14; k <= 14; k++) {
+						BlockPos lightPos = pos.add(i,j,k);
+						//BackroomsMod.LOGGER.info(lightPos.toString());
+						if(world.getBlockState(lightPos).getBlock()==BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT){
+							world.setBlockState(lightPos, BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT.getDefaultState().with(Properties.LIT, true), 1, 0);
+						}
+					}
+				}
+			}
+		}
 		return ActionResult.success(world.isClient);
 	}
 
