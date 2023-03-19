@@ -15,14 +15,18 @@
   "item.backrooms.red_dotted_pattern.desc": "Czerwona tapeta z krokami",
   "item.backrooms.red_blank_pattern": "Wzór sztandaru",
   "item.backrooms.red_blank_pattern.desc": "Czerwona czysta tapeta",
-  "item.backrooms.almond_water_bottle": "Migdałowa woda",
+  "item.backrooms.almond_water_bottle": "Woda migdałowa",
   "item.backrooms.firesalt": "Ogniosól",
   "item.backrooms.tilemold_lump": "Bryłka kafelkowa",
   "item.backrooms.baked_tilemold_lump": "Upieczona bryłka kafelkowa",
   "item.backrooms.tainted_flesh": "Skażone mięso",
   "item.backrooms.cooked_flesh": "Upieczone mięso",
   "item.backrooms.hound_spawn_egg": "Jajo przywołujące łajdaka",
+  "item.backrooms.wretch_spawn_egg": "Jajo przywołujące nędznika",
+  "item.backrooms.almond_water_bucket": "Wiadro wody migdałowej",
+  
   "block.backrooms.pyroil": "Pyroil",
+  "block.backrooms.pipe": "Rura",
   "block.backrooms.plasterwall": "Gips",
   "block.backrooms.cork_tile": "Płyta sufitowa",
   "block.backrooms.moldy_cork_tile": "Spleśniała płyta sufitowa",
@@ -44,7 +48,8 @@
   "block.backrooms.cement_brick_slab": "Cementowa ceglana płyta",
   "block.backrooms.cement_brick_stairs": "Cementowe ceglane schody",
   "block.backrooms.cement_brick_wall": "Cementowy ceglany murek",
-  "block.backrooms.cement_pillar": "Cementowe filar",
+  "block.backrooms.cement_pillar": "Cementowy filar",
+  "block.backrooms.parking_cement_pillar": "Parkingowy cementowy filar",
   "block.backrooms.cement_tiles": "Cementowe kafelki",
   "block.backrooms.cement_tile_slab": "Cementowa kafelkowa płyta",
   "block.backrooms.cement_tile_stairs": "Cementowe kafelkowe schody",
@@ -54,6 +59,8 @@
   "block.backrooms.cut_cement_stairs": "Żłobione cementowe schody",
   "block.backrooms.cut_cement_wall": "Żłobiony cementowy murek",
   "block.backrooms.cement_sandwich": "Cementowa kanapka",
+  "block.backrooms.crate": "Paka",
+  "block.backrooms.copper_pipe": "Miedziowa rura",
   "block.backrooms.red_patterned_wallpaper": "Karmazynowa tapeta",
   "block.backrooms.red_striped_wallpaper": "Karmazynowa tapeta z paskami",
   "block.backrooms.red_dotted_wallpaper": "Karmazynowa tapeta z kropkami",
@@ -67,9 +74,6 @@
   "block.backrooms.fake_ceiling": "Fałszywy sufit",
   "block.backrooms.bedrock_bricks": "Cegły ze skały macieżystej",
   "block.backrooms.fake_wall": "Fałszywa ściana",
-  "itemGroup.backrooms.items": "Zaplecza",
-  "entity.backrooms.hound": "Łajdak",
-  "entity.backrooms.fire_salt_projectile": "Ogniosól",
   "block.backrooms.black_carpeting": "Czarna wykładzina",
   "block.backrooms.red_carpeting": "Czerwona wykładzina",
   "block.backrooms.pink_carpeting": "Różowa wykładzina",
@@ -86,4 +90,43 @@
   "block.backrooms.purple_carpeting": "Fioletowa wykładzina",
   "block.backrooms.white_carpeting": "Biała wykładzina",
   "block.backrooms.computer": "Komputer"
+  "block.backrooms.colombina_mask": "Maska kolumbiny", //co to jest kolumbina xd
+  "block.backrooms.harlequin_mask": "Maska arlekina", //to też nie wiem co to jest
+  "block.backrooms.sock_buskin_mask": "Maska skarpetowego koturna", //co kurwa xd
+  "block.backrooms.machinery_block": "Blok machinerii",
+  "block.backrooms.roof_wiring": "Kable sufitowe",
+  
+  "entity.backrooms.hound": "Łajdak",
+  "entity.backrooms.fire_salt_projectile": "Ogniosól",
+  
+  "itemGroup.backrooms.items": "Zaplecza",
+  
+  "container.backrooms.crate": "Paka",
+  
+  "effect.backrooms.rotten": "Zepsuty",
+  "effect.backrooms.ragged": "Obdarty",
+  "effect.backrooms.wretched": "Nędzny",
+
+  "text.autoconfig.backrooms.option.disableStrongShaders": "Wyłącz silne efekty",
+  "text.autoconfig.backrooms.option.suffocationChance": "Szansa na uduszenie",
+  "text.autoconfig.backrooms.option.almondMilkRestoring": "Mleko migdałowe zmniejszające miernik nędzności", //japierdole XDDD
+  "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Sekundy między zwiększaniem cyklu nędzności",
+  "text.autoconfig.backrooms.option.moldyCorkTileChance": "Szansa na pojawienie się spleśniałej martwicy w karmazynowych korytarzach",
+  "text.autoconfig.backrooms.option.aiDebug": "Włącz debugowanie AI",
+
+  "text.autoconfig.backrooms.category.Gameplay": "Rozgrywka",
+  "text.autoconfig.backrooms.category.default": "Domyślny",
+  "text.autoconfig.backrooms.category.Render": "Klient",
+  "text.autoconfig.backrooms.category.Miscellaneous": "Niezkategoryzowane",
+
+  "subtitles.entity.hound.idle": "Łajdak warczy", //ojojoj
+  "subtitles.entity.hound.attack": "Łajdak atakuje", //o kurwa leci na nas
+  "subtitles.entity.hound.hurt": "Łajdak boli", //o mój boże
+  "subtitles.entity.hound.death": "Łajdak umiera", //ale nob ez win
+
+  "subtitles.entity.skin_stealer.idle": "Złodziej skóry stęka",
+  "subtitles.entity.skin_stealer.attack": "Złodziej skóry atakuje",
+  "subtitles.entity.skin_stealer.kill": "Złodziej skóry zabija istotę",
+  "subtitles.entity.skin_stealer.hurt": "Złodziej skóry boli",
+  "subtitles.entity.skin_stealer.death": "Złodziej skóry umiera"
 }
