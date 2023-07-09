@@ -89,10 +89,10 @@
   "block.backrooms.orange_carpeting": "Pomarańczowa wykładzina",
   "block.backrooms.purple_carpeting": "Fioletowa wykładzina",
   "block.backrooms.white_carpeting": "Biała wykładzina",
-  "block.backrooms.computer": "Komputer"
-  "block.backrooms.colombina_mask": "Maska kolumbiny", //co to jest kolumbina xd
-  "block.backrooms.harlequin_mask": "Maska arlekina", //to też nie wiem co to jest
-  "block.backrooms.sock_buskin_mask": "Maska skarpetowego koturna", //co kurwa xd
+  "block.backrooms.computer": "Komputer",
+  "block.backrooms.colombina_mask": "Maska kolumbiny",
+  "block.backrooms.harlequin_mask": "Maska arlekina",
+  "block.backrooms.sock_buskin_mask": "Maska skarpetowego koturna",
   "block.backrooms.machinery_block": "Blok machinerii",
   "block.backrooms.roof_wiring": "Kable sufitowe",
   
@@ -109,7 +109,7 @@
 
   "text.autoconfig.backrooms.option.disableStrongShaders": "Wyłącz silne efekty",
   "text.autoconfig.backrooms.option.suffocationChance": "Szansa na uduszenie",
-  "text.autoconfig.backrooms.option.almondMilkRestoring": "Mleko migdałowe zmniejszające miernik nędzności", //japierdole XDDD
+  "text.autoconfig.backrooms.option.almondMilkRestoring": "Mleko migdałowe zmniejszające miernik nędzności",
   "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Sekundy między zwiększaniem cyklu nędzności",
   "text.autoconfig.backrooms.option.moldyCorkTileChance": "Szansa na pojawienie się spleśniałej martwicy w karmazynowych korytarzach",
   "text.autoconfig.backrooms.option.aiDebug": "Włącz debugowanie AI",
@@ -119,10 +119,10 @@
   "text.autoconfig.backrooms.category.Render": "Klient",
   "text.autoconfig.backrooms.category.Miscellaneous": "Niezkategoryzowane",
 
-  "subtitles.entity.hound.idle": "Łajdak warczy", //ojojoj
-  "subtitles.entity.hound.attack": "Łajdak atakuje", //o kurwa leci na nas
-  "subtitles.entity.hound.hurt": "Łajdak boli", //o mój boże
-  "subtitles.entity.hound.death": "Łajdak umiera", //ale nob ez win
+  "subtitles.entity.hound.idle": "Łajdak warczy",
+  "subtitles.entity.hound.attack": "Łajdak atakuje",
+  "subtitles.entity.hound.hurt": "Łajdak boli",
+  "subtitles.entity.hound.death": "Łajdak umiera",
 
   "subtitles.entity.skin_stealer.idle": "Złodziej skóry stęka",
   "subtitles.entity.skin_stealer.attack": "Złodziej skóry atakuje",
