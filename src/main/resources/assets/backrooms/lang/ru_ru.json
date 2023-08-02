@@ -22,6 +22,7 @@
       "item.backrooms.tainted_flesh": "Испорченная плоть",
       "item.backrooms.cooked_flesh": "Приготовленная плоть",
       "item.backrooms.hound_spawn_egg": "Яйцо призыва гончей",
+
       "block.backrooms.pyroil": "Пироил",
       "block.backrooms.plasterwall": "Сухая стена",
       "block.backrooms.cork_tile": "Потолочная плитка",
@@ -67,8 +68,11 @@
       "block.backrooms.bedrock_bricks": "Бедроковые кирпичи",
       "block.backrooms.fake_wall": "Фальшивая стена",
       "itemGroup.backrooms.items": "Закулисье",
+
       "entity.backrooms.hound": "Гончая",
       "entity.backrooms.fire_salt_projectile": "Огнесоль",
+      "entity.backrooms.wretch":  "Убогий",
+
       "block.backrooms.black_carpeting": "Черный ковер",
       "block.backrooms.red_carpeting": "Красный ковер",
       "block.backrooms.pink_carpeting": "Розовый ковер",
@@ -84,9 +88,11 @@
       "block.backrooms.orange_carpeting": "Оранжевый ковер",
       "block.backrooms.purple_carpeting": "Фиолетовый ковер",
       "block.backrooms.white_carpeting": "Белый ковер",
+
       "effect.backrooms.rotten": "Гниющий",
       "effect.backrooms.ragged": "Опустошенный",
       "effect.backrooms.wretched": "Убогий",
+
       "text.autoconfig.backrooms.option.disableStrongShaders": "Отключить сильные шейдеры",
       "text.autoconfig.backrooms.option.suffocationChance": "Шанс задохнуться",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Восстановление миндальным молоком",
@@ -106,5 +112,22 @@
       "subtitles.entity.skin_stealer.attack": "Кожекрад атакует",
       "subtitles.entity.skin_stealer.kill": "Кожекрад убивает",
       "subtitles.entity.skin_stealer.hurt": "Кожекрад получил урон",
-      "subtitles.entity.skin_stealer.death": "Кожекрад умирает"
+      "subtitles.entity.skin_stealer.death": "Кожекрад умирает",
+      "item.backrooms.wretch_spawn_egg": "Яйцо призыва убогого",
+      "item.backrooms.almond_water_bucket": "Ведро миндальной воды",
+      "block.backrooms.pipe": "Труба",
+      "block.backrooms.repaired_fluorescent_light": "Флюоресцентная лампа",
+      "block.backrooms.parking_cement_pillar": "Цементовая парковочная колонна",
+      "block.backrooms.crate": "Ящик",
+      "block.backrooms.copper_pipe": "Бронзовая труба",
+      "block.backrooms.computer": "Компьютер",
+      "block.backrooms.colombina_mask": "Маска Колумбина",
+      "block.backrooms.harlequin_mask": "Маска Арлекина",
+      "block.backrooms.sock_buskin_mask": "Маска марионетки",
+      "block.backrooms.machinery_block": "Машина",
+      "block.backrooms.roof_wiring": "Проводка",
+      "container.backrooms.crate": "Ящик",
+
+      "text.autoconfig.backrooms.option.aiDebug": "Включить отладку ии",
+      "text.autoconfig.backrooms.category.Miscellaneous": "Разное"
     }
