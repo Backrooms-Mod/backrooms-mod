@@ -49,9 +49,9 @@ public class HoundEntity extends PathAwareEntity implements IAnimatable {
     }
 
     @Override
-    public void onRemoved() {
+    public void onDeath(DamageSource source) {
         LibAI.removeEntity(this.world, uniqueId);
-        super.onRemoved();
+        super.onDeath(source);
     }
 
     @Override

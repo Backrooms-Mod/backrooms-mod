@@ -7,6 +7,7 @@ import name.trimsky.lib_ai.LibAI;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -45,9 +46,9 @@ public final class WretchEntity extends PathAwareEntity implements IAnimatable {
     }
 
     @Override
-    public void onRemoved() {
+    public void onDeath(DamageSource source) {
         LibAI.removeEntity(this.world, uniqueId);
-        super.onRemoved();
+        super.onDeath(source);
     }
 
     @Override
