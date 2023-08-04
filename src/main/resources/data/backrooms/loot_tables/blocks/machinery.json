@@ -6,7 +6,7 @@
           "entries": [
             {
               "type": "minecraft:item",
-              "name": "backrooms:machinery_block"
+              "name": "backrooms:machinery"
             }
           ],
           "conditions": [

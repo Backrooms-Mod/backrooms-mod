@@ -14,6 +14,7 @@ import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -34,11 +35,19 @@ public abstract class EntityMixin {
     private void backroomsTick(CallbackInfo ci) {
         World world = ((Entity) (Object) this).world;
         Entity entity = ((Entity) (Object) this);
+        
         if (entity instanceof ServerPlayerEntity) {
             if (!world.isClient) {
-                if (isInsideHardBlocks(entity) && world.getRegistryKey() == World.OVERWORLD && !((ServerPlayerEntity) entity).isCreative()) {
-                    if (world.random.nextDouble() < BackroomsConfig.getInstance().suffocationChance) {
-                        teleportToLevel((ServerPlayerEntity) entity, getServer().getWorld(BackroomsLevels.LEVEL_0.getWorldKey()));
+                if (isInsideHardBlocks(entity)
+                        && !((ServerPlayerEntity) entity).isCreative()
+                        && world.random.nextDouble() < BackroomsConfig.getInstance().suffocationChance) {
+                    World levelZero = getServer().getWorld(BackroomsLevels.LEVEL_0.getWorldKey());
+
+                    RegistryKey<World> worldKey = world.getRegistryKey();
+                    if(worldKey == World.OVERWORLD) {
+                        teleportToLevel((ServerPlayerEntity) entity, levelZero);
+                    } else if (worldKey == levelZero.getRegistryKey()) {
+                        teleportToLevel((ServerPlayerEntity) entity, getServer().getWorld(BackroomsLevels.LEVEL_1.getWorldKey()));
                     }
                 }
             }
