@@ -84,7 +84,7 @@ public class BackroomsBlocks {
 	public static final Block HOTEL_CARPET = add("hotel_carpet",
 			new Block(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 
-	public static final Block MACHINERY_BLOCK = add("machinery_block",
+	public static final Block MACHINERY_BLOCK = add("machinery",
 			new MachineryBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block ROOF_WIRING = add("roof_wiring", new RoofWiringBlock(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.BROWN).strength(0F).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
