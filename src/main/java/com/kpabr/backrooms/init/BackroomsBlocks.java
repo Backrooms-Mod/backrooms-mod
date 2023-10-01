@@ -107,16 +107,18 @@ public class BackroomsBlocks {
 					.build(null));
 	public static final Block PYROIL = add("pyroil",
 			new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block PIPE = add("pipe",
-			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY)), ItemGroup.BUILDING_BLOCKS);
-	public static final Block COPPER_PIPE = add("copper_pipe",
-			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRACKED_PIPE = add("cracked_pipe",
 			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRACKED_COPPER_PIPE = add("cracked_copper_pipe",
-			new CrackedCopperPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+
+	public static final Block PIPE = add("pipe",
+			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY), CRACKED_PIPE), ItemGroup.BUILDING_BLOCKS);
+
+	public static final Block COPPER_PIPE = add("copper_pipe",
+			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.ORANGE), CRACKED_COPPER_PIPE), ItemGroup.BUILDING_BLOCKS);
 
 	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil",
 			FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
