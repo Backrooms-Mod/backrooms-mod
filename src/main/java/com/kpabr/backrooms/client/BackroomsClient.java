@@ -46,7 +46,9 @@ public class BackroomsClient implements ClientModInitializer {
 		BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(),
 				BackroomsBlocks.OFFICE_DOOR,
 				BackroomsBlocks.HARLEQUIN_MASK,
-				BackroomsBlocks.COLOMBINA_MASK);
+				BackroomsBlocks.COLOMBINA_MASK,
+				BackroomsBlocks.PLATE_DOOR
+		);
 		BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(),
 				BackroomsFluids.STILL_ALMOND_WATER,
 				BackroomsFluids.FLOWING_ALMOND_WATER);

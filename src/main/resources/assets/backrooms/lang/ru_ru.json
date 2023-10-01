@@ -128,7 +128,7 @@
       "block.backrooms.machinery": "Машина",
       "block.backrooms.roof_wiring": "Проводка",
       "container.backrooms.crate": "Ящик",
-
+      "block.backrooms.plate_door": "Стальная дверь",
       "text.autoconfig.backrooms.option.aiDebug": "Включить отладку ии",
       "text.autoconfig.backrooms.category.Miscellaneous": "Разное"
     }

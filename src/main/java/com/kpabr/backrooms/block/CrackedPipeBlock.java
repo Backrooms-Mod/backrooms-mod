@@ -1,16 +1,11 @@
 package com.kpabr.backrooms.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ConnectingBlock;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager.Builder;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
@@ -24,7 +19,7 @@ import net.minecraft.world.WorldAccess;
 
 import java.util.Map;
 
-public class PipeBlock extends Block implements Waterloggable{
+public class CrackedPipeBlock extends Block implements Waterloggable{
 	public static final BooleanProperty NORTH = ConnectingBlock.NORTH;
 	public static final BooleanProperty EAST = ConnectingBlock.EAST;
 	public static final BooleanProperty SOUTH = ConnectingBlock.SOUTH;
@@ -34,7 +29,7 @@ public class PipeBlock extends Block implements Waterloggable{
 	private static final Map<Direction, BooleanProperty> FACING_PROPERTIES = ConnectingBlock.FACING_PROPERTIES;
 	public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
-	public PipeBlock(Settings settings) {
+	public CrackedPipeBlock(Settings settings) {
 		super(settings);
 		this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, true).with(EAST, true).with(SOUTH, true).with(WEST, true).with(UP, true).with(DOWN, true).with(WATERLOGGED, false));
 	}
@@ -90,7 +85,6 @@ public class PipeBlock extends Block implements Waterloggable{
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {

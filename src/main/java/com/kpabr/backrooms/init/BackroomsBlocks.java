@@ -112,6 +112,12 @@ public class BackroomsBlocks {
 	public static final Block COPPER_PIPE = add("copper_pipe",
 			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 
+	public static final Block CRACKED_PIPE = add("cracked_pipe",
+			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+
+	public static final Block CRACKED_COPPER_PIPE = add("cracked_copper_pipe",
+			new CrackedCopperPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+
 	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil",
 			FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
 
@@ -129,7 +135,7 @@ public class BackroomsBlocks {
 	public static final Block CEMENT_SANDWICH = add("cement_sandwich", new Block(FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.YELLOW)), ItemGroup.BUILDING_BLOCKS);
 	public static final BlockEntityType<ComputerBlockEntity> TABLE_BLOCK_ENTITY = add("table", FabricBlockEntityTypeBuilder.create(ComputerBlockEntity::new, COMPUTER).build(null));
 	public static final Block OFFICE_DOOR = add("office_door", new BackroomsDoorBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
-
+	public static final Block PLATE_DOOR = add("plate_door", new PlateDoor(FabricBlockSettings.copyOf(Blocks.IRON_BLOCK).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_BLOCK = add("firesalt_block", new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).mapColor(DyeColor.ORANGE).collidable(true).sounds(BlockSoundGroup.DRIPSTONE_BLOCK)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal", new FiresaltCrystalBlock(FabricBlockSettings.copyOf(Blocks.AMETHYST_CLUSTER).mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 	public static final Block BEDROCK_BRICKS = add("bedrock_bricks", new Block(FabricBlockSettings.copy(Blocks.BEDROCK)), ItemGroup.BUILDING_BLOCKS);
