@@ -1,7 +1,6 @@
 package com.kpabr.backrooms.mixins;
 
 
-
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import net.minecraft.block.BlockState;
@@ -9,11 +8,9 @@ import net.minecraft.block.FallingBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
@@ -24,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
+import static com.kpabr.backrooms.util.EntityHelper.teleportToLevel;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -72,21 +69,5 @@ public abstract class EntityMixin {
         });
     }
 
-    private static void teleportToLevel(ServerPlayerEntity entity, World world) {
-        Random rand = world.getRandom();
 
-        int newX = (rand.nextInt(25) * 16) + rand.nextInt(16);
-        int newZ = (rand.nextInt(25) * 16) + rand.nextInt(16);
-        int newY = 30;
-
-        BlockPos.Mutable mutBlockPos = new BlockPos(newX, newY, newZ).mutableCopy().move(Direction.DOWN);
-        while (!world.isAir(mutBlockPos) && world.getBlockState(mutBlockPos) != null) {
-            mutBlockPos.move(Direction.SOUTH).move(Direction.EAST);
-            if (world.isAir(mutBlockPos.up()) && !world.isAir(mutBlockPos)) {
-                mutBlockPos.move(Direction.UP);
-            }
-        }
-
-        entity.teleport((ServerWorld) world, mutBlockPos.getX() + 0.5, mutBlockPos.getY(), mutBlockPos.getZ() + 0.5, entity.getYaw(), entity.getPitch());
-    }
 }

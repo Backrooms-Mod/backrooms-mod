@@ -2,21 +2,20 @@
 	"credit": "Made with Blockbench :)",
 	"textures": {
 		"0": "backrooms:block/copper_pipe_middle",
-		"1": "backrooms:block/copper_pipe",
-		"particle": "backrooms:block/copper_pipe"
+		"1": "backrooms:block/copper_pipe"
 	},
 	"elements": [
 		{
-			"from": [3, 6, 6],
-			"to": [13, 10, 10],
+			"from": [4, 6, 6],
+			"to": [12, 10, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [3, 6, 13, 10], "texture": "#0"},
+				"north": {"uv": [4, 6, 12, 10], "texture": "#0"},
 				"east": {"uv": [0, 0, 4, 4], "texture": "#0"},
-				"south": {"uv": [3, 6, 13, 10], "texture": "#0"},
+				"south": {"uv": [4, 6, 12, 10], "texture": "#0"},
 				"west": {"uv": [0, 0, 4, 4], "texture": "#0"},
-				"up": {"uv": [3, 6, 13, 10], "texture": "#0"},
-				"down": {"uv": [3, 6, 13, 10], "texture": "#0"}
+				"up": {"uv": [4, 6, 12, 10], "texture": "#0"},
+				"down": {"uv": [4, 6, 12, 10], "texture": "#0"}
 			}
 		},
 		{

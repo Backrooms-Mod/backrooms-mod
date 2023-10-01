@@ -88,6 +88,7 @@
       "block.backrooms.orange_carpeting": "Оранжевый ковер",
       "block.backrooms.purple_carpeting": "Фиолетовый ковер",
       "block.backrooms.white_carpeting": "Белый ковер",
+      "block.backrooms.portal_block": "Портал",
 
       "effect.backrooms.rotten": "Гниющий",
       "effect.backrooms.ragged": "Опустошенный",
@@ -96,8 +97,8 @@
       "text.autoconfig.backrooms.option.disableStrongShaders": "Отключить сильные шейдеры",
       "text.autoconfig.backrooms.option.suffocationChance": "Шанс задохнуться",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Восстановление миндальным молоком",
-      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Секунды между следующими шагами цикла убогих",
-      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс заспавнится плесневелой плитке в багровых корридорах",
+      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "",
+      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс спавна плесневелой плитки в багровых корридорах",
 
       "text.autoconfig.backrooms.category.Gameplay": "Геймплей",
       "text.autoconfig.backrooms.category.default": "Обычные опции",
@@ -124,7 +125,7 @@
       "block.backrooms.colombina_mask": "Маска Колумбина",
       "block.backrooms.harlequin_mask": "Маска Арлекина",
       "block.backrooms.sock_buskin_mask": "Маска марионетки",
-      "block.backrooms.machinery_block": "Машина",
+      "block.backrooms.machinery": "Машина",
       "block.backrooms.roof_wiring": "Проводка",
       "container.backrooms.crate": "Ящик",
 

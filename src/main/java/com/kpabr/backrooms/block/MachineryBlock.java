@@ -26,7 +26,8 @@ public class MachineryBlock extends Block {
 	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
 		state = state.cycle(POWERED);
 		world.setBlockState(pos, state, 1, 0);
-		if((Boolean)state.get(POWERED)){
+
+		if(state.get(POWERED)){
 			for (int i = -14; i <= 14; i++) {
 				for (int j = 0; j <= 4; j++) {
 					for (int k = -14; k <= 14; k++) {

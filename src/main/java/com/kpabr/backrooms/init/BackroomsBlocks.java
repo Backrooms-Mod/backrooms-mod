@@ -152,6 +152,7 @@ public class BackroomsBlocks {
 	public static final Block PURPLE_CARPETING = add("purple_carpeting", new CarpetingBlock(DyeColor.PURPLE), ItemGroup.BUILDING_BLOCKS);
 	public static final Block WHITE_CARPETING = add("white_carpeting", new CarpetingBlock(DyeColor.WHITE), ItemGroup.BUILDING_BLOCKS);
 	public static final Block RED_CARPETING = add("red_carpeting", new CarpetingBlock(DyeColor.RED), ItemGroup.BUILDING_BLOCKS);
+	public static final Block PORTAL_BLOCK = add("portal_block", new PortalBlock(), ItemGroup.BUILDING_BLOCKS);
 	private static <T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
 		BLOCK_ENTITIES.add(new BlockEntityEntry(id, blockEntity));

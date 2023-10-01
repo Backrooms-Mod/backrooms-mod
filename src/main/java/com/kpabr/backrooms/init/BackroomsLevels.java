@@ -1,18 +1,11 @@
 package com.kpabr.backrooms.init;
-import static com.kpabr.backrooms.util.RegistryHelper.get;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
-import java.util.OptionalLong;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.world.biome.*;
-import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelTwoChunkGenerator;
 import com.kpabr.backrooms.world.chunk.LevelThreeChunkGenerator;
-import com.kpabr.backrooms.world.chunk.level0chunkgenerators.MegalophobiaChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelTwoChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import net.ludocrypt.limlib.api.LiminalEffects;
 import net.ludocrypt.limlib.api.LiminalWorld;
 import net.ludocrypt.limlib.api.render.LiminalBaseEffects;
@@ -27,6 +20,13 @@ import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionType;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
+import java.util.OptionalLong;
+
+import static com.kpabr.backrooms.util.RegistryHelper.get;
+
 public class BackroomsLevels {
     public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", DecrepitBiome.create());
     public static final RegistryKey<Biome> MEGALOPHOBIA_BIOME = get("megalophobia", MegalophobiaBiome.create());
@@ -40,10 +40,17 @@ public class BackroomsLevels {
     // Level 2 biomes
     public static final RegistryKey<Biome> PIPES_BIOME = get("pipes", PipesBiome.create());
     public static LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
+
+    // don't forget to change this variable or portal block won't work
+    public static final int LEVELS_AMOUNT = 4;
+
     public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
     public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
     public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, LevelTwoBiomeSource.class);
     public static final LiminalWorld LEVEL_3 = addLevel("level_3", LevelThreeChunkGenerator.class, Level3BiomeSource.class);
+
+
+
 
     public static void init() {
         Registry.register(Registry.BIOME_SOURCE, "level_0_biome_source", Level0BiomeSource.CODEC);
