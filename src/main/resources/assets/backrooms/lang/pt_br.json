@@ -73,10 +73,18 @@
       "block.backrooms.fake_carpet": "Carpete Falso",
       "block.backrooms.fake_ceiling": "Teto Falso",
       "block.backrooms.bedrock_bricks": "Tijolos de Bedrock",
-      "block.backrooms.fake_wall": "Parede Falsa",
+      "block.backrooms.fake_wall": "Parede Falsa"
+      "block.backrooms.plate_door": "Plate Door",
+      "block.backrooms.cracked_pipe": "Cano Rachado",
+      "block.backrooms.cracked_copper_pipe": "Cano de Cobre Rachado",
+
+
       "itemGroup.backrooms.items": "Backrooms",
+
       "entity.backrooms.hound": "Hound",
       "entity.backrooms.fire_salt_projectile": "Sal Flamenjante",
+      "entity.backrooms.wretch": "Wretch",
+
       "block.backrooms.black_carpeting": "Carpete Preto",
       "block.backrooms.red_carpeting": "Carpete Vermelho",
       "block.backrooms.pink_carpeting": "Carpete Rosa",
@@ -98,6 +106,7 @@
       "block.backrooms.sock_buskin_mask": "Mascara Tragédia e Comédia",
       "block.backrooms.machinery_block": "Bloco de Maquinaria",
       "block.backrooms.roof_wiring": "Fiação de Telhado",
+      "block.backrooms.portal_block": "Bloco de Portal",
 
       "container.backrooms.crate": "Caixote",
 
