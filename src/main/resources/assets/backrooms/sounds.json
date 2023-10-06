@@ -40,5 +40,47 @@
       "backrooms:mob/hound/death"
     ],
     "subtitle": "subtitles.entity.hound.death"
+  },
+  "block.pipe.break": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/break"
+    ],
+    "subtitle": "subtitles.block.pipe.break"
+  },
+  "block.pipe.hit": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/hit"
+    ],
+    "subtitle": "subtitles.block.pipe.hit"
+  },
+  "block.pipe.place": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/place"
+    ],
+    "subtitle": "subtitles.block.pipe.place"
+  },
+  "block.pipe.step": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/step"
+    ],
+    "subtitle": "subtitles.block.pipe.step"
+  },
+  "block.pipe.fall": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/step"
+    ],
+    "subtitle": "subtitles.block.pipe.fall"
+  },
+  "block.pipe.crack": {
+    "category": "block",
+    "sounds": [
+      "backrooms:block/pipe/break"
+    ],
+    "subtitle": "subtitles.block.pipe.crack"
   }
 }

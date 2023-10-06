@@ -36,6 +36,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.World;
 import com.kpabr.backrooms.block.AbstractPipeBlock;
+import com.kpabr.backrooms.init.BackroomsSounds;
 
 import java.util.Map;
 
@@ -57,7 +58,7 @@ public class PipeBlock extends AbstractPipeBlock{
 				));
 			}
 			world.setBlockState(pos, this.crackedPipe.getStateWithProperties(state), Block.FORCE_STATE, 0);
-			//player.playSound(BackroomsSounds.ITEM_AXE_STRIP, 0.5f, rand.nextFloat());
+			player.playSound(BackroomsSounds.BLOCK_PIPE_CRACK, 0.5f, rand.nextFloat());
 			return ActionResult.SUCCESS;
 		}
 		return ActionResult.FAIL;

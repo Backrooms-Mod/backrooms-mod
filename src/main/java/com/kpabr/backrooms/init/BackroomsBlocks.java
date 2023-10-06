@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 
 import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.sound.BackroomsSoundGroups;
 import com.kpabr.backrooms.block.*;
 import com.kpabr.backrooms.block.MaskBlock.MaskType;
 import com.kpabr.backrooms.block.entity.ComputerBlockEntity;
@@ -109,16 +110,16 @@ public class BackroomsBlocks {
 			new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRACKED_PIPE = add("cracked_pipe",
-			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY).sounds(BackroomsSoundGroups.PIPE)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRACKED_COPPER_PIPE = add("cracked_copper_pipe",
-			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
+			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.ORANGE).sounds(BackroomsSoundGroups.PIPE)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block PIPE = add("pipe",
-			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.GRAY), CRACKED_PIPE), ItemGroup.BUILDING_BLOCKS);
+			new PipeBlock(FabricBlockSettings.copyOf(CRACKED_PIPE), CRACKED_PIPE), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block COPPER_PIPE = add("copper_pipe",
-			new PipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque().mapColor(DyeColor.ORANGE), CRACKED_COPPER_PIPE), ItemGroup.BUILDING_BLOCKS);
+			new PipeBlock(FabricBlockSettings.copyOf(CRACKED_COPPER_PIPE), CRACKED_COPPER_PIPE), ItemGroup.BUILDING_BLOCKS);
 
 	public static final BlockEntityType<PyroilLineBlockEntity> PYROIL_LINE_BLOCK_ENTITY = add("pyroil",
 			FabricBlockEntityTypeBuilder.create(PyroilLineBlockEntity::new, PYROIL).build(null));
