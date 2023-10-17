@@ -12,22 +12,16 @@ public class BackroomsSounds {
     public static SoundEvent HOUND_ATTACK;
     public static SoundEvent HOUND_HURT;
     public static SoundEvent HOUND_DEATH;
-    public static SoundEvent BLOCK_PIPE_BREAK;
-    public static SoundEvent BLOCK_PIPE_STEP;
-    public static SoundEvent BLOCK_PIPE_PLACE;
-    public static SoundEvent BLOCK_PIPE_HIT;
-    public static SoundEvent BLOCK_PIPE_FALL;
-    public static SoundEvent BLOCK_PIPE_CRACK;
+    public static SoundEvent BLOCK_PIPE_BREAK = get("block.pipe.break");
+    public static SoundEvent BLOCK_PIPE_STEP = get("block.pipe.step");
+    public static SoundEvent BLOCK_PIPE_PLACE = get("block.pipe.place");
+    public static SoundEvent BLOCK_PIPE_HIT = get("block.pipe.hit");
+    public static SoundEvent BLOCK_PIPE_FALL = get("block.pipe.fall");
+    public static SoundEvent BLOCK_PIPE_CRACK = get("block.pipe.crack");;
 
     public static void init() {
         HUMBUZZ_LEVEL_0 = get("humbuzz");
         FIRESALT_LAND_EVENT = get("firesalt_land");
-        BLOCK_PIPE_BREAK = get("block.pipe.break");
-        BLOCK_PIPE_STEP = get("block.pipe.step");
-        BLOCK_PIPE_PLACE = get("block.pipe.place");
-        BLOCK_PIPE_HIT = get("block.pipe.hit");
-        BLOCK_PIPE_FALL = get("block.pipe.fall");
-        BLOCK_PIPE_CRACK = get("block.pipe.crack");
         initHoundSounds();
     }
 
