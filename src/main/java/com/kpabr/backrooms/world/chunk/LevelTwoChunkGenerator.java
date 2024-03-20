@@ -28,11 +28,16 @@ import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
@@ -517,12 +522,55 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
         return new LevelTwoChunkGenerator(this.biomeSource, seed);
     }
 
+
+
+    @Override
+    public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
+    }
+
+
+
+    @Override
+    public void carve(ChunkRegion chunkRegion, long seed, BiomeAccess biomeAccess, StructureAccessor structureAccessor,
+            Chunk chunk, Carver generationStep) {
+    }
+
+    @Override
+    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world) {
+        return null;
+    }
+
+    @Override
+    public void getDebugHudText(List<String> text, BlockPos pos) {
+    }
+
     @Override
     public int getMinimumY() {
         return FLOOR_Y - 1;
     }
 
     @Override
-    public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
+    public int getWorldHeight() {
+        return FLOOR_Y - 1;
+    }
+
+    @Override
+    public MultiNoiseSampler getMultiNoiseSampler() {
+        return null;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return 0;
+    }
+
+    @Override
+    public void populateEntities(ChunkRegion region) {
+    }
+
+    @Override
+    public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender,
+            StructureAccessor structureAccessor, Chunk chunk) {
+        return null;
     }
 }
