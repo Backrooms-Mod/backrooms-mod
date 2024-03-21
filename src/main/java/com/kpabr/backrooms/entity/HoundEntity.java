@@ -144,6 +144,15 @@ public class HoundEntity extends PathAwareEntity implements IAnimatable {
         return this.factory;
     }
 
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        if (source == DamageSource.HOT_FLOOR) {
+            return false;
+        }
+        return super.damage(source, amount);
+    }
+
+
     public enum AnimationEnum {
         IDLING((event) -> event.getController().setAnimation(
                 new AnimationBuilder().addAnimation("animation.hound.idle", true))),
