@@ -6,7 +6,6 @@ import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomStatusEffects;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -44,8 +43,7 @@ public class AlmondWaterItem extends Item {
 			user.removeStatusEffect(StatusEffects.WEAKNESS);
 			user.removeStatusEffect(StatusEffects.WITHER);
 
-			user.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1));
-			user.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 30, 0));
+			player.getHungerManager().add(8, 8.0f);
 
 			if(wretched.getValue() < 24 && wretched.getValue() + almondMilkRestoring >= 24) {
 				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
