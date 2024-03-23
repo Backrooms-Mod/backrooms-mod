@@ -12,7 +12,7 @@
         {
           "type": "minecraft:item",
           "weight": 5,
-          "name": "minecraft:iron_ingot",
+          "name": "minecraft:iron_nugget",
           "functions": [
             {
               "function": "minecraft:set_count",
