@@ -46,7 +46,7 @@ public class BackroomsLevels {
 
     public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
     public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
-    public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, LevelTwoBiomeSource.class);
+    public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, Level2BiomeSource.class);
     public static final LiminalWorld LEVEL_3 = addLevel("level_3", LevelThreeChunkGenerator.class, Level3BiomeSource.class);
 
 
@@ -55,7 +55,7 @@ public class BackroomsLevels {
     public static void init() {
         Registry.register(Registry.BIOME_SOURCE, "level_0_biome_source", Level0BiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, "level_1_biome_source", Level1BiomeSource.CODEC);
-        Registry.register(Registry.BIOME_SOURCE, "level_2_biome_source", LevelTwoBiomeSource.CODEC);
+        Registry.register(Registry.BIOME_SOURCE, "level_2_biome_source", Level2BiomeSource.CODEC);
         Registry.register(Registry.BIOME_SOURCE, "level_3_biome_source", Level3BiomeSource.CODEC);
         get("level_0_chunk_generator", LevelZeroChunkGenerator.CODEC);
         get("level_1_chunk_generator", LevelOneChunkGenerator.CODEC);
