@@ -92,10 +92,137 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
         // BackroomsBlocks.MOLDY_WOOLEN_CARPET -> random blocks(you can just replace them with carpet)
 
         final ChunkPos chunkPos = chunk.getPos();
+        final BlockPos biomePos = chunkPos.getBlockPos(4, 4, 4);
         //Save the starting x and z position of the chunk. Note: positive x means east, positive z means south.
         final int startX = chunkPos.getStartX();
         final int startZ = chunkPos.getStartZ();
 
+        if (isBiomeEquals(BackroomsLevels.MEGALOPHOBIA_BIOME, chunk, biomePos)) {
+            //Create 3 floors, top to bottom, because one Megalophobia floor equals 6 normal floors.
+        for (int y = 2; y >= 0; y--) {
+            //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
+            for (int x = 1; x >= 0; x--) {
+                for (int z = 1; z >= 0; z--) {
+                    //Make a Random object controlling the generation of the section.
+                    final Random random = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, x + 4 * z + 20 * y));
+                    //Decide the arrangement of the walls of the section. The two numbers with an F directly after them denote the probability of an eastern wall and a southern wall generating, respectively.
+                    final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
+
+                    //Check if the arrangement includes the eastern wall.
+                    // and create eastern wall if true
+                    if ((wallType & 1) == 1) {
+                        for(int i = 0; i < 7; i++){
+                            for(int j = 0; j < 10; j++) {
+                                for(int k = 0; k < 2; k++){
+                                    region.setBlockState(
+                                        new BlockPos(startX + x * 8 + 6 + k, 2 + 12 * y + j, startZ + z * 8 + i),
+                                        BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(),
+                                        Block.FORCE_STATE,
+                                        0);
+                                }
+                            }
+                        }
+                    }
+                    // Check if the arrangement includes the southern wall
+                    // and create southern wall if true
+                    if ((wallType & 2) == 2) {
+                        for(int i = 0; i < 7; i++){
+                            for(int j = 0; j < 10; j++){
+                                for(int k = 0; k < 2; k++){
+                                    region.setBlockState(
+                                        new BlockPos(startX + x * 8 + i, 2 + 12 * y + j, startZ + z * 8 + 6 + k),
+                                        BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(),
+                                        Block.FORCE_STATE,
+                                        0);
+                                }
+                            }
+                        }
+                    }
+                    // New variable controlling whether a pillar in generated.
+                    // If there's a wall in the current section, always create a pillar.
+                    boolean pillar = wallType != 0;
+
+                    //If you're on the southeasternmost spot on the chunk, always make a pillar.
+                    pillar = pillar || (x == 1 && z == 1);
+
+                    // Check if you're not on the eastern edge of the chunk. If you aren't, proceed.
+                    // Check one block east whether there's a wall there. If so, a pillar will always be generated.
+                    if(x != 1) {
+                        pillar = pillar ||
+                                !region.getBlockState(new BlockPos(startX + x * 8 + 8, 2 + 12 * y, startZ + z * 8 + 7)).isAir();
+                    }
+                    // Check if you're not on the southern edge of the chunk. If you aren't, proceed.
+                    if(z != 1) {
+                        // Check one block south whether there's a wall there. If so, a pillar will always be generated.
+                        pillar = pillar || !region.getBlockState(new BlockPos(startX + x * 8 + 7, 2 + 12 * y, startZ + z * 8 + 8)).isAir();
+                    }
+                    pillar = pillar || (random.nextFloat() < 0.2F); //Sometimes generate a pillar anyways, even if none of the previous conditions were met.
+                    if (pillar) {
+                        //Create the pillar.
+                        for (int i = 0; i < 10; i++) {
+                            for (int j = 0; j < 2; j++) {
+                                for (int k = 0; k < 2; k++) {
+                                    region.setBlockState(new BlockPos(startX + x * 8 + 6 + j, 2 + 12 * y + i, startZ + z * 8 + 6 + k), BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(), Block.FORCE_STATE, 0);
+                                }
+                            }
+                        }
+                    }
+                    // Generate the carpeting and the ceiling.
+                    for(int i = 0; i < 8; i++) {
+                        for(int j = 0; j < 8; j++){
+                            region.setBlockState(new BlockPos(startX + x * 8 + i, 1 + 12 * y, startZ + z * 8 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
+                            region.setBlockState(new BlockPos(startX + x * 8 + i, 12 + 12 * y, startZ + z * 8 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                        }
+                    }
+                    //Place a ceiling light.
+                    region.setBlockState(new BlockPos(startX + x * 8 + 2, 12 + 12 * y, startZ + z * 8 + 2), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
+                    region.setBlockState(new BlockPos(startX + x * 8 + 2, 12 + 12 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
+                    region.setBlockState(new BlockPos(startX + x * 8 + 3, 12 + 12 * y, startZ + z * 8 + 2), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
+                    region.setBlockState(new BlockPos(startX + x * 8 + 3, 12 + 12 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0);
+                }
+            }
+        }
+
+        //Mold placement code; will be subject to heavy revisions, so ignore for now.
+        for (int y = getFloorCount(); y >= 0; y--) {
+            final Random fullFloorRandom = new Random(region.getSeed()
+                    + MathHelper.hashCode(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
+
+            for(int i = 0 ; i < 300; i++){
+                final int x = fullFloorRandom.nextInt(16);
+                final int z = fullFloorRandom.nextInt(16);
+                int x2 = x + fullFloorRandom.nextInt(3) - 1;
+                int z2 = fullFloorRandom.nextInt(3) - 1;
+                if(region.getBlockState(new BlockPos(startX + x, 1 + 12 * y, startZ + z))
+                        == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()){
+                    if(x2 < 0) x2=0;
+                    else if(x2 > 15) x2=15;
+                    if(z2 < 0) z2=0;
+                    else if(z2 > 15) z2=15;
+                    if(fullFloorRandom.nextFloat() < 0.1F || region.getBlockState(new BlockPos(startX + x2, 1 + 12 * y, startZ + z2)) == BackroomsBlocks.CORK_TILE.getDefaultState()) {
+                        region.setBlockState(
+                                new BlockPos(startX + x, 1 + 12 * y, startZ + z),
+                                BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState(),
+                                Block.FORCE_STATE,
+                                0);
+                    }
+                }
+            }
+        }
+        // Place bedrock bricks at the bottom.
+        for (int x = startX; x < startX + 16; x++) {
+            for (int z = startZ; z < startZ + 16; z++) {
+                region.setBlockState(new BlockPos(x, 0, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+            }
+        }
+        // Place bedrock bricks at the roof of chunk
+        for (int x = startX; x < startX + 16; x++) {
+            for (int z = startZ; z < startZ + 16; z++) {
+                region.setBlockState(new BlockPos(x, ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+            }
+        }
+        return CompletableFuture.completedFuture(chunk);
+        } else {
         //Create 5 floors, top to bottom.
         for (int y = getFloorCount(); y >= 0; y--) {
             //Create 16 smaller sections of the floor, layed out in a 4x4 pattern. Each section will consist of the carpeting, the ceiling, two walls (located on the eastern and southern side of the section) and a pillar, located in the southeasternmost space.
@@ -270,7 +397,7 @@ public class LevelZeroChunkGenerator extends AbstractNbtChunkGenerator {
                 region.setBlockState(new BlockPos(x, ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
             }
         }
-        return CompletableFuture.completedFuture(chunk);
+        return CompletableFuture.completedFuture(chunk);}
     }
 
     public static int getFloorCount() {
