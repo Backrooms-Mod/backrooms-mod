@@ -28,17 +28,24 @@ import java.util.OptionalLong;
 import static com.kpabr.backrooms.util.RegistryHelper.get;
 
 public class BackroomsLevels {
+    // Level 0 biomes
     public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", DecrepitBiome.create());
     public static final RegistryKey<Biome> MEGALOPHOBIA_BIOME = get("megalophobia", MegalophobiaBiome.create());
-    public static final RegistryKey<Biome> LEVEL_ZERO_NORMAL_BIOME = get("normal_biome", LevelZeroNormalBiome.create());
+    public static final RegistryKey<Biome> YELLOW_WALLS_BIOME = get("yellow_walls", YellowHallsBiome.create());
     public static final RegistryKey<Biome> CRIMSON_WALLS_BIOME = get("crimson_walls", CrimsonHallsBiome.create());
+    
+    // Level 1 biomes
     public static final RegistryKey<Biome> CEMENT_WALLS_BIOME = get("cement_walls", CementHallsBiome.create());
     public static final RegistryKey<Biome> PARKING_GARAGE_BIOME = get("parking_garage", ParkingGarageBiome.create());
     public static final RegistryKey<Biome> WAREHOUSE_BIOME = get("warehouse", WarehouseBiome.create());
-    public static final RegistryKey<Biome> ELECTRICAL_STATION_BIOME = get("electrical_station", ElectricalStationBiome.create());
-
+    
     // Level 2 biomes
     public static final RegistryKey<Biome> PIPES_BIOME = get("pipes", PipesBiome.create());
+    
+    // Level 4 biomes
+    public static final RegistryKey<Biome> ELECTRICAL_STATION_BIOME = get("electrical_station", ElectricalStationBiome.create());
+
+
     public static LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
 
     // don't forget to change this variable or portal block won't work

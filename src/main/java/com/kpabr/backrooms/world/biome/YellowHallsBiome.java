@@ -5,7 +5,7 @@ import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 
-public class LevelZeroNormalBiome {
+public class YellowHallsBiome {
     public static Biome create() {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();

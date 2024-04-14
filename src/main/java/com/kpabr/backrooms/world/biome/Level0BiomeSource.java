@@ -25,7 +25,7 @@ public class Level0BiomeSource extends BaseBiomeSource {
                 .addBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, 0.3)
                 .addBiome(BackroomsLevels.DECREPIT_BIOME, 0.4)
                 .addBiome(BackroomsLevels.MEGALOPHOBIA_BIOME, 0.3)
-                .addBiome(BackroomsLevels.LEVEL_ZERO_NORMAL_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
+                .addBiome(BackroomsLevels.YELLOW_WALLS_BIOME, BiomeRegistryList.DEFAULT_CHANCE_VALUE)
         );
     }
 
