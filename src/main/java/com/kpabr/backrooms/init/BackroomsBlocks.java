@@ -106,7 +106,7 @@ public class BackroomsBlocks {
 					.create(MaskBlockEntity::new, HARLEQUIN_MASK, COLOMBINA_MASK, SOCK_BUSKIN_MASK)
 					.build(null));
 	public static final Block PYROIL = add("pyroil",
-			new Pyroil(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
+			new PyroilLineBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_WIRE).nonOpaque().mapColor(DyeColor.ORANGE)), ItemGroup.BUILDING_BLOCKS);
 
 	public static final Block CRACKED_PIPE = add("cracked_pipe",
 			new CrackedPipeBlock(FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()), ItemGroup.BUILDING_BLOCKS);
