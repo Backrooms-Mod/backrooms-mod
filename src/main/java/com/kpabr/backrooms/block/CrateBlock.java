@@ -7,7 +7,10 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
@@ -20,15 +23,19 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
+
 import org.jetbrains.annotations.Nullable;
 
-public class CrateBlock extends BlockWithEntity {
+public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty OPEN;
+    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public CrateBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(OPEN, false));
+        this.setDefaultState(this.stateManager.getDefaultState().with(OPEN, false).with(WATERLOGGED, false));
     }
 
     @Override
@@ -73,6 +80,27 @@ public class CrateBlock extends BlockWithEntity {
         return new CrateBlockEntity(pos, state);
     }
 
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        return (BlockState)this.getDefaultState()
+            .with(OPEN, false)
+            .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+    }
+
+     @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+    }
+   
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        if (state.get(WATERLOGGED)) {
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        }
+ 
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
+    }
+    
     public BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
@@ -96,7 +124,7 @@ public class CrateBlock extends BlockWithEntity {
     }
 
     protected void appendProperties(Builder<Block, BlockState> builder) {
-        builder.add(OPEN);
+        builder.add(OPEN, WATERLOGGED);
     }
 
     static {
