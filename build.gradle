@@ -45,16 +45,16 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "io.github.ladysnake:satin:${satin_version}"
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.51'
+	modImplementation "software.bernie.geckolib:geckolib-fabric-1.18:${geckolib_version}"
 
 
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 
-	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.config_version}"
+	modImplementation "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 	modImplementation "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
 
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:4.1.4"
-	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:4.1.4"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cardinal_components_version}"
+	modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cardinal_components_version}"
 
 	include "com.github.LudoCrypt:Liminal-Library:${project.limlib_version}"
 	// Includes Cardinal Components API as a Jar-in-Jar dependency (optional)

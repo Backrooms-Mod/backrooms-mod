@@ -12,22 +12,22 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 
 import java.util.stream.Stream;
 
-public class LevelTwoBiomeSource extends BiomeSource {
-    public static final Codec<LevelTwoBiomeSource> CODEC = RecordCodecBuilder.create((instance) ->
+public class Level2BiomeSource extends BiomeSource {
+    public static final Codec<Level2BiomeSource> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
                     RegistryOps.createRegistryCodec(Registry.BIOME_KEY)
                             .forGetter((biomeSource) -> biomeSource.BIOME_REGISTRY),
                     Codec.LONG.fieldOf("seed")
                             .stable()
                             .forGetter((biomeSource) -> biomeSource.seed)
-            ).apply(instance, instance.stable(LevelTwoBiomeSource::new)));
+            ).apply(instance, instance.stable(Level2BiomeSource::new)));
 
 
     private final long seed;
     protected Registry<Biome> BIOME_REGISTRY;
     private final RegistryEntry<Biome> PIPES_BIOME;
 
-    public LevelTwoBiomeSource(Registry<Biome> registry, long seed) {
+    public Level2BiomeSource(Registry<Biome> registry, long seed) {
         super(Stream.of(
                 registry.getOrCreateEntry(BackroomsLevels.PIPES_BIOME)));
         PIPES_BIOME = registry.getOrCreateEntry(BackroomsLevels.PIPES_BIOME);
@@ -40,11 +40,11 @@ public class LevelTwoBiomeSource extends BiomeSource {
     }
 
     public BiomeSource withSeed(long seed) {
-        return new LevelTwoBiomeSource(BIOME_REGISTRY, seed);
+        return new Level2BiomeSource(BIOME_REGISTRY, seed);
     }
 
     @Override
-    protected Codec<LevelTwoBiomeSource> getCodec() {
+    protected Codec<Level2BiomeSource> getCodec() {
         return CODEC;
     }
 }
