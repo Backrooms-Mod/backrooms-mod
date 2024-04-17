@@ -114,6 +114,7 @@
       "effect.backrooms.ragged": "Ragged",
       "effect.backrooms.wretched": "Wretched",
 
+      "text.autoconfig.backrooms.title": "Configure The Backrooms",
       "text.autoconfig.backrooms.option.disableStrongShaders": "Disable strong shaders",
       "text.autoconfig.backrooms.option.suffocationChance": "Suffocation chance",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Almond milk decreasing the wretched meter",
@@ -125,6 +126,13 @@
       "text.autoconfig.backrooms.category.default": "Default",
       "text.autoconfig.backrooms.category.Render": "Client",
       "text.autoconfig.backrooms.category.Miscellaneous": "Miscellaneous",
+
+      "gamerule.category.backrooms_category": "Backrooms",
+      
+      "gamerule.respawn": "Respawn",
+      "gamerule.respawn.natural": "Natural",
+      "gamerule.respawn.in_current_level": "In current Level",
+      "gamerule.respawn.in_level_zero": "In Level 0",
 
       "subtitles.entity.hound.idle": "Hound growls",
       "subtitles.entity.hound.attack": "Hound attacks",

@@ -4,6 +4,7 @@ package com.kpabr.backrooms;
 import com.kpabr.backrooms.client.render.sky.StrongLiminalShader;
 import com.kpabr.backrooms.component.WretchedComponent;
 import com.kpabr.backrooms.config.BackroomsConfig;
+import com.kpabr.backrooms.config.BackroomsGamerules;
 import com.kpabr.backrooms.init.*;
 import name.trimsky.lib_ai.LibAI;
 import name.trimsky.lib_ai.example.LibAIMod;
@@ -34,6 +35,7 @@ public class BackroomsMod implements ModInitializer {
 		LibAI.initialize();
 
 		BackroomsConfig.init();
+		BackroomsGamerules.init();
 		BackroomsSounds.init();
 		BackroomsParticles.init();
 		BackroomStatusEffects.init();
@@ -56,7 +58,7 @@ public class BackroomsMod implements ModInitializer {
                     applyWretchedCycle(player);
 				}
 			}
-		});
+        });
 	}
 
 	public static Identifier id(String name) {
