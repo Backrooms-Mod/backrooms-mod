@@ -66,7 +66,7 @@ Other versions may work, but it is not guaranteed.
 
 ### Settings
 
-You can change some settings. In Mod Menu, click in the Backrooms and open the configuration screen.
+You can change some settings. In Mod Menu, click on the Backrooms and open the configuration screen.
 
 
 ## Building and Running
