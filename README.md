@@ -61,6 +61,7 @@ The Backrooms mod depends on some other mods and libraries. You must install the
 - Mod Menu (3.2.5)
 - Satin API (1.7.2) (there is no 1.18.2 version, so we use 1.18.1 version)
 - Geckolib (3.0.80)
+
 Other versions may work, but it is not guaranteed.
 
 ### Settings
