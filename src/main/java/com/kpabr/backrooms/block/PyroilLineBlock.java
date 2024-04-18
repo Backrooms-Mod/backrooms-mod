@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Random;
 
 
-public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
+public class PyroilLineBlock extends BlockWithEntity implements BlockEntityProvider {
     private static final EnumProperty<WireConnection> WIRE_CONNECTION_NORTH = Properties.NORTH_WIRE_CONNECTION;
     private static final EnumProperty<WireConnection> WIRE_CONNECTION_EAST = Properties.EAST_WIRE_CONNECTION;
     private static final EnumProperty<WireConnection> WIRE_CONNECTION_SOUTH = Properties.SOUTH_WIRE_CONNECTION;
@@ -63,7 +63,7 @@ public class Pyroil extends BlockWithEntity implements BlockEntityProvider {
     private final BlockState dotState;
     public static final VoxelShape DOT_SHAPE = Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 13.0);
 
-    public Pyroil(Settings settings) {
+    public PyroilLineBlock(Settings settings) {
         super(settings);
         this.setDefaultState(stateManager.getDefaultState()
                 .with(WIRE_CONNECTION_NORTH, WireConnection.NONE)

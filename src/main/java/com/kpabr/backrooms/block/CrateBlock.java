@@ -31,7 +31,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrateBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty OPEN;
-    public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
+    public static final BooleanProperty WATERLOGGED;
 
     public CrateBlock(Settings settings) {
         super(settings);
@@ -82,9 +82,11 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
+        
+      FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         return (BlockState)this.getDefaultState()
             .with(OPEN, false)
-            .with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).isOf(Fluids.WATER));
+            .with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
 
      @Override
@@ -123,11 +125,13 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos));
     }
 
+    @Override
     protected void appendProperties(Builder<Block, BlockState> builder) {
         builder.add(OPEN, WATERLOGGED);
     }
 
     static {
         OPEN = Properties.OPEN;
+        WATERLOGGED = Properties.WATERLOGGED;
     }
 }
