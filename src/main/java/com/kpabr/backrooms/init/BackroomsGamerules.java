@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.config;
+package com.kpabr.backrooms.init;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
