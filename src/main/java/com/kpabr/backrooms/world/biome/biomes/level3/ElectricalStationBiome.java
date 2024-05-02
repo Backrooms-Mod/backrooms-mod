@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.world.biome;
+package com.kpabr.backrooms.world.biome.biomes.level3;
 
 import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.init.BackroomsSounds;

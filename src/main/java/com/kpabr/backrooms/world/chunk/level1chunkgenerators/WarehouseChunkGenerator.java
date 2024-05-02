@@ -3,16 +3,17 @@ package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsBlocks;
+import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.init.BackroomsLootTables;
+import com.kpabr.backrooms.util.NbtPlacerUtilNew;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.ludocrypt.limlib.api.LiminalUtil;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.block.enums.RailShape;
+import net.ludocrypt.limlib.api.LiminalUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -44,18 +45,23 @@ import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.VerticalBlockSample;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.Function;
 
-public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
+public class WarehouseChunkGenerator extends ChunkGenerator {
     public static final Codec<WarehouseChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
          instance.group(
                  BiomeSource.CODEC.fieldOf("biome_source")
@@ -79,8 +85,12 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     };
     private final long worldSeed;
     private static final int ROOF_BEGIN_Y = 6 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
+
+    private final HashMap<String, NbtPlacerUtilNew> loadedStructures = new HashMap<String, NbtPlacerUtilNew>(30);
+    private Identifier nbtId = BackroomsMod.id("level_1");
+    
     public WarehouseChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
+        super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed);
         this.worldSeed = worldSeed;
     }
 
@@ -94,7 +104,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+    public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, StructureAccessor structureAccessor, Chunk chunk) {
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
         // If you're adding new type of structure then don't use blocks other than described below from our mod!
@@ -112,6 +122,10 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         // Create 5 floors, top to bottom.
         final int floorCount = LevelOneChunkGenerator.getFloorCount();
 
+        if (this.loadedStructures.isEmpty()) {
+            storeStructures(BackroomsLevels.LEVEL_1_WORLD);
+        }
+
         // Create 4 smaller sections of the floor, layed out in a 2x2 pattern.
         // (located on the eastern and southern side of the section) and a pillar,
         // located in the southeasternmost space.
@@ -119,18 +133,18 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
             for (int x = 1; x >= 0; x--) {
                 for (int z = 1; z >= 0; z--) {
                     //Make a Random object controlling the generation of the section.
-                    final Random random = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ, x + 4 * z + 20 * y));
+                    final Random random = new Random(worldSeed + MathHelper.hashCode(startX, startZ, x + 4 * z + 20 * y));
                     // Decide the arrangement of the walls of the section.
                     // The two numbers with an F directly after them denote the probability of
                     // an eastern wall and a southern wall generating, respectively.
                     final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
                     final int shelfType = 4 * (random.nextFloat() < 0.7F ? random.nextInt(4) + 1 : 0) + random.nextInt(3);
                     //Same for the eastern adjacent section.
-                    final Random eastRandom = new Random(region.getSeed() + MathHelper.hashCode(startX + x * 16, startZ, (1 - x) + 4 * z + 20 * y));
+                    final Random eastRandom = new Random(worldSeed + MathHelper.hashCode(startX + x * 16, startZ, (1 - x) + 4 * z + 20 * y));
                     final int eastWallType = (eastRandom.nextFloat() < 0.4F ? 1 : 0) + (eastRandom.nextFloat() < 0.4F ? 2 : 0);
                     final int eastShelfType = 4 * (eastRandom.nextFloat() < 0.7F ? eastRandom.nextInt(4) + 1 : 0) + eastRandom.nextInt(3);
                     //Same for the southern adjacent section.
-                    final Random southRandom = new Random(region.getSeed() + MathHelper.hashCode(startX, startZ + z * 16, x + 4 * (1 - z) + 20 * y));
+                    final Random southRandom = new Random(worldSeed + MathHelper.hashCode(startX, startZ + z * 16, x + 4 * (1 - z) + 20 * y));
                     final int southWallType = (southRandom.nextFloat() < 0.4F ? 1 : 0) + (southRandom.nextFloat() < 0.4F ? 2 : 0);
                     final int southShelfType = 4 * (southRandom.nextFloat() < 0.7F ? southRandom.nextInt(4) + 1 : 0) + southRandom.nextInt(3);
                     // Check if the arrangement includes the eastern wall
@@ -138,7 +152,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if ((wallType & 1) == 1) {
                         for(int i = 0; i < 7; i++){
                             for(int j = 0; j < 6; j++){
-                                region.setBlockState(new BlockPos(startX + x * 8 + 7 , 2 + 8 * y + j, startZ + z * 8 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                                chunk.setBlockState(new BlockPos(startX + x * 8 + 7 , 2 + 8 * y + j, startZ + z * 8 + i), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), false);
                             }
                         }
                     }
@@ -147,14 +161,14 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                     if ((wallType & 2) == 2) {
                         for(int i = 0; i < 7; i++){
                             for(int j = 0; j < 6; j++){
-                                region.setBlockState(new BlockPos(startX + x * 8 + i, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                                chunk.setBlockState(new BlockPos(startX + x * 8 + i, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), false);
                             }
                         }
                     }
                     // Create the pillar.
                     if ((wallType & 1) + (wallType & 2) / 2 + (southWallType & 1) + (eastWallType & 2) / 2 > 0) {
                         for (int j = 0; j < 6; j++){
-                            region.setBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), Block.FORCE_STATE, 0);
+                            chunk.setBlockState(new BlockPos(startX + x * 8 + 7, 2 + 8 * y + j, startZ + z * 8 + 7), BackroomsBlocks.CEMENT_BRICKS.getDefaultState(), false);
                         }
                     }
                     if(shelfType - (shelfType & 3) != 0){
@@ -166,27 +180,27 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                             default -> BlockRotation.CLOCKWISE_180;
                         };
                         //BackroomsMod.LOGGER.info(dir +" & " + rotation);
-                        generateNbt(region, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_" + ((shelfType & 3) + 4), rotation); //Actually generate the shelf.
-                        //commented former code: generateNbt(region, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_5", BlockRotation.NONE);
+                        generateNbt(chunk, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_" + ((shelfType & 3) + 4), rotation); //Actually generate the shelf.
+                        //commented former code: generateNbt(chunk, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8), "warehouse_5", BlockRotation.NONE);
                     }
                     //Generate the edges of the shelves.
                     if((wallType & 1) == 0) {
-                        shelfEdge(region, new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 6), Direction.EAST, 1, shelfType, eastShelfType);
-                        shelfEdge(region, new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8), Direction.EAST, 3, shelfType, eastShelfType);
+                        shelfEdge(chunk, new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8 + 6), Direction.EAST, 1, shelfType, eastShelfType);
+                        shelfEdge(chunk, new BlockPos(startX + x * 8 + 7, 2 + 8 * y, startZ + z * 8), Direction.EAST, 3, shelfType, eastShelfType);
                     }
                     if((wallType & 2) == 0) {
-                        shelfEdge(region, new BlockPos(startX + x * 8 + 6, 2 + 8 * y, startZ + z * 8 + 7), Direction.SOUTH, 0, shelfType, southShelfType);
-                        shelfEdge(region, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8 + 7), Direction.SOUTH, 2, shelfType, southShelfType);
+                        shelfEdge(chunk, new BlockPos(startX + x * 8 + 6, 2 + 8 * y, startZ + z * 8 + 7), Direction.SOUTH, 0, shelfType, southShelfType);
+                        shelfEdge(chunk, new BlockPos(startX + x * 8, 2 + 8 * y, startZ + z * 8 + 7), Direction.SOUTH, 2, shelfType, southShelfType);
                     }
                     // blockState.with(FACING, direction)
                     // Generate the carpeting and the ceiling.
                     for(int i = 0; i < 8; i++){
                         for(int j = 0; j < 8; j++){
-                            region.setBlockState(new BlockPos(startX + x * 8 + i, 1 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), Block.FORCE_STATE, 0);
-                            region.setBlockState(new BlockPos(startX + x * 8 + i, 8 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), Block.FORCE_STATE, 0);
+                            chunk.setBlockState(new BlockPos(startX + x * 8 + i, 1 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), false);
+                            chunk.setBlockState(new BlockPos(startX + x * 8 + i, 8 + 8 * y, startZ + z * 8 + j), BackroomsBlocks.CORK_TILE.getDefaultState(), false);
                             for(int k = 0; k < 6; k++){
                                 final BlockPos pos = new BlockPos(startX + x * 8 + i, 2 + 8 * y + k, startZ + z * 8 + j);
-                                final BlockState state = region.getBlockState(pos);
+                                final BlockState state = chunk.getBlockState(pos);
                                 if (state.isOf(Blocks.GOLD_BLOCK)) {
                                     final int blockType = random.nextInt(11);
                                     Block chosenBlock;
@@ -201,80 +215,81 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
                                     }
 
                                     if(chosenBlock == Blocks.STONE_BUTTON || chosenBlock == Blocks.LEVER) {
-                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.FLOOR).with(WallMountedBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.FLOOR).with(WallMountedBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), false);
                                     }
                                     else if(chosenBlock == Blocks.FLOWER_POT) {
-                                        region.setBlockState(pos, validPots[random.nextInt(validPots.length)].getDefaultState(), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, validPots[random.nextInt(validPots.length)].getDefaultState(), false);
                                     }
                                     else if(chosenBlock == Blocks.WHITE_CONCRETE_POWDER) {
-                                        region.setBlockState(pos, validConcretePowder[random.nextInt(validConcretePowder.length)].getDefaultState(), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, validConcretePowder[random.nextInt(validConcretePowder.length)].getDefaultState(), false);
                                     }
                                     else if(chosenBlock == BackroomsBlocks.FIRESALT_CRYSTAL) {
-                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(FiresaltCrystalBlock.FACING, Direction.UP), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState().with(FiresaltCrystalBlock.FACING, Direction.UP), false);
                                     }
                                     else if(chosenBlock == Blocks.CANDLE) {
-                                        region.setBlockState(pos, validCandles[random.nextInt(validCandles.length)].getDefaultState().with(CandleBlock.LIT, true).with(CandleBlock.CANDLES, random.nextInt(4) + 1), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, validCandles[random.nextInt(validCandles.length)].getDefaultState().with(CandleBlock.LIT, true).with(CandleBlock.CANDLES, random.nextInt(4) + 1), false);
                                     }
                                     else if(chosenBlock == Blocks.REPEATER || chosenBlock == Blocks.COMPARATOR || chosenBlock == Blocks.FURNACE) {
-                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState().with(HorizontalFacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), false);
                                     }
                                     else if(chosenBlock == Blocks.PISTON || chosenBlock == Blocks.OBSERVER){
-                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(FacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState().with(FacingBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), false);
                                     }
                                     else if(chosenBlock == Blocks.RAIL){
-                                        region.setBlockState(pos, rails[random.nextInt(2)], Block.FORCE_STATE, 0);
+                                        chunk.setBlockState(pos, rails[random.nextInt(2)], false);
                                     }
                                     else if(chosenBlock == Blocks.SKELETON_SKULL || chosenBlock == Blocks.ZOMBIE_HEAD){
-                                        region.setBlockState(pos, chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), 0);
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), false);
                                     }
                                     else if(chosenBlock == BackroomsBlocks.CRATE){
-                                        region.setBlockState(pos, chosenBlock.getDefaultState(), 0);
-                                        if (region.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
-                                            lootTable.setLootTable(this.getBarrelLootTable(), region.getSeed() + MathHelper.hashCode(pos));
+                                        chunk.setBlockState(pos, chosenBlock.getDefaultState(), false);
+                                        if (chunk.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
+                                            lootTable.setLootTable(this.getBarrelLootTable(), worldSeed + MathHelper.hashCode(pos));
                                         }
                                     }
                                     else{
-                                        replace(region, chosenBlock, chunk, pos);
+                                        replace(chunk, chosenBlock, chunk, pos);
                                     }
                                 }
                             }
                         }
                     }
                     //Place a ceiling light at the correct height.
-                    region.setBlockState(new BlockPos(startX + x * 8 + 3, 8 + 8 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), Block.FORCE_STATE, 0); //Place a ceiling light.
+                    chunk.setBlockState(new BlockPos(startX + x * 8 + 3, 8 + 8 * y, startZ + z * 8 + 3), BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState(), false); //Place a ceiling light.
                 }
             }
         }
         return CompletableFuture.completedFuture(chunk);
     }
 
-    @Override
+    protected Identifier getBarrelLootTable() {
+        return BackroomsLootTables.CRATE;
+    }
+    
     public void storeStructures(ServerWorld world) {
         store("warehouse", world, 4, 6); //Makes it so the shelves can be used while generating
         store("warehouse_sliver", world, 4, 6);
     }
 
-    @Override
-    protected void modifyStructure(ChunkRegion region, BlockPos pos, BlockState state, NbtCompound nbt) {
-        if(!state.isAir()) {
-            if (state.isOf(Blocks.BARRIER)) {
-                region.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL, 1);
-            } else {
-                region.setBlockState(pos, state, Block.NOTIFY_ALL, 1);
-            }
-        }
-    }
+    private void store(String id, ServerWorld world) {
+		loadedStructures.put(id, NbtPlacerUtilNew.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
+	}
 
-    @Override
-    public int chunkRadius() {
-        return 1;
-    }
+	private void store(String id, ServerWorld world, int from, int to) {
+		for (int i = from; i <= to; i++) {
+			store(id + "_" + i, world);
+		}
+	}
 
-
-    @Override
-    protected Identifier getBarrelLootTable() {
-        return BackroomsLootTables.CRATE;
-    }
+    private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
+		if (!state.isAir()) {
+			if (state.isOf(Blocks.BARRIER)) {
+				region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
+			} else {
+				region.setBlockState(pos, state, true);
+			}
+		}
+	}
 
     @Override
     public int getWorldHeight() {
@@ -286,20 +301,25 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         return world.getTopY();
     }
 
+    private void replace(Chunk region, Block block, Chunk chunk, BlockPos pos) {
+        final BlockState oldState = chunk.setBlockState(pos, block.getDefaultState(), false);
+        BackroomsLevels.LEVEL_1_WORLD.onBlockChanged(pos, oldState, block.getDefaultState());
+    }
+
     private void replace(ChunkRegion region, Block block, Chunk chunk, BlockPos pos) {
         final BlockState oldState = chunk.setBlockState(pos, block.getDefaultState(), false);
         region.toServerWorld().onBlockChanged(pos, oldState, block.getDefaultState());
     }
 
-    private void shelfEdge(ChunkRegion region, BlockPos pos, Direction direction, int shelfDirection, int shelfType, int adjacentShelfType) {
+    private void shelfEdge(Chunk region, BlockPos pos, Direction direction, int shelfDirection, int shelfType, int adjacentShelfType) {
         if ((shelfType - (shelfType & 3)) / 4 - 1 == shelfDirection) {
             for (int j = 0; j < (shelfType & 3) + 4; j++) {
-                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
+                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction).with(TrapdoorBlock.OPEN, true), false);
             }
             if((adjacentShelfType - (adjacentShelfType & 3)) / 4 - 1 == shelfDirection) {
                 if ((adjacentShelfType & 3) != (shelfType & 3)){
                     for (int j = 0; j < 6; j++) {
-                        region.setBlockState(pos.add(new BlockPos(0,j,0)), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), Block.FORCE_STATE, 0);
+                        region.setBlockState(pos.add(new BlockPos(0,j,0)), BackroomsBlocks.CEMENT_PILLAR.getDefaultState(), false);
                     }
                 }
                 else{
@@ -309,7 +329,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
         }
         else if((adjacentShelfType - (adjacentShelfType & 3)) / 4 - 1 == shelfDirection){
             for (int j = 0; j < (adjacentShelfType & 3) + 4; j++) {
-                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction.getOpposite()).with(TrapdoorBlock.OPEN, true), Block.FORCE_STATE, 0);
+                region.setBlockState(pos.add(new BlockPos(0,j,0)), Blocks.OAK_TRAPDOOR.getDefaultState().with(TrapdoorBlock.FACING, direction.getOpposite()).with(TrapdoorBlock.OPEN, true), false);
             }
         }
     }
@@ -317,7 +337,7 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         final ChunkPos chunkPos = chunk.getPos();
-        final Random random = new Random(region.getSeed() + MathHelper.hashCode(chunkPos.getStartX(), chunkPos.getStartZ(),0));
+        final Random random = new Random(worldSeed + MathHelper.hashCode(chunkPos.getStartX(), chunkPos.getStartZ(),0));
         // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -344,5 +364,43 @@ public class WarehouseChunkGenerator extends AbstractNbtChunkGenerator {
     public interface PentaConsumer<K, V, S, T, I> {
         void accept(K k, V v, S s, T t, I i);
     }
+
+    private void generateNbt(Chunk region, BlockPos at, String id) {
+		generateNbt(region, at, id, BlockRotation.NONE);
+	}
+
+	private void generateNbt(Chunk region, BlockPos at, String id, BlockRotation rotation) {
+		loadedStructures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
+	}
+
+    @Override
+    public void carve(ChunkRegion chunkRegion, long seed, BiomeAccess biomeAccess, StructureAccessor structureAccessor,
+            Chunk chunk, Carver generationStep) {}
+
+    @Override
+    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world) {
+        return new VerticalBlockSample(0, new BlockState[0]);
+    }
+
+    @Override
+    public void getDebugHudText(List<String> text, BlockPos pos) {}
+
+    @Override
+    public int getMinimumY() {
+        return 0;
+    }
+
+    @Override
+    public MultiNoiseSampler getMultiNoiseSampler() {
+        return null;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return 0;
+    }
+
+    @Override
+    public void populateEntities(ChunkRegion region) {}
 
 }

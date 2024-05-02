@@ -1,0 +1,9 @@
+{
+    "generator": {
+      "type": "backrooms:level_0",
+      "biome_source": {
+        "type": "backrooms:level_0_biome_source"
+      }
+    },
+    "type": "backrooms:level_0_type"
+  }

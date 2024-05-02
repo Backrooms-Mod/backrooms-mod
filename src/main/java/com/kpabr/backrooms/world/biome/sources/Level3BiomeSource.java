@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.world.biome;
+package com.kpabr.backrooms.world.biome.sources;
 
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.mojang.serialization.Codec;

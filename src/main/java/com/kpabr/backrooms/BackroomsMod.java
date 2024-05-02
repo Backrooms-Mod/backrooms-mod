@@ -44,6 +44,7 @@ public class BackroomsMod implements ModInitializer {
 		BackroomsItems.init();
 		BackroomsEntities.init();
 		BackroomsLevels.init();
+		
 		Registry.register(LimlibRegistries.LIMINAL_SHADER_APPLIER, id("strong_simple_shader"), StrongLiminalShader.CODEC);
 		LOGGER.info("Backrooms mod was loaded!");
 		// registering every tick event

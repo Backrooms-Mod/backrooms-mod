@@ -1,33 +1,53 @@
 package com.kpabr.backrooms.init;
 
-import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.LevelOneChunkGenerator;
+import com.kpabr.backrooms.LevelThreeChunkGenerator;
+import com.kpabr.backrooms.LevelTwoChunkGenerator;
+import com.kpabr.backrooms.LevelZeroChunkGenerator;
 import com.kpabr.backrooms.world.biome.*;
-import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelThreeChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelTwoChunkGenerator;
-import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
-import net.ludocrypt.limlib.api.LiminalEffects;
-import net.ludocrypt.limlib.api.LiminalWorld;
-import net.ludocrypt.limlib.api.render.LiminalBaseEffects;
-import net.ludocrypt.limlib.api.sound.ReverbSettings;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
-import net.minecraft.tag.TagKey;
+import com.kpabr.backrooms.world.biome.biomes.level0.CrimsonHallsBiome;
+import com.kpabr.backrooms.world.biome.biomes.level0.DecrepitBiome;
+import com.kpabr.backrooms.world.biome.biomes.level0.MegalophobiaBiome;
+import com.kpabr.backrooms.world.biome.biomes.level0.YellowHallsBiome;
+import com.kpabr.backrooms.world.biome.biomes.level1.CementHallsBiome;
+import com.kpabr.backrooms.world.biome.biomes.level1.ParkingGarageBiome;
+import com.kpabr.backrooms.world.biome.biomes.level1.WarehouseBiome;
+import com.kpabr.backrooms.world.biome.biomes.level2.PipesBiome;
+import com.kpabr.backrooms.world.biome.biomes.level3.ElectricalStationBiome;
+import com.kpabr.backrooms.world.biome.sources.LevelOneBiomeSource;
+import com.kpabr.backrooms.world.biome.sources.LevelThreeBiomeSource;
+import com.kpabr.backrooms.world.biome.sources.LevelTwoBiomeSource;
+import com.kpabr.backrooms.world.biome.sources.LevelZeroBiomeSource;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.block.Blocks;
+import net.minecraft.command.CommandException;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.TeleportTarget;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.dimension.DimensionOptions;
-import net.minecraft.world.dimension.DimensionType;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Optional;
-import java.util.OptionalLong;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 import static com.kpabr.backrooms.util.RegistryHelper.get;
+import static net.minecraft.server.command.CommandManager.literal;
 
 public class BackroomsLevels {
+
     // Level 0 biomes
     public static final RegistryKey<Biome> DECREPIT_BIOME = get("decrepit", DecrepitBiome.create());
     public static final RegistryKey<Biome> MEGALOPHOBIA_BIOME = get("megalophobia", MegalophobiaBiome.create());
@@ -46,55 +66,114 @@ public class BackroomsLevels {
     public static final RegistryKey<Biome> ELECTRICAL_STATION_BIOME = get("electrical_station", ElectricalStationBiome.create());
 
 
-    public static LiminalEffects DEFAULT_LEVEL_EFFECTS = new LiminalEffects(Optional.of(new LiminalBaseEffects.SimpleBaseEffects(Optional.empty(), false, "NONE", true, false, true)), Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(new ReverbSettings().setDecayTime(2.15F).setDensity(0.725F)));
+    // Levels/Dimensions
+    // The dimension options refer to the JSON-file in the dimension subfolder of the datapack,
+	// which will always share it's ID with the world that is created from it
+	public static final RegistryKey<DimensionOptions> LEVEL_0_DIMENSION_KEY = RegistryKey.of(
+        Registry.DIMENSION_KEY,
+        new Identifier("backrooms", "level_0")
+    );
+    public static RegistryKey<World> LEVEL_0_WORLD_KEY = RegistryKey.of(
+        Registry.WORLD_KEY,
+        LEVEL_0_DIMENSION_KEY.getValue()
+    );
+
+    public static final RegistryKey<DimensionOptions> LEVEL_1_DIMENSION_KEY = RegistryKey.of(
+        Registry.DIMENSION_KEY,
+        new Identifier("backrooms", "level_1")
+    );
+    public static RegistryKey<World> LEVEL_1_WORLD_KEY = RegistryKey.of(
+        Registry.WORLD_KEY,
+        LEVEL_1_DIMENSION_KEY.getValue()
+    );
+
+    public static final RegistryKey<DimensionOptions> LEVEL_2_DIMENSION_KEY = RegistryKey.of(
+        Registry.DIMENSION_KEY,
+        new Identifier("backrooms", "level_2")
+    );
+    public static RegistryKey<World> LEVEL_2_WORLD_KEY = RegistryKey.of(
+        Registry.WORLD_KEY,
+        LEVEL_2_DIMENSION_KEY.getValue()
+    );
+
+    public static final RegistryKey<DimensionOptions> LEVEL_3_DIMENSION_KEY = RegistryKey.of(
+        Registry.DIMENSION_KEY,
+        new Identifier("backrooms", "level_3")
+    );
+    public static RegistryKey<World> LEVEL_3_WORLD_KEY = RegistryKey.of(
+        Registry.WORLD_KEY,
+        LEVEL_3_DIMENSION_KEY.getValue()
+    );
 
     // don't forget to change this variable or portal block won't work
     public static final int LEVELS_AMOUNT = 4;
 
-    public static final LiminalWorld LEVEL_0 = addLevel("level_0", LevelZeroChunkGenerator.class, Level0BiomeSource.class);
-    public static final LiminalWorld LEVEL_1 = addLevel("level_1", LevelOneChunkGenerator.class, Level1BiomeSource.class);
-    public static final LiminalWorld LEVEL_2 = addLevel("level_2", LevelTwoChunkGenerator.class, Level2BiomeSource.class);
-    public static final LiminalWorld LEVEL_3 = addLevel("level_3", LevelThreeChunkGenerator.class, Level3BiomeSource.class);
-
-
-
+    // ServerWorlds for getting seed and NBT resources
+	public static ServerWorld LEVEL_0_WORLD;
+	public static ServerWorld LEVEL_1_WORLD;
+	public static ServerWorld LEVEL_2_WORLD;
+	public static ServerWorld LEVEL_3_WORLD;
 
     public static void init() {
-        Registry.register(Registry.BIOME_SOURCE, "level_0_biome_source", Level0BiomeSource.CODEC);
-        Registry.register(Registry.BIOME_SOURCE, "level_1_biome_source", Level1BiomeSource.CODEC);
-        Registry.register(Registry.BIOME_SOURCE, "level_2_biome_source", Level2BiomeSource.CODEC);
-        Registry.register(Registry.BIOME_SOURCE, "level_3_biome_source", Level3BiomeSource.CODEC);
-        get("level_0_chunk_generator", LevelZeroChunkGenerator.CODEC);
-        get("level_1_chunk_generator", LevelOneChunkGenerator.CODEC);
-        get("level_2_chunk_generator", LevelTwoChunkGenerator.CODEC);
-        get("level_3_chunk_generator", LevelThreeChunkGenerator.CODEC);
+        addLevel("backrooms", "level_0", "level_0_biome_source",  LevelZeroChunkGenerator.CODEC, LevelZeroBiomeSource.CODEC);
+        addLevel("backrooms", "level_1", "level_1_biome_source",  LevelOneChunkGenerator.CODEC, LevelOneBiomeSource.CODEC);
+        addLevel("backrooms", "level_2", "level_2_biome_source",  LevelTwoChunkGenerator.CODEC, LevelTwoBiomeSource.CODEC);
+        addLevel("backrooms", "level_3", "level_3_biome_source",  LevelThreeChunkGenerator.CODEC, LevelThreeBiomeSource.CODEC);
+
+
+        ServerLifecycleEvents.SERVER_STARTED.register(server -> {
+			LEVEL_0_WORLD = server.getWorld(LEVEL_0_WORLD_KEY);
+			LEVEL_1_WORLD = server.getWorld(LEVEL_1_WORLD_KEY);
+			LEVEL_2_WORLD = server.getWorld(LEVEL_2_WORLD_KEY);
+			LEVEL_3_WORLD = server.getWorld(LEVEL_3_WORLD_KEY);
+        });
+
+        // only for debug, remove // TODO
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+				dispatcher.register(literal("tp0").executes(context -> { 
+                    return debugTeleport(context, LEVEL_0_WORLD_KEY);
+                })));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+				dispatcher.register(literal("tp1").executes(context -> { 
+                    return debugTeleport(context, LEVEL_1_WORLD_KEY);
+                })));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+				dispatcher.register(literal("tp2").executes(context -> { 
+                    return debugTeleport(context, LEVEL_2_WORLD_KEY);
+                })));
+        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+				dispatcher.register(literal("tp3").executes(context -> { 
+                    return debugTeleport(context, LEVEL_3_WORLD_KEY);
+                })));
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> LiminalWorld addLevel(String name, Class<T> chunkGenerator, Class<S> biomeSource) {
-        return addLevelWithEffects(name, chunkGenerator, biomeSource, DEFAULT_LEVEL_EFFECTS);
+    public static RegistryKey<World> addLevel(String namespace, String levelName, String biomeSourceName, Codec<? extends ChunkGenerator> chunkGenerator, Codec<? extends BiomeSource> biomeSource) {
+        Registry.register(Registry.BIOME_SOURCE, new Identifier(namespace, biomeSourceName), biomeSource);
+		Registry.register(Registry.CHUNK_GENERATOR, new Identifier(namespace, levelName), chunkGenerator);
+        return RegistryKey.of(Registry.WORLD_KEY, new Identifier(namespace, levelName));
     }
 
-    public static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> LiminalWorld addLevelWithEffects(String name, Class<T> chunkGenerator, Class<S> biomeSource, LiminalEffects effects) {
-        final Identifier levelId = BackroomsMod.id(name);
+    // only for debug, remove
+    private static int debugTeleport(CommandContext<ServerCommandSource> context, RegistryKey<World> level) throws CommandSyntaxException {
+        ServerPlayerEntity player = context.getSource().getPlayer();
+		ServerWorld serverWorld = player.getWorld();
+		ServerWorld targetWorld = context.getSource().getServer().getWorld(level);
 
-        // Messy wrapper
-        return get(levelId, new LiminalWorld(levelId, DimensionType.create(OptionalLong.of(23500), true, false, false, true, 1.0, false, false, true, false, false, 0, 128, 128, TagKey.of(Registry.BLOCK_KEY, levelId), levelId, /*0.075F*/0.000F),
-                (world, dimensionTypeRegistry, biomeRegistry, structureRegistry, chunkGeneratorSettingsRegistry, noiseSettingsRegistry, registryManager, seed) ->
-                        new DimensionOptions(
-                                dimensionTypeRegistry.getOrCreateEntry(world.getDimensionTypeKey()),
-                                createChunkGenerator(chunkGenerator, biomeSource, biomeRegistry, seed)
-                        ),
-                effects));
-    }
+		if (serverWorld != targetWorld) {
+			TeleportTarget target = new TeleportTarget(new Vec3d(0.5, 101, 0.5), Vec3d.ZERO, 0, 0);
+			FabricDimensions.teleport(player, targetWorld, target);
 
-    // Creating chunk generator for registerLevel in runtime.
-    private static<T extends AbstractNbtChunkGenerator, S extends BiomeSource> T createChunkGenerator(Class<T> chunkGeneratorClass, Class<S> biomeSourceClass, Registry<Biome> registry, long seed) {
-        try {
-            Constructor<T> chunkGeneratorConstructor = chunkGeneratorClass.getConstructor(BiomeSource.class, long.class);
-            Constructor<S> biomeSourceConstructor = biomeSourceClass.getConstructor(Registry.class, long.class);
-            return chunkGeneratorConstructor.newInstance(biomeSourceConstructor.newInstance(registry, seed), seed);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
+			if (player.world != targetWorld) {
+				throw new CommandException(new LiteralText("Teleportation failed!"));
+			}
+
+			targetWorld.setBlockState(new BlockPos(0, 100, 0), Blocks.DIAMOND_BLOCK.getDefaultState());
+			targetWorld.setBlockState(new BlockPos(0, 101, 0), Blocks.TORCH.getDefaultState());
+		} else {
+			TeleportTarget target = new TeleportTarget(new Vec3d(0, 100, 0), Vec3d.ZERO,
+					(float) Math.random() * 360 - 180, (float) Math.random() * 360 - 180);
+			FabricDimensions.teleport(player, context.getSource().getServer().getWorld(World.OVERWORLD), target);
+		}
+		return 1;
     }
 }

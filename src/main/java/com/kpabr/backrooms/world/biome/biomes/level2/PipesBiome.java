@@ -1,26 +1,24 @@
-package com.kpabr.backrooms.world.biome;
+package com.kpabr.backrooms.world.biome.biomes.level2;
 
-import com.kpabr.backrooms.init.BackroomsEntities;
-import net.minecraft.entity.SpawnGroup;
+import com.kpabr.backrooms.util.Color;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 
-public class WarehouseBiome {
+public class PipesBiome {
     public static Biome create() {
-        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder()
-            .spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
+        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
-
         BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
-                .skyColor(10921378)
-                .waterColor(10921378)
-                .waterFogColor(10921378)
-                .fogColor(10921378)
+                .skyColor(Color.of(36, 36, 36))
+                .waterColor(13548960)
+                .waterFogColor(13548960)
+                .fogColor(Color.of(36, 36, 36))
                 .grassColor(13818488);
+                //TODO: make loop sound for level two;
 
-        // Configure warehouse biome
+        // Configure level 2 default biome
         Biome.Builder biome = new Biome.Builder()
                 .spawnSettings(spawnSettings.build())
                 .generationSettings(generationSettings.build())
@@ -29,9 +27,10 @@ public class WarehouseBiome {
                 .precipitation(Biome.Precipitation.NONE)
                 .category(Biome.Category.NONE)
 
-                .temperature(0.8F)
-                .downfall(1.0F);
+                .temperature(15.0F)
+                .downfall(0.0F);
 
         return biome.build();
     }
+
 }

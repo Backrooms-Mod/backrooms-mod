@@ -1,4 +1,4 @@
-package com.kpabr.backrooms.world.biome;
+package com.kpabr.backrooms.world.biome.biomes.level1;
 
 import com.kpabr.backrooms.init.BackroomsEntities;
 import com.kpabr.backrooms.init.BackroomsSounds;
@@ -8,26 +8,24 @@ import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 
-public class CrimsonHallsBiome {
+public class CementHallsBiome {
     public static Biome create() {
-        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
-        spawnSettings.spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
+        SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder()
+                .spawn(SpawnGroup.CREATURE, new SpawnSettings.SpawnEntry(BackroomsEntities.HOUND, 100, 1, 1));
 
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
 
-        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder();
-        biomeEffects.skyColor(13776695);
-        biomeEffects.waterColor(13548960);
-        biomeEffects.waterFogColor(16735821);
-        biomeEffects.fogColor(11548232);
-        biomeEffects.loopSound(BackroomsSounds.HUMBUZZ_LEVEL_0);
-        BiomeEffects effects = biomeEffects.build();
+        BiomeEffects.Builder biomeEffects = new BiomeEffects.Builder()
+                .skyColor(10921378)
+                .waterColor(10921378)
+                .waterFogColor(10921378)
+                .fogColor(10921378)
+                .grassColor(13818488);
 
-        // Configure crimson halls biome
         Biome.Builder biome = new Biome.Builder()
                 .spawnSettings(spawnSettings.build())
                 .generationSettings(generationSettings.build())
-                .effects(effects)
+                .effects(biomeEffects.build())
 
                 .precipitation(Biome.Precipitation.NONE)
                 .category(Biome.Category.NONE)
