@@ -6,19 +6,14 @@ import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.NbtPlacerUtilNew;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ChunkHolder.Unloaded;
-import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -26,17 +21,14 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.Blender;
@@ -49,7 +41,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
 public class CementHallsChunkGenerator extends ChunkGenerator {
     public static final Codec<CementHallsChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
@@ -325,10 +316,6 @@ public class CementHallsChunkGenerator extends ChunkGenerator {
 		}
 	}
 
-    private void generateNbt(Chunk region, BlockPos at, String id) {
-		generateNbt(region, at, id, BlockRotation.NONE);
-	}
-
 	private void generateNbt(Chunk region, BlockPos at, String id, BlockRotation rotation) {
 		loadedStructures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
 	}
@@ -342,10 +329,6 @@ public class CementHallsChunkGenerator extends ChunkGenerator {
 			}
 		}
 	}
-
-    private boolean isBiomeEquals(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
-        return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
-    }
 
     @Override
     public void carve(ChunkRegion chunkRegion, long seed, BiomeAccess biomeAccess, StructureAccessor structureAccessor,

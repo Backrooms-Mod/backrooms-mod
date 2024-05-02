@@ -5,64 +5,65 @@ import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import com.kpabr.backrooms.block.FluorescentLightBlock;
 import com.kpabr.backrooms.block.PipeBlock;
 import com.kpabr.backrooms.init.BackroomsBlocks;
+import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.ChunkType;
-import com.mojang.datafixers.util.Either;
+import com.kpabr.backrooms.util.NbtPlacerUtilNew;
+import com.kpabr.backrooms.world.biome.sources.LevelTwoBiomeSource;
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.ludocrypt.limlib.api.LiminalUtil;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
 import net.minecraft.block.*;
-import net.minecraft.server.world.ChunkHolder;
-import net.minecraft.server.world.ServerLightingProvider;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
+import net.minecraft.structure.StructureSet;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.dynamic.RegistryOps;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.SimplexNoiseSampler;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 import net.minecraft.world.ChunkRegion;
 import net.minecraft.world.HeightLimitView;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeAccess;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.Blender;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
-public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
-    // TODO: Discuss BiomeSource, especially about BiomeSource in constructor,
-    // TODO: because we know type of BiomeSource for every chunk generator
-
+public class LevelTwoChunkGenerator extends ChunkGenerator {
+    
+    
     public static final Codec<LevelTwoChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    BiomeSource.CODEC.fieldOf("biome_source")
-                            .stable()
-                            .forGetter((chunkGenerator) -> chunkGenerator.biomeSource),
-                    Codec.LONG.fieldOf("seed")
-                            .stable()
-                            .forGetter((chunkGenerator) -> chunkGenerator.seed)
-            ).apply(instance, instance.stable(LevelTwoChunkGenerator::new)));
+			method_41042(instance).and(
+				RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((generator) -> generator.biomeRegistry)
+			)
+			.apply(instance, instance.stable(LevelTwoChunkGenerator::new))
+	);
 
-    private final long seed;
+    
+    private final Registry<Biome> biomeRegistry;
+    private final HashMap<String, NbtPlacerUtilNew> loadedStructures = new HashMap<String, NbtPlacerUtilNew>(30);
+    private Identifier nbtId = BackroomsMod.id("level_2");
+
     private final static int ROOF_Y = 15;
     private final static int FLOOR_Y = 1;
-    private final SimplexNoiseSampler xPlaneNoise;
-    private final SimplexNoiseSampler zPlaneNoise;
-    private final AtomicSimpleRandom random;
+    private SimplexNoiseSampler xPlaneNoise;
+    private SimplexNoiseSampler zPlaneNoise;
+    private AtomicSimpleRandom random;
     private final static BlockState fluorescentLightOn = BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState().with(FluorescentLightBlock.LIT, true);
     private final static BlockState fluorescentLightOff = BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState().with(FluorescentLightBlock.LIT, false);
     private final static BlockState firesaltWestWallState = BackroomsBlocks.FIRESALT_CRYSTAL.getDefaultState()
@@ -84,17 +85,24 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
             .with(PipeBlock.NORTH, false)
             .with(PipeBlock.SOUTH, false);
 
-    public LevelTwoChunkGenerator(BiomeSource biomeSource, long seed) {
-        super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, seed, BackroomsMod.id("level_2"), LiminalUtil.createMultiNoiseSampler());
-        this.seed = seed;
-        random = new AtomicSimpleRandom(seed);
-        final ChunkRandom planeRandom = new ChunkRandom(new AtomicSimpleRandom(seed));
-        this.xPlaneNoise = new SimplexNoiseSampler(planeRandom);
-        this.zPlaneNoise = new SimplexNoiseSampler(planeRandom);
+    public LevelTwoChunkGenerator(Registry<StructureSet> registry, Registry<Biome> biomeRegistry) {
+        super(registry, Optional.empty(), new LevelTwoBiomeSource(biomeRegistry));
+        this.biomeRegistry = biomeRegistry;
     }
 
     @Override
-    public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, ChunkHolder.Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+    public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, StructureAccessor structureAccessor, Chunk chunk) {
+        if (this.random == null) {
+            this.random = new AtomicSimpleRandom(BackroomsLevels.LEVEL_2_WORLD.getSeed());
+            final ChunkRandom planeRandom = new ChunkRandom(new AtomicSimpleRandom(BackroomsLevels.LEVEL_2_WORLD.getSeed()));
+        this.xPlaneNoise = new SimplexNoiseSampler(planeRandom);
+        this.zPlaneNoise = new SimplexNoiseSampler(planeRandom);
+        }
+
+        if (this.loadedStructures.isEmpty()) {
+            storeStructures(BackroomsLevels.LEVEL_2_WORLD);
+        }
+
         final ChunkPos pos = chunk.getPos();
 
         final var biome = getBiome(pos);
@@ -121,56 +129,56 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
             if (isClosestToSpawnEastWestChunkCorridor && isClosestToSpawnNorthSouthChunkCorridor) {
                 // Generate intersection between two corridors
                 if((eastWestChunkBiome == ChunkType.HOT_PIPES || northSouthChunkBiome == ChunkType.HOT_PIPES) && random.nextBetween(0, 5) == 1) {
-                    generateNbt(region, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "hot_corridors_intersection");
+                    generateNbt(chunk, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "hot_corridors_intersection");
                 } else if((eastWestChunkBiome == ChunkType.COLD_PIPES || northSouthChunkBiome == ChunkType.COLD_PIPES) && random.nextBetween(0, 5) == 1) {
-                    generateNbt(region, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "cold_corridors_intersection");
+                    generateNbt(chunk, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "cold_corridors_intersection");
                 } else {
-                    generateNbt(region, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridors_intersection");
+                    generateNbt(chunk, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridors_intersection");
                 }
 
                 // Generate 4 random lights
-                fillRectZX(region, chunk, pos, 1, 2, 4, 7, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 1, 2, 4, 7, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
-                fillRectZX(region, chunk, pos, 1, 2, 11, 7, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 1, 2, 11, 7, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
-                fillRectZX(region, chunk, pos, 2, 1, 7, 4, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 2, 1, 7, 4, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
-                fillRectZX(region, chunk, pos, 2, 1, 7, 11, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 2, 1, 7, 11, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
 
                 // Fill empty space with light gray terracotta
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 3, 5, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 2, 3, 3, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 3, 5, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 2, 3, 3, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 3, 5, 13, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 2, 3, 11, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 3, 5, 13, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 2, 3, 11, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 3, 5, 0, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 2, 3, 3, 13, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 3, 5, 0, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 2, 3, 3, 13, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 3, 5, 13, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 2, 3, 11, 13, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 3, 5, 13, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 2, 3, 11, 13, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
 
             }
             else if (isClosestToSpawnEastWestChunkCorridor) {
-                generateNbt(region, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridor", BlockRotation.CLOCKWISE_90);
+                generateNbt(chunk, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridor", BlockRotation.CLOCKWISE_90);
 
                 // Generate walls
                 for (int i = 1; i <= 2; i++) {
-                    fillRectZX(region, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 4, wallBlock);
-                    fillRectZX(region, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 5, wallBlock);
-                    fillRectZX(region, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 6, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 4, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 5, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 16, 1, 0, 5 * i, FLOOR_Y + 6, wallBlock);
                 }
 
                 // Generate lights on roof
-                fillRectZX(region, chunk, pos, 3, 1, 2, 7, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 3, 1, 2, 7, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
-                fillRectZX(region, chunk, pos, 3, 1, 11, 7, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 3, 1, 11, 7, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
 
                 // Generate hot and cold pipes biomes features(magma and ice)
@@ -179,11 +187,11 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int z = 7; z <= 9; z++) {
                         for (int x = 0; x < 16; x++) {
                             if(random.nextBetween(0, 5) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 1, Blocks.PACKED_ICE);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 1, Blocks.PACKED_ICE);
                                 if(random.nextBetween(0, 8) == 1) {
-                                    setBlock(region, chunk, x, z, FLOOR_Y + 2, Blocks.PACKED_ICE);
+                                    setBlock(chunk, chunk, x, z, FLOOR_Y + 2, Blocks.PACKED_ICE);
                                     if(random.nextBetween(0, 8) == 1) {
-                                        setBlock(region, chunk, x, z, FLOOR_Y + 3, Blocks.PACKED_ICE);
+                                        setBlock(chunk, chunk, x, z, FLOOR_Y + 3, Blocks.PACKED_ICE);
                                     }
                                 }
                             }
@@ -192,14 +200,14 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     // Generate on wall
                     for (int x = 0; x < 16; x++) {
                         if(random.nextBetween(0, 5) == 1) {
-                            setBlock(region, chunk, x, 5, FLOOR_Y + 5, Blocks.PACKED_ICE);
+                            setBlock(chunk, chunk, x, 5, FLOOR_Y + 5, Blocks.PACKED_ICE);
                         }
                     }
                     // Generate on roof
                     for (int z = 7; z <= 9; z++) {
                         for (int x = 0; x < 16; x++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 7, Blocks.PACKED_ICE);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 7, Blocks.PACKED_ICE);
                             }
                         }
                     }
@@ -208,16 +216,16 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int z = 7; z <= 9; z++) {
                         for (int x = 0; x < 16; x++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 1, Blocks.MAGMA_BLOCK);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 1, Blocks.MAGMA_BLOCK);
                             }
                         }
                     }
                     // Generate on wall
                     for (int x = 0; x < 16; x++) {
                         if(random.nextBetween(0, 10) == 1) {
-                            setBlock(region, chunk, x, 5, FLOOR_Y + 5, Blocks.MAGMA_BLOCK);
+                            setBlock(chunk, chunk, x, 5, FLOOR_Y + 5, Blocks.MAGMA_BLOCK);
                             if(random.nextBetween(0, 4) == 1) {
-                                setBlock(region, chunk, x, 6, FLOOR_Y + 5, firesaltNorthWallState);
+                                setBlock(chunk, chunk, x, 6, FLOOR_Y + 5, firesaltNorthWallState);
                             }
                         }
                     }
@@ -225,7 +233,7 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int z = 7; z <= 9; z++) {
                         for (int x = 0; x < 16; x++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 7, Blocks.MAGMA_BLOCK);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 7, Blocks.MAGMA_BLOCK);
                             }
                         }
                     }
@@ -234,48 +242,48 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                 // Generate pipes upon corridor
                 for (int x = 0; x <= 1; x++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
-                        setBlock(region, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
+                        setBlock(chunk, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
+                        setBlock(chunk, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
                     }
                 }
                 for (int x = 5; x <= 10; x++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
-                        setBlock(region, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
+                        setBlock(chunk, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
+                        setBlock(chunk, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
                     }
                 }
                 for (int x = 14; x <= 15; x++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
-                        setBlock(region, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
-                        setBlock(region, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
+                        setBlock(chunk, chunk, x, 6, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.SOUTH, true));
+                        setBlock(chunk, chunk, x, 7, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 8, FLOOR_Y + 6, pipeNorthSouthState);
+                        setBlock(chunk, chunk, x, 9, FLOOR_Y + 6, pipeWestEastState.with(PipeBlock.NORTH, true));
                     }
                 }
 
                 // Fill empty space with light gray terracotta
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 16, 5, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 16, 5, 0, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 16, 5, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 16, 5, 0, 11, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
             }
             else if (isClosestToSpawnNorthSouthChunkCorridor) {
-                generateNbt(region, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridor");
+                generateNbt(chunk, new BlockPos(pos.getStartX(), FLOOR_Y + 1, pos.getStartZ()), "corridor");
                 // Generate walls
                 for (int i = 1; i <= 2; i++) {
-                    fillRectZX(region, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 4, wallBlock);
-                    fillRectZX(region, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 5, wallBlock);
-                    fillRectZX(region, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 6, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 4, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 5, wallBlock);
+                    fillRectZX(chunk, chunk, pos, 1, 16, 5 * i, 0, FLOOR_Y + 6, wallBlock);
                 }
 
                 // Generate lights on roof
-                fillRectZX(region, chunk, pos, 1, 3, 7, 2, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 1, 3, 7, 2, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
-                fillRectZX(region, chunk, pos, 1, 3, 7, 11, FLOOR_Y + 7,
+                fillRectZX(chunk, chunk, pos, 1, 3, 7, 11, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
 
                 // Generate hot and cold pipes biomes features(magma and ice)
@@ -284,11 +292,11 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int x = 7; x <= 9; x++) {
                         for (int z = 0; z < 16; z++) {
                             if(random.nextBetween(0, 5) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 1, Blocks.PACKED_ICE);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 1, Blocks.PACKED_ICE);
                                 if(random.nextBetween(0, 8) == 1) {
-                                    setBlock(region, chunk, x, z, FLOOR_Y + 2, Blocks.PACKED_ICE);
+                                    setBlock(chunk, chunk, x, z, FLOOR_Y + 2, Blocks.PACKED_ICE);
                                     if(random.nextBetween(0, 8) == 1) {
-                                        setBlock(region, chunk, x, z, FLOOR_Y + 3, Blocks.PACKED_ICE);
+                                        setBlock(chunk, chunk, x, z, FLOOR_Y + 3, Blocks.PACKED_ICE);
                                     }
                                 }
                             }
@@ -297,14 +305,14 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     // Generate on wall
                     for (int z = 0; z < 16; z++) {
                         if(random.nextBetween(0, 5) == 1) {
-                            setBlock(region, chunk, 5, z, FLOOR_Y + 5, Blocks.PACKED_ICE);
+                            setBlock(chunk, chunk, 5, z, FLOOR_Y + 5, Blocks.PACKED_ICE);
                         }
                     }
                     // Generate on roof
                     for (int x = 7; x <= 9; x++) {
                         for (int z = 0; z < 16; z++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 7, Blocks.PACKED_ICE);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 7, Blocks.PACKED_ICE);
                             }
                         }
                     }
@@ -313,16 +321,16 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int x = 7; x <= 9; x++) {
                         for (int z = 0; z < 16; z++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 1, Blocks.MAGMA_BLOCK);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 1, Blocks.MAGMA_BLOCK);
                             }
                         }
                     }
                     // Generate on wall
                     for (int z = 0; z < 16; z++) {
                         if(random.nextBetween(0, 10) == 1) {
-                            setBlock(region, chunk, 5, z, FLOOR_Y + 5, Blocks.MAGMA_BLOCK);
+                            setBlock(chunk, chunk, 5, z, FLOOR_Y + 5, Blocks.MAGMA_BLOCK);
                             if(random.nextBetween(0, 4) == 1) {
-                                setBlock(region, chunk, 6, z, FLOOR_Y + 5, firesaltWestWallState);
+                                setBlock(chunk, chunk, 6, z, FLOOR_Y + 5, firesaltWestWallState);
                             }
                         }
                     }
@@ -330,7 +338,7 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                     for (int x = 7; x <= 9; x++) {
                         for (int z = 0; z < 16; z++) {
                             if(random.nextBetween(0, 8) == 1) {
-                                setBlock(region, chunk, x, z, FLOOR_Y + 7, Blocks.MAGMA_BLOCK);
+                                setBlock(chunk, chunk, x, z, FLOOR_Y + 7, Blocks.MAGMA_BLOCK);
                             }
                         }
                     }
@@ -339,52 +347,54 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
                 // Generate pipes upon corridor
                 for (int z = 0; z <= 1; z++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
-                        setBlock(region, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
+                        setBlock(chunk, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
+                        setBlock(chunk, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
                     }
                 }
                 for (int z = 5; z <= 10; z++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
-                        setBlock(region, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
+                        setBlock(chunk, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
+                        setBlock(chunk, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
                     }
                 }
                 for (int z = 14; z <= 15; z++) {
                     if(random.nextBetween(0, 6) == 1) {
-                        setBlock(region, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
-                        setBlock(region, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
-                        setBlock(region, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
+                        setBlock(chunk, chunk, 6, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.EAST, true));
+                        setBlock(chunk, chunk, 7, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 8, z, FLOOR_Y + 6, pipeWestEastState);
+                        setBlock(chunk, chunk, 9, z, FLOOR_Y + 6, pipeNorthSouthState.with(PipeBlock.WEST, true));
                     }
                 }
 
                 // Fill empty space with light gray terracotta
                 for (int i = 1; i <= 7; i++) {
-                    fillRectZX(region, chunk, pos, 5, 16, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
-                    fillRectZX(region, chunk, pos, 5, 16, 11, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 5, 16, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                    fillRectZX(chunk, chunk, pos, 5, 16, 11, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
                 }
             }
         }
         else {
             for(int i = 1; i <= 7; i++) {
-                fillRectZX(region, chunk, pos, 16, 16, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
+                fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
             }
         }
-        fillRectZX(region, chunk, pos, 16, 16, 0, 0, FLOOR_Y, BackroomsBlocks.BEDROCK_BRICKS);
+        fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y, BackroomsBlocks.BEDROCK_BRICKS);
         return CompletableFuture.completedFuture(chunk);
     }
 
-    @Override
     public void storeStructures(ServerWorld world) {
         store("corridors_intersection", world);
         store("hot_corridors_intersection", world);
         store("cold_corridors_intersection", world);
         store("corridor", world);
     }
+    private void store(String id, ServerWorld world) {
+		loadedStructures.put(id, NbtPlacerUtilNew.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
+	}
 
     @Override
     public int getHeight(int var1, int var2, Heightmap.Type var3, HeightLimitView var4) {
@@ -455,17 +465,14 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
         return ChunkType.EMPTY;
     }
 
-    private void setBlock(ChunkRegion region, Chunk chunk, int alignX, int alignZ, int y, final Block block) {
+    private void setBlock(Chunk region, Chunk chunk, int alignX, int alignZ, int y, final Block block) {
         setBlock(region, chunk, alignX, alignZ, y, block.getDefaultState());
     }
-    private void setBlock(ChunkRegion region, Chunk chunk, int alignX, int alignZ, int y, BlockState state) {
+    private void setBlock(Chunk region, Chunk chunk, int alignX, int alignZ, int y, BlockState state) {
         setBlockState(region, chunk, state,
                 new BlockPos(chunk.getPos().getStartX() + alignX, y, chunk.getPos().getStartZ() + alignZ));
     }
-    private void fillRectZX(ChunkRegion region, Chunk chunk, ChunkPos pos, int sizeX, int sizeZ, int alignX, int alignZ, int y) {
-        fillRectZX(region, chunk, pos, sizeX, sizeZ, alignX, alignZ, y, Blocks.AIR);
-    }
-    private void fillRectZX(ChunkRegion region, Chunk chunk, ChunkPos pos, int sizeX, int sizeZ, int alignX, int alignZ, int y, final Block block) {
+    private void fillRectZX(Chunk region, Chunk chunk, ChunkPos pos, int sizeX, int sizeZ, int alignX, int alignZ, int y, final Block block) {
         fillRectZX(region, chunk, pos, sizeX, sizeZ, alignX, alignZ, y, block.getDefaultState());
     }
     private boolean isPipesBiome(ChunkType biome) {
@@ -475,7 +482,7 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
         return getChunkType(chunk);
     }
 
-    private void fillRectZX(ChunkRegion region, Chunk chunk, ChunkPos pos, int sizeX, int sizeZ, int alignX, int alignZ, int y, BlockState state) {
+    private void fillRectZX(Chunk region, Chunk chunk, ChunkPos pos, int sizeX, int sizeZ, int alignX, int alignZ, int y, BlockState state) {
         for(int i = 0; i < sizeX; i++) {
             for(int j = 0; j < sizeZ; j++) {
                 setBlockState(region, chunk, state,
@@ -488,23 +495,11 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
      * Fabulously optimized setBlockState function, don't use it if you aren't sure,
      * that old block state is AIR and your block isn't BlockEntity
      */
-    private void setBlockState(ChunkRegion region, Chunk chunk, BlockState state, BlockPos pos) {
+    private void setBlockState(Chunk region, Chunk chunk, BlockState state, BlockPos pos) {
         final BlockState blockState = chunk.setBlockState(pos, state, false);
         if(blockState != null) {
-            region.toServerWorld().onBlockChanged(pos, blockState, state);
+            BackroomsLevels.LEVEL_2_WORLD.onBlockChanged(pos, blockState, state);
         }
-    }
-
-
-    private boolean isChunkDirectionEastOrWest(ChunkRegion region, ChunkPos pos) {
-        final Random random = new Random(region.getSeed() + MathHelper.hashCode(pos.getStartX(), 0, pos.getStartZ()));
-        final Direction dir = Direction.fromHorizontal(random.nextInt(4));
-        return dir == Direction.EAST || dir == Direction.WEST;
-    }
-    private boolean isChunkDirectionNorthOrSouth(ChunkRegion region, ChunkPos pos) {
-        final Random random = new Random(region.getSeed() + MathHelper.hashCode(pos.getStartX(), 0, pos.getStartZ()));
-        final Direction dir = Direction.fromHorizontal(random.nextInt(4));
-        return dir == Direction.NORTH || dir == Direction.SOUTH;
     }
 
     @Override
@@ -514,7 +509,7 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
 
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new LevelTwoChunkGenerator(this.biomeSource, seed);
+        return this;
     }
 
     @Override
@@ -525,4 +520,52 @@ public class LevelTwoChunkGenerator extends AbstractNbtChunkGenerator {
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
     }
+
+    private void generateNbt(Chunk region, BlockPos at, String id, BlockRotation rotation) {
+		loadedStructures.get(id).rotate(rotation).generateNbt(region, at, (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
+	}
+
+    private void generateNbt(Chunk region, BlockPos at, String id) {
+		generateNbt(region, at, id, BlockRotation.NONE);
+	}
+
+    private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
+		if (!state.isAir()) {
+			if (state.isOf(Blocks.BARRIER)) {
+				region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
+			} else {
+				region.setBlockState(pos, state, true);
+			}
+		}
+	}
+
+    @Override
+    public void carve(ChunkRegion chunkRegion, long seed, BiomeAccess biomeAccess, StructureAccessor structureAccessor,
+            Chunk chunk, Carver generationStep) {}
+
+    @Override
+    public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView world) {
+        return new VerticalBlockSample(0, new BlockState[0]);
+    }
+
+    @Override
+    public void getDebugHudText(List<String> text, BlockPos pos) {}
+
+    @Override
+    public MultiNoiseSampler getMultiNoiseSampler() {
+        return null;
+    }
+
+    @Override
+    public int getSeaLevel() {
+        return 0;
+    }
+
+    @Override
+    public int getWorldHeight() {
+        return 128;
+    }
+
+    @Override
+    public void populateEntities(ChunkRegion region) {}
 }

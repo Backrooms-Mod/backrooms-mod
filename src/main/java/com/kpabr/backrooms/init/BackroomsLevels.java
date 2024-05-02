@@ -1,10 +1,5 @@
 package com.kpabr.backrooms.init;
 
-import com.kpabr.backrooms.LevelOneChunkGenerator;
-import com.kpabr.backrooms.LevelThreeChunkGenerator;
-import com.kpabr.backrooms.LevelTwoChunkGenerator;
-import com.kpabr.backrooms.LevelZeroChunkGenerator;
-import com.kpabr.backrooms.world.biome.*;
 import com.kpabr.backrooms.world.biome.biomes.level0.CrimsonHallsBiome;
 import com.kpabr.backrooms.world.biome.biomes.level0.DecrepitBiome;
 import com.kpabr.backrooms.world.biome.biomes.level0.MegalophobiaBiome;
@@ -18,6 +13,10 @@ import com.kpabr.backrooms.world.biome.sources.LevelOneBiomeSource;
 import com.kpabr.backrooms.world.biome.sources.LevelThreeBiomeSource;
 import com.kpabr.backrooms.world.biome.sources.LevelTwoBiomeSource;
 import com.kpabr.backrooms.world.biome.sources.LevelZeroBiomeSource;
+import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelThreeChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelTwoChunkGenerator;
+import com.kpabr.backrooms.world.chunk.LevelZeroChunkGenerator;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;

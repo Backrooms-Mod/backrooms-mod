@@ -1,95 +1,128 @@
 package com.kpabr.backrooms.world.chunk;
 
-
-import com.kpabr.backrooms.BackroomsMod;
-import com.kpabr.backrooms.init.BackroomsBlocks;
-import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.world.chunk.level1chunkgenerators.CementHallsChunkGenerator;
-import com.kpabr.backrooms.world.chunk.level1chunkgenerators.ParkingGarageChunkGenerator;
-import com.kpabr.backrooms.world.chunk.level1chunkgenerators.WarehouseChunkGenerator;
-import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.Lifecycle;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.ludocrypt.limlib.api.LiminalUtil;
-import net.ludocrypt.limlib.api.world.AbstractNbtChunkGenerator;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.loot.LootTables;
-import net.minecraft.server.world.ChunkHolder.Unloaded;
-import net.minecraft.server.world.ServerLightingProvider;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
-import net.minecraft.util.registry.SimpleRegistry;
-import net.minecraft.world.ChunkRegion;
-import net.minecraft.world.HeightLimitView;
-import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeSource;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.StructureAccessor;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
-public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
+import com.kpabr.backrooms.init.BackroomsBlocks;
+import com.kpabr.backrooms.init.BackroomsLevels;
+import com.kpabr.backrooms.world.biome.sources.LevelOneBiomeSource;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.CementHallsChunkGenerator;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.ParkingGarageChunkGenerator;
+import com.kpabr.backrooms.world.chunk.level1chunkgenerators.WarehouseChunkGenerator;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-    public static final Codec<LevelOneChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    BiomeSource.CODEC.fieldOf("biome_source").stable().forGetter(
-                            (chunkGenerator) -> chunkGenerator.biomeSource),
-                    Codec.LONG.fieldOf("seed").stable().forGetter(
-                            (chunkGenerator) -> chunkGenerator.worldSeed)
-            ).apply(instance, instance.stable(LevelOneChunkGenerator::new))
-    );
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.structure.StructureSet;
+import net.minecraft.util.dynamic.RegistryOps;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.ChunkRegion;
+import net.minecraft.world.HeightLimitView;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeAccess;
+import net.minecraft.world.biome.source.util.MultiNoiseUtil;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.chunk.Blender;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.chunk.VerticalBlockSample;
 
-    private final long worldSeed;
-    private final CementHallsChunkGenerator cementHallsChunkGenerator;
-    private final ParkingGarageChunkGenerator parkingGarageChunkGenerator;
-    private final WarehouseChunkGenerator warehouseChunkGenerator;
+public class LevelOneChunkGenerator extends ChunkGenerator {
+	public static final Codec<LevelOneChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
+			method_41042(instance).and(
+				RegistryOps.createRegistryCodec(Registry.BIOME_KEY).forGetter((generator) -> generator.biomeRegistry)
+			)
+			.apply(instance, instance.stable(LevelOneChunkGenerator::new))
+	);
+
+	
+    private CementHallsChunkGenerator cementHallsChunkGenerator;
+    private ParkingGarageChunkGenerator parkingGarageChunkGenerator;
+    private WarehouseChunkGenerator warehouseChunkGenerator;
     private static final BlockState PATTERNED_WALLPAPER = BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState();
     private static final BlockState WOOLEN_CARPET = BackroomsBlocks.WOOLEN_CARPET.getDefaultState();
     private static final BlockState MOLDY_WOOLEN_CARPET = BackroomsBlocks.MOLDY_WOOLEN_CARPET.getDefaultState();
     private static final BlockState CORK_TILE = BackroomsBlocks.CORK_TILE.getDefaultState();
     private static final BlockState MOLDY_CORK_TILE = BackroomsBlocks.MOLDY_CORK_TILE.getDefaultState();
     private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
-    //Define roof position on y coordinate.
+
     private static final int ROOF_BEGIN_Y = 8 * (getFloorCount() + 1) + 1;
-    public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed, CementHallsChunkGenerator cementHallsChunkGenerator, ParkingGarageChunkGenerator parkingGarageChunkGenerator, WarehouseChunkGenerator warehouseChunkGenerator) {
-        super(new SimpleRegistry<>(Registry.STRUCTURE_SET_KEY, Lifecycle.stable(), null), Optional.empty(), biomeSource, biomeSource, worldSeed, BackroomsMod.id("level_1"), LiminalUtil.createMultiNoiseSampler());
-        this.worldSeed = worldSeed;
-        this.cementHallsChunkGenerator = cementHallsChunkGenerator;
-        this.parkingGarageChunkGenerator = parkingGarageChunkGenerator;
-        this.warehouseChunkGenerator = warehouseChunkGenerator;
-    }
-    public LevelOneChunkGenerator(BiomeSource biomeSource, long worldSeed) {
-        this(biomeSource, worldSeed,
-                new CementHallsChunkGenerator(biomeSource, worldSeed),
-                new ParkingGarageChunkGenerator(biomeSource, worldSeed),
-                new WarehouseChunkGenerator(biomeSource, worldSeed));
-    }
+    
+	private final Registry<Biome> biomeRegistry;
 
-    @Override
-    protected Codec<? extends ChunkGenerator> getCodec() {
-        return CODEC;
-    }
-    @Override
-    public ChunkGenerator withSeed(long seed) {
-        return new LevelOneChunkGenerator(this.biomeSource, seed);
-    }
+	public LevelOneChunkGenerator(Registry<StructureSet> registry, Registry<Biome> biomeRegistry) {
+		super(registry, Optional.empty(), new LevelOneBiomeSource(biomeRegistry));
+		this.biomeRegistry = biomeRegistry;
+	}
 
-    @Override
-    public CompletableFuture<Chunk> populateNoise(ChunkRegion region, ChunkStatus targetStatus, Executor executor, ServerWorld world, ChunkGenerator generator, StructureManager structureManager, ServerLightingProvider lightingProvider, Function<Chunk, CompletableFuture<Either<Chunk, Unloaded>>> function, List<Chunk> chunks, Chunk chunk, boolean bl) {
+	@Override
+	protected Codec<? extends ChunkGenerator> getCodec() {
+		return CODEC;
+	}
+
+	@Override
+	public ChunkGenerator withSeed(long seed) {
+		return this;
+	}
+
+	@Override
+	public MultiNoiseUtil.MultiNoiseSampler getMultiNoiseSampler() {
+        return null;
+	}
+
+	@Override
+	public void carve(ChunkRegion chunkRegion, long l, BiomeAccess biomeAccess, StructureAccessor structureAccessor, Chunk chunk, GenerationStep.Carver carver) {
+	}
+
+	@Override
+	public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
+        final ChunkPos chunkPos = chunk.getPos();
+
+        // controls every block up to the roof
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
+                    final BlockPos pos = chunkPos.getBlockPos(x, y, z);
+                    final BlockState block = chunk.getBlockState(pos);
+
+                    if (block == PATTERNED_WALLPAPER) {
+                        replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
+                    } else if (block == WOOLEN_CARPET || block == MOLDY_WOOLEN_CARPET) {
+                        replace(BackroomsBlocks.CEMENT, chunk, pos);
+                    } else if (block == CORK_TILE || block == MOLDY_CORK_TILE) {
+                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
+                    }
+                }
+            }
+        }
+	}
+
+	@Override
+	public void populateEntities(ChunkRegion region) {
+	}
+
+	@Override
+	public int getWorldHeight() {
+		return 128;
+	}
+
+	@Override
+	public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, StructureAccessor structureAccessor, Chunk chunk) {
+
+        if (this.cementHallsChunkGenerator == null) {
+            this.cementHallsChunkGenerator = new CementHallsChunkGenerator(biomeSource, BackroomsLevels.LEVEL_1_WORLD.getSeed());
+            this.parkingGarageChunkGenerator= new ParkingGarageChunkGenerator(biomeSource, BackroomsLevels.LEVEL_1_WORLD.getSeed());
+            this.warehouseChunkGenerator = new WarehouseChunkGenerator(biomeSource, BackroomsLevels.LEVEL_1_WORLD.getSeed());
+        }
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace them later with blocks we actually need in biomes.
         // If you're adding new type of structure then don't use blocks other than described below from our mod!
@@ -110,20 +143,20 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         final int startZ = chunkPos.getStartZ();
         final int endZ = startZ  + 16;
 
-        // if(isBiomeEquals(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
-        //     this.cementHallsChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
-        // }
-        // else if(isBiomeEquals(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
-        //     this.parkingGarageChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
-        // }
-        // else if(isBiomeEquals(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)) {
-        //     this.warehouseChunkGenerator.populateNoise(region, targetStatus, executor, world, generator, structureManager, lightingProvider, function, chunks, chunk, bl);
-        // }
+        if(isBiomeEquals(BackroomsLevels.CEMENT_WALLS_BIOME, chunk, biomePos)) {
+            this.cementHallsChunkGenerator.populateNoise(executor, blender, structureAccessor, chunk);
+        }
+        else if(isBiomeEquals(BackroomsLevels.PARKING_GARAGE_BIOME, chunk, biomePos)) {
+            this.parkingGarageChunkGenerator.populateNoise(executor, blender, structureAccessor, chunk);
+        }
+        else if(isBiomeEquals(BackroomsLevels.WAREHOUSE_BIOME, chunk, biomePos)) {
+            this.warehouseChunkGenerator.populateNoise(executor, blender, structureAccessor, chunk);
+        }
 
         // Place bedrock bricks at the bottom.
         for (int x = startX; x < endX; x++) {
             for (int z = startZ; z < endZ; z++) {
-                region.setBlockState(new BlockPos(x, 0, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+                chunk.setBlockState(new BlockPos(x, 0, z), ROOF_BLOCK, false);
             }
         }
 
@@ -131,74 +164,57 @@ public class LevelOneChunkGenerator extends AbstractNbtChunkGenerator {
         for (int x = startX; x < endX; x++) {
             // 3 layers to be placed
             for (int z = startZ; z < endZ; z++) {
-                region.setBlockState(new BlockPos(x, ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 1 + ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
-                region.setBlockState(new BlockPos(x, 2 + ROOF_BEGIN_Y, z), ROOF_BLOCK, Block.FORCE_STATE, 0);
+                chunk.setBlockState(new BlockPos(x, ROOF_BEGIN_Y, z), ROOF_BLOCK, false);
+                chunk.setBlockState(new BlockPos(x, 1 + ROOF_BEGIN_Y, z), ROOF_BLOCK, false);
+                chunk.setBlockState(new BlockPos(x, 2 + ROOF_BEGIN_Y, z), ROOF_BLOCK, false);
             }
         }
 
         return CompletableFuture.completedFuture(chunk);
+
+    }
+	
+
+	@Override
+	public int getSeaLevel() {
+		return 0;
+	}
+
+	@Override
+	public int getMinimumY() {
+		return 0;
+	}
+
+	@Override
+	public int getHeight(int x, int z, Heightmap.Type heightmapType, HeightLimitView heightLimitView) {
+		return 128;
+	}
+
+	@Override
+	public VerticalBlockSample getColumnSample(int x, int z, HeightLimitView heightLimitView) {
+		return new VerticalBlockSample(0, new BlockState[0]);
+	}
+
+	@Override
+	public void getDebugHudText(List<String> list, BlockPos blockPos) {
+	}
+
+    public static int getFloorCount() {
+        return 5;
     }
 
-    @Override
-    public int chunkRadius() {
-        return 1;
-    }
 
-    @Override
     public void storeStructures(ServerWorld world) {
         this.parkingGarageChunkGenerator.storeStructures(world);
         this.cementHallsChunkGenerator.storeStructures(world);
         this.warehouseChunkGenerator.storeStructures(world);
     }
 
-    @Override
-    protected Identifier getBarrelLootTable() {
-        return LootTables.SPAWN_BONUS_CHEST;
-    }
-
-    @Override
-    public int getWorldHeight() {
-        return 128;
-    }
-
-    @Override
-    public int getHeight(int x, int y, Heightmap.Type type, HeightLimitView world) {
-        return world.getTopY();
-    }
-
-    public static int getFloorCount() {
-        return 5;
-    }
-
-    private static void replace(Block block, Chunk chunk, BlockPos pos) {
-        chunk.setBlockState(pos, block.getDefaultState(), false);
-    }
-
     private boolean isBiomeEquals(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
         return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
     }
 
-    @Override
-    public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
-        final ChunkPos chunkPos = chunk.getPos();
-
-        // controls every block up to the roof
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                for (int y = 0; y < ROOF_BEGIN_Y; y++) {
-                    final BlockPos pos = chunkPos.getBlockPos(x, y, z);
-                    final BlockState block = chunk.getBlockState(pos);
-
-                    if (block == PATTERNED_WALLPAPER) {
-                        replace(BackroomsBlocks.CEMENT_BRICKS, chunk, pos);
-                    } else if (block == WOOLEN_CARPET || block == MOLDY_WOOLEN_CARPET) {
-                        replace(BackroomsBlocks.CEMENT, chunk, pos);
-                    } else if (block == CORK_TILE || block == MOLDY_CORK_TILE) {
-                        replace(BackroomsBlocks.CEMENT_TILES, chunk, pos);
-                    }
-                }
-            }
-        }
+    private void replace(Block block, Chunk chunk, BlockPos pos) {
+        chunk.setBlockState(pos, block.getDefaultState(), false);
     }
 }

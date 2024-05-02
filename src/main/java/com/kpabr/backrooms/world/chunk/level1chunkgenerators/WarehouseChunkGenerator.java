@@ -7,13 +7,11 @@ import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.init.BackroomsLootTables;
 import com.kpabr.backrooms.util.NbtPlacerUtilNew;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
-import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.block.enums.RailShape;
-import net.ludocrypt.limlib.api.LiminalUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -28,12 +26,8 @@ import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import net.minecraft.block.WallMountedBlock;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 
-import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ChunkHolder.Unloaded;
-import net.minecraft.server.world.ServerLightingProvider;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.structure.StructureManager;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -49,7 +43,6 @@ import net.minecraft.world.biome.source.BiomeAccess;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.GenerationStep.Carver;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.Blender;
@@ -59,7 +52,6 @@ import net.minecraft.world.gen.chunk.VerticalBlockSample;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-import java.util.function.Function;
 
 public class WarehouseChunkGenerator extends ChunkGenerator {
     public static final Codec<WarehouseChunkGenerator> CODEC = RecordCodecBuilder.create((instance) ->
@@ -308,7 +300,7 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
 
     private void replace(ChunkRegion region, Block block, Chunk chunk, BlockPos pos) {
         final BlockState oldState = chunk.setBlockState(pos, block.getDefaultState(), false);
-        region.toServerWorld().onBlockChanged(pos, oldState, block.getDefaultState());
+        BackroomsLevels.LEVEL_1_WORLD.onBlockChanged(pos, oldState, block.getDefaultState());
     }
 
     private void shelfEdge(Chunk region, BlockPos pos, Direction direction, int shelfDirection, int shelfType, int adjacentShelfType) {
@@ -337,7 +329,6 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structureAccessor, Chunk chunk) {
         final ChunkPos chunkPos = chunk.getPos();
-        final Random random = new Random(worldSeed + MathHelper.hashCode(chunkPos.getStartX(), chunkPos.getStartZ(),0));
         // controls every block up to the roof
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {

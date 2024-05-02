@@ -1,9 +1,7 @@
 package com.kpabr.backrooms.world.biome.sources;
 
-import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.BiomeListBuilderNew;
-import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.kpabr.backrooms.util.BiomeRegistryListNew;
 import com.kpabr.backrooms.util.LevelParameters;
 import com.mojang.serialization.Codec;
@@ -19,8 +17,6 @@ import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 import net.minecraft.world.gen.random.AtomicSimpleRandom;
 import net.minecraft.world.gen.random.ChunkRandom;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class LevelZeroBiomeSource extends BiomeSource {
