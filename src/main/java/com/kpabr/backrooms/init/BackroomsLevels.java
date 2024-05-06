@@ -1,5 +1,6 @@
 package com.kpabr.backrooms.init;
 
+import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.world.biome.biomes.level0.CrimsonHallsBiome;
 import com.kpabr.backrooms.world.biome.biomes.level0.DecrepitBiome;
 import com.kpabr.backrooms.world.biome.biomes.level0.MegalophobiaBiome;
@@ -24,6 +25,7 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.dimension.v1.FabricDimensions;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.CommandException;
 import net.minecraft.server.command.ServerCommandSource;
@@ -70,7 +72,7 @@ public class BackroomsLevels {
 	// which will always share it's ID with the world that is created from it
 	public static final RegistryKey<DimensionOptions> LEVEL_0_DIMENSION_KEY = RegistryKey.of(
         Registry.DIMENSION_KEY,
-        new Identifier("backrooms", "level_0")
+        new Identifier(BackroomsMod.ModId, "level_0")
     );
     public static RegistryKey<World> LEVEL_0_WORLD_KEY = RegistryKey.of(
         Registry.WORLD_KEY,
@@ -79,7 +81,7 @@ public class BackroomsLevels {
 
     public static final RegistryKey<DimensionOptions> LEVEL_1_DIMENSION_KEY = RegistryKey.of(
         Registry.DIMENSION_KEY,
-        new Identifier("backrooms", "level_1")
+        new Identifier(BackroomsMod.ModId, "level_1")
     );
     public static RegistryKey<World> LEVEL_1_WORLD_KEY = RegistryKey.of(
         Registry.WORLD_KEY,
@@ -88,7 +90,7 @@ public class BackroomsLevels {
 
     public static final RegistryKey<DimensionOptions> LEVEL_2_DIMENSION_KEY = RegistryKey.of(
         Registry.DIMENSION_KEY,
-        new Identifier("backrooms", "level_2")
+        new Identifier(BackroomsMod.ModId, "level_2")
     );
     public static RegistryKey<World> LEVEL_2_WORLD_KEY = RegistryKey.of(
         Registry.WORLD_KEY,
@@ -97,7 +99,7 @@ public class BackroomsLevels {
 
     public static final RegistryKey<DimensionOptions> LEVEL_3_DIMENSION_KEY = RegistryKey.of(
         Registry.DIMENSION_KEY,
-        new Identifier("backrooms", "level_3")
+        new Identifier(BackroomsMod.ModId, "level_3")
     );
     public static RegistryKey<World> LEVEL_3_WORLD_KEY = RegistryKey.of(
         Registry.WORLD_KEY,
@@ -114,10 +116,10 @@ public class BackroomsLevels {
 	public static ServerWorld LEVEL_3_WORLD;
 
     public static void init() {
-        addLevel("backrooms", "level_0", "level_0_biome_source",  LevelZeroChunkGenerator.CODEC, LevelZeroBiomeSource.CODEC);
-        addLevel("backrooms", "level_1", "level_1_biome_source",  LevelOneChunkGenerator.CODEC, LevelOneBiomeSource.CODEC);
-        addLevel("backrooms", "level_2", "level_2_biome_source",  LevelTwoChunkGenerator.CODEC, LevelTwoBiomeSource.CODEC);
-        addLevel("backrooms", "level_3", "level_3_biome_source",  LevelThreeChunkGenerator.CODEC, LevelThreeBiomeSource.CODEC);
+        addLevel(BackroomsMod.ModId, "level_0", "level_0_biome_source",  LevelZeroChunkGenerator.CODEC, LevelZeroBiomeSource.CODEC);
+        addLevel(BackroomsMod.ModId, "level_1", "level_1_biome_source",  LevelOneChunkGenerator.CODEC, LevelOneBiomeSource.CODEC);
+        addLevel(BackroomsMod.ModId, "level_2", "level_2_biome_source",  LevelTwoChunkGenerator.CODEC, LevelTwoBiomeSource.CODEC);
+        addLevel(BackroomsMod.ModId, "level_3", "level_3_biome_source",  LevelThreeChunkGenerator.CODEC, LevelThreeBiomeSource.CODEC);
 
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
@@ -127,23 +129,25 @@ public class BackroomsLevels {
 			LEVEL_3_WORLD = server.getWorld(LEVEL_3_WORLD_KEY);
         });
 
-        // only for debug, remove // TODO
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
-				dispatcher.register(literal("tp0").executes(context -> { 
-                    return debugTeleport(context, LEVEL_0_WORLD_KEY);
-                })));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
-				dispatcher.register(literal("tp1").executes(context -> { 
-                    return debugTeleport(context, LEVEL_1_WORLD_KEY);
-                })));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
-				dispatcher.register(literal("tp2").executes(context -> { 
-                    return debugTeleport(context, LEVEL_2_WORLD_KEY);
-                })));
-        CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
-				dispatcher.register(literal("tp3").executes(context -> { 
-                    return debugTeleport(context, LEVEL_3_WORLD_KEY);
-                })));
+        // only for debug
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+				    dispatcher.register(literal("tp0").executes(context -> { 
+                        return debugTeleport(context, LEVEL_0_WORLD_KEY);
+                    })));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+			    	dispatcher.register(literal("tp1").executes(context -> { 
+                        return debugTeleport(context, LEVEL_1_WORLD_KEY);
+                    })));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+		    		dispatcher.register(literal("tp2").executes(context -> { 
+                        return debugTeleport(context, LEVEL_2_WORLD_KEY);
+                    })));
+            CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) ->
+		    		dispatcher.register(literal("tp3").executes(context -> { 
+                        return debugTeleport(context, LEVEL_3_WORLD_KEY);
+                    })));
+            }
     }
 
     public static RegistryKey<World> addLevel(String namespace, String levelName, String biomeSourceName, Codec<? extends ChunkGenerator> chunkGenerator, Codec<? extends BiomeSource> biomeSource) {
