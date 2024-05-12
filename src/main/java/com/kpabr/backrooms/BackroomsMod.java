@@ -8,9 +8,6 @@ import com.kpabr.backrooms.init.*;
 import name.trimsky.lib_ai.LibAI;
 import name.trimsky.lib_ai.example.LibAIMod;
 import net.fabricmc.api.ModInitializer;
-import com.kpabr.backrooms.init.BackroomsBlocks;
-import com.kpabr.backrooms.init.BackroomsGroups;
-import com.kpabr.backrooms.init.BackroomsItems;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.entity.SpawnReason;
@@ -34,6 +31,7 @@ public class BackroomsMod implements ModInitializer {
 		LibAI.initialize();
 
 		BackroomsConfig.init();
+		BackroomsGamerules.init();
 		BackroomsSounds.init();
 		BackroomsParticles.init();
 		BackroomStatusEffects.init();
@@ -56,7 +54,7 @@ public class BackroomsMod implements ModInitializer {
                     applyWretchedCycle(player);
 				}
 			}
-		});
+        });
 	}
 
 	public static Identifier id(String name) {
