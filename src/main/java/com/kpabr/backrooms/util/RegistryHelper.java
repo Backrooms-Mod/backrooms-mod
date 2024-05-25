@@ -6,8 +6,6 @@ import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import com.kpabr.backrooms.BackroomsMod;
-import net.ludocrypt.limlib.api.LiminalWorld;
-import net.ludocrypt.limlib.impl.LimlibRegistries;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -28,13 +26,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 public class RegistryHelper {
-
-    public static <T extends LiminalWorld> T get(String id, T world) {
-        return get(BackroomsMod.id(id), world);
-    }
-    public static <T extends LiminalWorld> T get(Identifier id, T world) {
-        return Registry.register(LimlibRegistries.LIMINAL_WORLD, id, world);
-    }
 
     public static <T extends Codec<? extends ChunkGenerator>> T get(String id, T chunkGenerator) {
         return Registry.register(Registry.CHUNK_GENERATOR, BackroomsMod.id(id), chunkGenerator);

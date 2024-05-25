@@ -1,11 +1,11 @@
-package com.kpabr.backrooms.world.biome;
+package com.kpabr.backrooms.world.biome.biomes.level0;
 import com.kpabr.backrooms.init.BackroomsSounds;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEffects;
 import net.minecraft.world.biome.GenerationSettings;
 import net.minecraft.world.biome.SpawnSettings;
 
-public class YellowHallsBiome {
+public class MegalophobiaBiome {
     public static Biome create() {
         SpawnSettings.Builder spawnSettings = new SpawnSettings.Builder();
         GenerationSettings.Builder generationSettings = new GenerationSettings.Builder();
