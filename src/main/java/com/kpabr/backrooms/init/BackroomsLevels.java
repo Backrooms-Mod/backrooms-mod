@@ -156,7 +156,7 @@ public class BackroomsLevels {
         return RegistryKey.of(Registry.WORLD_KEY, new Identifier(namespace, levelName));
     }
 
-    // only for debug, remove
+    // only for debug
     private static int debugTeleport(CommandContext<ServerCommandSource> context, RegistryKey<World> level) throws CommandSyntaxException {
         ServerPlayerEntity player = context.getSource().getPlayer();
 		ServerWorld serverWorld = player.getWorld();

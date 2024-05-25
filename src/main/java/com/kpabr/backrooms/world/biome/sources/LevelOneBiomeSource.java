@@ -1,8 +1,8 @@
 package com.kpabr.backrooms.world.biome.sources;
 
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.BiomeListBuilderNew;
-import com.kpabr.backrooms.util.BiomeRegistryListNew;
+import com.kpabr.backrooms.util.BiomeListBuilder;
+import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.kpabr.backrooms.util.LevelParameters;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -28,7 +28,7 @@ public class LevelOneBiomeSource extends BiomeSource{
             ).apply(instance, instance.stable(LevelOneBiomeSource::new)));
 
 
-    private final BiomeRegistryListNew biomeList;
+    private final BiomeRegistryList biomeList;
     
     private SimplexNoiseSampler temperatureNoiseSampler;
     private SimplexNoiseSampler moistnessNoiseSampler;
@@ -40,7 +40,7 @@ public class LevelOneBiomeSource extends BiomeSource{
     private Registry<Biome> BIOME_REGISTRY;
 
     public LevelOneBiomeSource(Registry<Biome> biomeRegistry) {
-        this(biomeRegistry, BiomeRegistryListNew.from(biomeRegistry, new BiomeListBuilderNew()
+        this(biomeRegistry, BiomeRegistryList.from(biomeRegistry, new BiomeListBuilder()
         .addBiome(BackroomsLevels.WAREHOUSE_BIOME, new LevelParameters(0.45, 0.3, 0.8, 0.4, 0.05, 1))
         .addBiome(BackroomsLevels.PARKING_GARAGE_BIOME, new LevelParameters(0.4, 0.4, 0.65, 0.35, 0.05, 0.9))
         .addBiome(BackroomsLevels.CEMENT_WALLS_BIOME, new LevelParameters(0.35, 0.45, 0.75, 0.4, 0.05, 0.8))));
@@ -48,7 +48,7 @@ public class LevelOneBiomeSource extends BiomeSource{
         this.BIOME_REGISTRY = biomeRegistry;
     }
 
-    private LevelOneBiomeSource(Registry<Biome> biomeRegistry, BiomeRegistryListNew biomeList) {
+    private LevelOneBiomeSource(Registry<Biome> biomeRegistry, BiomeRegistryList biomeList) {
         super(biomeList.getBiomeEntries());
         this.biomeList = biomeList;
     }

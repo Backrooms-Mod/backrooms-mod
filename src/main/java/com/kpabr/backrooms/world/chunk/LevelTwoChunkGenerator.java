@@ -7,7 +7,7 @@ import com.kpabr.backrooms.block.PipeBlock;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.util.ChunkType;
-import com.kpabr.backrooms.util.NbtPlacerUtilNew;
+import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.biome.sources.LevelTwoBiomeSource;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -56,7 +56,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
 
     
     private final Registry<Biome> biomeRegistry;
-    private final HashMap<String, NbtPlacerUtilNew> loadedStructures = new HashMap<String, NbtPlacerUtilNew>(30);
+    private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
     private Identifier nbtId = BackroomsMod.id("level_2");
 
     private final static int ROOF_Y = 15;
@@ -393,7 +393,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
         store("corridor", world);
     }
     private void store(String id, ServerWorld world) {
-		loadedStructures.put(id, NbtPlacerUtilNew.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
+		loadedStructures.put(id, NbtPlacerUtil.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
 	}
 
     @Override

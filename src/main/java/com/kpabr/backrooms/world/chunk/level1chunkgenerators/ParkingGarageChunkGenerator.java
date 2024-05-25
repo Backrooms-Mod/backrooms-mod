@@ -4,7 +4,7 @@ package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.NbtPlacerUtilNew;
+import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Lifecycle;
@@ -58,7 +58,7 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
     private final long worldSeed;
     private static final int ROOF_BEGIN_Y = 8 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
 
-    private final HashMap<String, NbtPlacerUtilNew> loadedStructures = new HashMap<String, NbtPlacerUtilNew>(30);
+    private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
     private Identifier nbtId = BackroomsMod.id("level_1");
     
     
@@ -192,7 +192,7 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
     }
 
     private void store(String id, ServerWorld world) {
-		loadedStructures.put(id, NbtPlacerUtilNew.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
+		loadedStructures.put(id, NbtPlacerUtil.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
 	}
 
 	private void store(String id, ServerWorld world, int from, int to) {

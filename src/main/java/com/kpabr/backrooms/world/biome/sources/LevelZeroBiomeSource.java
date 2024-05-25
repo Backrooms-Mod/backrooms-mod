@@ -1,8 +1,8 @@
 package com.kpabr.backrooms.world.biome.sources;
 
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.BiomeListBuilderNew;
-import com.kpabr.backrooms.util.BiomeRegistryListNew;
+import com.kpabr.backrooms.util.BiomeListBuilder;
+import com.kpabr.backrooms.util.BiomeRegistryList;
 import com.kpabr.backrooms.util.LevelParameters;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -28,7 +28,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
             ).apply(instance, instance.stable(LevelZeroBiomeSource::new)));
 
 
-    private final BiomeRegistryListNew biomeList;
+    private final BiomeRegistryList biomeList;
     
     private SimplexNoiseSampler temperatureNoiseSampler;
     private SimplexNoiseSampler moistnessNoiseSampler;
@@ -40,7 +40,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
     private Registry<Biome> BIOME_REGISTRY;
 
     public LevelZeroBiomeSource(Registry<Biome> biomeRegistry) {
-        this(biomeRegistry, BiomeRegistryListNew.from(biomeRegistry, new BiomeListBuilderNew()
+        this(biomeRegistry, BiomeRegistryList.from(biomeRegistry, new BiomeListBuilder()
         .addBiome(BackroomsLevels.CRIMSON_WALLS_BIOME, new LevelParameters(0.6, 0.65, 0.75, 0.45, 0.15, 1))
         .addBiome(BackroomsLevels.DECREPIT_BIOME, new LevelParameters(0.55, 0.7, 0.5, 0.3, 0.25, 1.2))
         .addBiome(BackroomsLevels.MEGALOPHOBIA_BIOME, new LevelParameters(0.45, 0.55, 0.65, 0.4, 0.05, 1))
@@ -48,7 +48,7 @@ public class LevelZeroBiomeSource extends BiomeSource {
         this.BIOME_REGISTRY = biomeRegistry;
     }
 
-    private LevelZeroBiomeSource(Registry<Biome> biomeRegistry, BiomeRegistryListNew biomeList) {
+    private LevelZeroBiomeSource(Registry<Biome> biomeRegistry, BiomeRegistryList biomeList) {
         super(biomeList.getBiomeEntries());
         this.biomeList = biomeList;
     }

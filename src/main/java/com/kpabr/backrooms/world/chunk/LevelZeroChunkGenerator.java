@@ -11,7 +11,7 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
-import com.kpabr.backrooms.util.NbtPlacerUtilNew;
+import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.biome.sources.LevelZeroBiomeSource;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -56,7 +56,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     private static final int ROOF_BEGIN_Y = 6 * (getFloorCount() + 1) + 1;
     private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
 
-    private final HashMap<String, NbtPlacerUtilNew> loadedStructures = new HashMap<String, NbtPlacerUtilNew>(30);
+    private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
     private Identifier nbtId = BackroomsMod.id("level_zero");
 
     private Random moldPlacementRandom;
@@ -499,7 +499,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     }
 
     private void store(String id, ServerWorld world) {
-		loadedStructures.put(id, NbtPlacerUtilNew.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
+		loadedStructures.put(id, NbtPlacerUtil.load(world.getServer().getResourceManager(), new Identifier(this.nbtId.getNamespace(), "nbt/" + this.nbtId.getPath() + "/" + id + ".nbt")).get());
 	}
 
 	private void store(String id, ServerWorld world, int from, int to) {
