@@ -23,6 +23,8 @@ import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.FacingBlock;
 import com.kpabr.backrooms.block.FiresaltCrystalBlock;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
+
 import net.minecraft.block.WallMountedBlock;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 
@@ -205,7 +207,7 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
                                     else {
                                         chosenBlock = rare[random.nextInt(rare.length)];
                                     }
-
+                                    
                                     if(chosenBlock == Blocks.STONE_BUTTON || chosenBlock == Blocks.LEVER) {
                                         chunk.setBlockState(pos, chosenBlock.getDefaultState().with(WallMountedBlock.FACE, WallMountLocation.FLOOR).with(WallMountedBlock.FACING, Direction.fromHorizontal(random.nextInt(4))), false);
                                     }
@@ -233,12 +235,12 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
                                     else if(chosenBlock == Blocks.SKELETON_SKULL || chosenBlock == Blocks.ZOMBIE_HEAD){
                                         chunk.setBlockState(pos, chosenBlock.getDefaultState().with(SkullBlock.ROTATION, random.nextInt(16)), false);
                                     }
-                                    else if(chosenBlock == BackroomsBlocks.CRATE){
+                                    else if (chosenBlock == BackroomsBlocks.CRATE) {
                                         chunk.setBlockState(pos, chosenBlock.getDefaultState(), false);
-                                        if (chunk.getBlockEntity(pos) instanceof LootableContainerBlockEntity lootTable) {
-                                            lootTable.setLootTable(this.getBarrelLootTable(), worldSeed + MathHelper.hashCode(pos));
-                                        }
-                                    }
+                                        CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, chosenBlock.getDefaultState());
+                                        chunk.setBlockEntity(crateBlockEntity);
+                                        crateBlockEntity.setLootTable(this.getBarrelLootTable(), worldSeed + MathHelper.hashCode(pos));
+}
                                     else{
                                         replace(chunk, chosenBlock, chunk, pos);
                                     }
