@@ -8,9 +8,11 @@ import java.util.concurrent.Executor;
 import java.util.HashMap;
 
 import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 import com.kpabr.backrooms.config.BackroomsConfig;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
+import com.kpabr.backrooms.init.BackroomsLootTables;
 import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.biome.sources.LevelZeroBiomeSource;
 import com.mojang.serialization.Codec;
@@ -19,6 +21,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BarrelBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.structure.StructureSet;
@@ -518,9 +521,22 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
 				region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
 			} else {
 				region.setBlockState(pos, state, true);
+                if (state.isOf(Blocks.BARREL)) {
+                    BarrelBlockEntity barrelBlockEntity = new BarrelBlockEntity(pos, state);
+                    region.setBlockEntity(barrelBlockEntity);
+                    barrelBlockEntity.setLootTable(this.getBarrelLootTable(), BackroomsLevels.LEVEL_0_WORLD.getSeed() + MathHelper.hashCode(pos));
+                } else if (state.isOf(BackroomsBlocks.CRATE)) {
+                    CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, state);
+                    region.setBlockEntity(crateBlockEntity);
+                    crateBlockEntity.setLootTable(this.getBarrelLootTable(), BackroomsLevels.LEVEL_0_WORLD.getSeed() + MathHelper.hashCode(pos));
+                }
 			}
 		}
 	}
+
+    protected Identifier getBarrelLootTable() {
+        return BackroomsLootTables.CRATE;
+    }
 
     private boolean isBiomeEquals(RegistryKey<Biome> biome, Chunk chunk, BlockPos biomePos) {
         return chunk.getBiomeForNoiseGen(biomePos.getX(), biomePos.getY(), biomePos.getZ()).matchesId(biome.getValue());
