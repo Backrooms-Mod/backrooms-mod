@@ -9,8 +9,8 @@ import dev.onyxstudios.cca.api.v3.entity.EntityComponentInitializer;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 
 public final class BackroomsComponents implements EntityComponentInitializer {
-    public static final ComponentKey<WretchedComponent> WRETCHED =
-            ComponentRegistryV3.INSTANCE.getOrCreate(BackroomsMod.id("wretched"), WretchedComponent.class);
+    public static final ComponentKey<WretchedComponent> WRETCHED = ComponentRegistryV3.INSTANCE
+            .getOrCreate(BackroomsMod.id("wretched"), WretchedComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {

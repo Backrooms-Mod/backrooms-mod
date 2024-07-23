@@ -14,7 +14,7 @@ public class BrewingRecipeRegistryMixin {
 
     @Inject(method = "registerPotionRecipe", at = @At("HEAD"))
     private static void replaceNetherWartByTilemoldLump(Potion input, Item item, Potion output, CallbackInfo ci) {
-        if(NetherWartAccessor.getNetherWart().equals(item)) {
+        if (NetherWartAccessor.getNetherWart().equals(item)) {
             BrewingRecipeRegistryInvoker.invokeRegisterPotionRecipe(input, BackroomsItems.TILEMOLD_LUMP, output);
         }
     }

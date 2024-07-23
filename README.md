@@ -1,7 +1,7 @@
 # Backrooms Exploration
-This is a Fabric 1.18.2 mod adding the Backrooms to Minecraft.
+This is a Fabric 1.20.1 mod adding the Backrooms to Minecraft.
 
-\[README still incomplete\]
+\[README incomplete\]
 
 ## Features
 
@@ -54,24 +54,24 @@ Snapshots are still work-in-progress builds, but they are considered as more sta
 
 ### Install the mod
 
-This is a Fabric 1.18.2 mod, so you need a Fabric 1.18.2 profile with a *mods* folder. Place the .jar file there. 
+This is a Fabric 1.20.1 mod, so you need a Fabric 1.20.1 (Fabric 0.15.11) profile with a *mods* folder. Place the .jar file there. 
 
-The Backrooms mod depends on some other mods and libraries. You must install them with the right version (compatible with 1.18.2):
-- ClothConfig (6.5.116)
-- Mod Menu (3.2.5)
-- Satin API (1.7.2) (there is no 1.18.2 version, so we use 1.18.1 version)
-- Geckolib (3.0.80)
+The Backrooms mod depends on some other mods and libraries. You must install them with the right version (compatible with 1.20.1):
+- ClothConfig (11.1.118)
+- Mod Menu (7.2.2)
+- Satin API (1.14.0)
+- Geckolib (4.4.7)
 
 Other versions may work, but it is not guaranteed.
 
 ### Settings
 
-You can change some settings. In Mod Menu, click on the Backrooms and open the configuration screen.
+You can change some settings. In Mod Menu, click on the Backrooms and open the configuration screen. Some of them have no effect yet.
 
 
 ## Building and Running
 
-If you are a developer, you can build the mod on your own and run a debug build. Make sure you have JDK 17 installed on your machine, since we use 1.18.2 and Gradle 7.4. Clone this Repository and open it in your preferred IDE. Follow the instructions on [the Fabric Wiki](https://fabricmc.net/wiki/tutorial:setup). You can skip "Mod Setup".
+If you are a developer, you can build the mod on your own and run a debug build. Make sure you have JDK 17 or higher installed on your machine, since we use 1.20.1 and Gradle 8.8. Clone this Repository and open it in your preferred IDE. Follow the instructions on [the Fabric Wiki](https://fabricmc.net/wiki/tutorial:setup). You can skip "Mod Setup".
 
 
 ## License

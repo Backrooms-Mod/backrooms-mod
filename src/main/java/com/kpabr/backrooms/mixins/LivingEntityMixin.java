@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class LivingEntityMixin {
     @Inject(at = @At("HEAD"), method = "getPreferredEquipmentSlot(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/entity/EquipmentSlot;", cancellable = true)
     private static void getPreferredEquipmentSlot(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
-        if(stack.getItem() instanceof MaskItem) {
+        if (stack.getItem() instanceof MaskItem) {
             cir.setReturnValue(EquipmentSlot.HEAD);
         }
     }

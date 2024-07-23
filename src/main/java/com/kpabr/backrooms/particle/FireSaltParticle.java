@@ -10,9 +10,7 @@ import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.particle.SpriteBillboardParticle;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ItemStackParticleEffect;
 
 @Environment(EnvType.CLIENT)
 public class FireSaltParticle extends SpriteBillboardParticle {

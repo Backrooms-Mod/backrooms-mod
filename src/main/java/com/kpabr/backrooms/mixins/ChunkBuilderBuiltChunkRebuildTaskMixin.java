@@ -2,7 +2,7 @@ package com.kpabr.backrooms.mixins;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 import java.util.Set;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -34,7 +34,12 @@ import net.minecraft.util.math.Direction;
 public class ChunkBuilderBuiltChunkRebuildTaskMixin {
 
 	@Inject(method = "Lnet/minecraft/client/render/chunk/ChunkBuilder$BuiltChunk$RebuildTask;render(FFFLnet/minecraft/client/render/chunk/ChunkBuilder$ChunkData;Lnet/minecraft/client/render/chunk/BlockBufferBuilderStorage;)Ljava/util/Set;", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/chunk/ChunkRendererRegion;getBlockState(Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/BlockState;", ordinal = 1, shift = Shift.BEFORE), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void corners$render(float cameraX, float cameraY, float cameraZ, ChunkBuilder.ChunkData data, BlockBufferBuilderStorage buffers, CallbackInfoReturnable<Set<BlockEntity>> ci, int i, BlockPos blockPos, BlockPos blockPos2, ChunkOcclusionDataBuilder chunkOcclusionDataBuilder, Set<BlockEntity> set, ChunkRendererRegion chunkRendererRegion, MatrixStack matrixStack, Random random, BlockRenderManager blockRenderManager, Iterator<BlockPos> var15, BlockPos blockPos3, BlockState blockState) {
+	private void corners$render(float cameraX, float cameraY, float cameraZ, ChunkBuilder.ChunkData data,
+			BlockBufferBuilderStorage buffers, CallbackInfoReturnable<Set<BlockEntity>> ci, int i, BlockPos blockPos,
+			BlockPos blockPos2, ChunkOcclusionDataBuilder chunkOcclusionDataBuilder, Set<BlockEntity> set,
+			ChunkRendererRegion chunkRendererRegion, MatrixStack matrixStack, Random random,
+			BlockRenderManager blockRenderManager, Iterator<BlockPos> var15, BlockPos blockPos3,
+			BlockState blockState) {
 		List<BakedQuad> quads = Lists.newArrayList();
 		BakedModel model = ((BlockRenderManagerAccess) blockRenderManager).getModelPure(blockState);
 		SkyboxShaders.addAll(quads, model, blockState, random);

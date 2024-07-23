@@ -7,8 +7,10 @@ import name.trimsky.lib_ai.TaskController;
  */
 public class EmptyTask implements Task {
     @Override
-    public void tick() {}
+    public void tick() {
+    }
 
     @Override
-    public void setTaskController(TaskController controller) {}
+    public void setTaskController(TaskController controller) {
+    }
 }

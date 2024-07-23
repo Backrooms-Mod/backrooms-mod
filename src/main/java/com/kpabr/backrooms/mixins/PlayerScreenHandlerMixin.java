@@ -19,8 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerScreenHandler.class)
 public abstract class PlayerScreenHandlerMixin {
 
-    @Inject(at = @At("TAIL"),
-            method = "<init>(Lnet/minecraft/entity/player/PlayerInventory;ZLnet/minecraft/entity/player/PlayerEntity;)V")
+    @Inject(at = @At("TAIL"), method = "<init>(Lnet/minecraft/entity/player/PlayerInventory;ZLnet/minecraft/entity/player/PlayerEntity;)V")
     private void reInitHeadSlot(PlayerInventory inventory, boolean onServer, PlayerEntity owner, CallbackInfo ci) {
         Slot slot = new Slot(inventory, 39, 8, 8 + 0 * 18) {
             public int getMaxItemCount() {
@@ -34,7 +33,10 @@ public abstract class PlayerScreenHandlerMixin {
             public boolean canTakeItems(PlayerEntity playerEntity) {
                 final ItemStack itemStack = this.getStack();
                 return !itemStack.isEmpty() && !playerEntity.isCreative()
-                        && (EnchantmentHelper.hasBindingCurse(itemStack) || (itemStack.getItem() instanceof MaskItem && playerEntity.getHealth() <= 5.0F)) ? false : super.canTakeItems(playerEntity);
+                        && (EnchantmentHelper.hasBindingCurse(itemStack)
+                                || (itemStack.getItem() instanceof MaskItem && playerEntity.getHealth() <= 5.0F))
+                                        ? false
+                                        : super.canTakeItems(playerEntity);
             }
 
             public Pair<Identifier, Identifier> getBackgroundSprite() {

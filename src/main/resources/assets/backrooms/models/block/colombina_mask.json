@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench :)",
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "backrooms:armor/colombina_mask",
-		"particle": "backrooms:armor/colombina_mask"
+		"1": "backrooms:block/colombina_mask",
+		"particle": "backrooms:block/colombina_mask"
 	},
 	"elements": [
 		{

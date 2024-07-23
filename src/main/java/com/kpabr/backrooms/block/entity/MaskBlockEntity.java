@@ -82,7 +82,7 @@ public class MaskBlockEntity extends BlockEntity {
     }
 
     public float getTicksPowered(float tickDelta) {
-        return this.powered ? (float)this.ticksPowered + tickDelta : (float)this.ticksPowered;
+        return this.powered ? (float) this.ticksPowered + tickDelta : (float) this.ticksPowered;
     }
 
     @Nullable
@@ -101,7 +101,7 @@ public class MaskBlockEntity extends BlockEntity {
     }
 
     public void setOwner(@Nullable GameProfile owner) {
-        synchronized(this) {
+        synchronized (this) {
             this.owner = owner;
         }
 
@@ -116,11 +116,14 @@ public class MaskBlockEntity extends BlockEntity {
     }
 
     public static void loadProperties(@Nullable GameProfile owner, Consumer<GameProfile> callback) {
-        if (owner != null && !StringHelper.isEmpty(owner.getName()) && (!owner.isComplete() || !owner.getProperties().containsKey("textures")) && userCache != null && sessionService != null) {
+        if (owner != null && !StringHelper.isEmpty(owner.getName())
+                && (!owner.isComplete() || !owner.getProperties().containsKey("textures")) && userCache != null
+                && sessionService != null) {
             userCache.findByNameAsync(owner.getName(), (profile) -> {
                 Util.getMainWorkerExecutor().execute(() -> {
                     Util.ifPresentOrElse(profile, (profilex) -> {
-                        Property property = (Property)Iterables.getFirst(profilex.getProperties().get("textures"), (Object)null);
+                        Property property = (Property) Iterables.getFirst(profilex.getProperties().get("textures"),
+                                (Object) null);
                         if (property == null) {
                             profilex = sessionService.fillProfileProperties(profilex, true);
                         }

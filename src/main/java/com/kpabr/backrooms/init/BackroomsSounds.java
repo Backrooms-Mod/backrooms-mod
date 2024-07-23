@@ -12,9 +12,11 @@ public class BackroomsSounds {
     public static SoundEvent HOUND_ATTACK;
     public static SoundEvent HOUND_HURT;
     public static SoundEvent HOUND_DEATH;
+
     public static void init() {
         HUMBUZZ_LEVEL_0 = get("humbuzz");
         FIRESALT_LAND_EVENT = get("firesalt_land");
+        // TODO: make loop sound for level two, add in json;
         initHoundSounds();
     }
 

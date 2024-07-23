@@ -97,21 +97,28 @@ public class Color {
 		int cmin = NumberUtils.min(r, g, b);
 
 		brightness = (double) cmax / 255.0d;
-		if (cmax != 0) saturation = (double) (cmax - cmin) / (double) cmax;
-		else saturation = 0;
+		if (cmax != 0)
+			saturation = (double) (cmax - cmin) / (double) cmax;
+		else
+			saturation = 0;
 
-		if (saturation == 0) hue = 0;
+		if (saturation == 0)
+			hue = 0;
 		else {
 			double redc = (double) (cmax - r) / (double) (cmax - cmin);
 			double greenc = (double) (cmax - g) / (double) (cmax - cmin);
 			double bluec = (double) (cmax - b) / (double) (cmax - cmin);
 
-			if (r == cmax) hue = bluec - greenc;
-			else if (g == cmax) hue = 2.0f + redc - bluec;
-			else hue = 4.0f + greenc - redc;
+			if (r == cmax)
+				hue = bluec - greenc;
+			else if (g == cmax)
+				hue = 2.0f + redc - bluec;
+			else
+				hue = 4.0f + greenc - redc;
 
 			hue /= 6.0f;
-			if (hue < 0) hue += 1.0f;
+			if (hue < 0)
+				hue += 1.0f;
 		}
 		hsbvals[0] = hue;
 		hsbvals[1] = saturation;
@@ -144,7 +151,8 @@ public class Color {
 	}
 
 	public Color boost(int r, int g, int b) {
-		return new Color(Math.max(0, Math.min(255, this.getRed() + r)), Math.max(0, Math.min(255, this.getGreen() + g)), Math.max(0, Math.min(255, this.getBlue() + b)));
+		return new Color(Math.max(0, Math.min(255, this.getRed() + r)), Math.max(0, Math.min(255, this.getGreen() + g)),
+				Math.max(0, Math.min(255, this.getBlue() + b)));
 	}
 
 	public int getRed() {

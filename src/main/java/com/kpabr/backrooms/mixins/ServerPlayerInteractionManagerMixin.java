@@ -13,12 +13,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayerInteractionManager.class)
 public abstract class ServerPlayerInteractionManagerMixin {
-    @Shadow @Final
+    @Shadow
+    @Final
     protected ServerPlayerEntity player;
 
     @Inject(method = "setGameMode(Lnet/minecraft/world/GameMode;Lnet/minecraft/world/GameMode;)V", at = @At("HEAD"))
     private void removeWretchedCycleEffects(GameMode gameMode, GameMode previousGameMode, CallbackInfo ci) {
-        if(previousGameMode.isSurvivalLike() && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR)) {
+        if (previousGameMode.isSurvivalLike() && (gameMode == GameMode.CREATIVE || gameMode == GameMode.SPECTATOR)) {
             player.removeStatusEffect(BackroomStatusEffects.RAGGED);
             player.removeStatusEffect(BackroomStatusEffects.ROTTEN);
             player.removeStatusEffect(BackroomStatusEffects.WRETCHED);

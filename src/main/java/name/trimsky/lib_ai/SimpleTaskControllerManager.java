@@ -13,7 +13,7 @@ public final class SimpleTaskControllerManager {
     public long uniqueId = 0;
 
     public void tick() {
-        for(final var controller : controllers.values()) {
+        for (final var controller : controllers.values()) {
             controller.tick();
         }
     }

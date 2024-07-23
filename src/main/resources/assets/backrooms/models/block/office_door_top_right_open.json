@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:block/door_top_right_open",
+    "textures": {
+      "bottom": "backrooms:block/office_door_bottom",
+      "top": "backrooms:block/office_door_top"
+    }
+  }

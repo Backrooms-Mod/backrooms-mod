@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.block;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import net.minecraft.block.Block;

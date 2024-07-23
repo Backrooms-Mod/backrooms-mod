@@ -1,7 +1,7 @@
 package com.kpabr.backrooms.client.render.sky;
 
 import java.util.List;
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.BakedModel;
@@ -25,7 +25,7 @@ public class RemoveSkyboxQuadsBakedModel implements BakedModel {
 		if (quads == null) {
 			return null;
 		}
-		return quads.stream().filter((quad) -> !quad.getSprite().getId().getPath().startsWith("sky/")).toList();
+		return quads.stream().filter((quad) -> !quad.getSprite().getAtlasId().getPath().startsWith("sky/")).toList();
 	}
 
 	@Override

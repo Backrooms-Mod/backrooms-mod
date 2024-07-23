@@ -1,0 +1,26 @@
+{
+    "temperature": 0.8,
+    "downfall": 1,
+    "has_precipitation": false,
+    "effects": {
+      "sky_color": 10921378,
+      "fog_color": 10921378,
+      "water_color": 10921378,
+      "water_fog_color": 16735821,
+      "grass_color": 13818488
+    },
+    "spawners": {
+      "creature": [
+        {
+          "type": "backrooms:hound",
+          "weight": 100,
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    },
+    "spawn_costs": {},
+    "carvers": {},
+    "features": []
+  }
+  

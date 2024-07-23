@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_rh",
-  "textures": {
-    "top": "backrooms:block/plate_door_top",
-    "bottom": "backrooms:block/plate_door_bottom"
-  }
-}

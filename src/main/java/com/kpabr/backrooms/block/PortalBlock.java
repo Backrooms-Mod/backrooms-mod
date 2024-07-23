@@ -17,10 +17,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.world.World;
-
 
 public class PortalBlock extends Block {
     public static final IntProperty LEVEL = IntProperty.of("backrooms_level", 0, BackroomsLevels.LEVELS_AMOUNT);
@@ -30,20 +29,20 @@ public class PortalBlock extends Block {
         this.setDefaultState(this.stateManager.getDefaultState().with(LEVEL, 0));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         super.onEntityCollision(state, world, pos, entity);
 
-        if(world.isClient) {
+        if (world.isClient) {
             return;
         }
 
-        if(entity.isPlayer()) {
+        if (entity.isPlayer()) {
             World portalBlockWorld = entity.getServer().getWorld(
                     RegistryKey.of(
-                            Registry.WORLD_KEY,
-                            new Identifier("backrooms:level_"+state.get(LEVEL))));
-
+                            RegistryKeys.WORLD,
+                            new Identifier("backrooms:level_" + state.get(LEVEL))));
 
             EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld);
         }
@@ -54,19 +53,19 @@ public class PortalBlock extends Block {
         stateManager.add(LEVEL);
     }
 
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if(player.hasPermissionLevel(4) && (player.isCreative() || player.isSpectator())) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
+            BlockHitResult hit) {
+        if (player.hasPermissionLevel(4) && (player.isCreative() || player.isSpectator())) {
             int level = world.getBlockState(pos).get(LEVEL);
 
-            if(level == BackroomsLevels.LEVELS_AMOUNT-1) {
+            if (level == BackroomsLevels.LEVELS_AMOUNT - 1) {
                 level = 0;
             } else {
                 level += 1;
             }
 
-
             world.setBlockState(pos, state.with(LEVEL, level));
-            player.sendMessage(Text.of("Stored level has been set to "+level), true);
+            player.sendMessage(Text.of("Stored level has been set to " + level), true);
 
             return ActionResult.SUCCESS;
         }

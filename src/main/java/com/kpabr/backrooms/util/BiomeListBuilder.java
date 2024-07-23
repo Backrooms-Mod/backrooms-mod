@@ -1,6 +1,6 @@
 package com.kpabr.backrooms.util;
 
-import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 
 import java.util.*;
