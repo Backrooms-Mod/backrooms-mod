@@ -17,7 +17,7 @@ public class FireSalt extends Item {
 
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         ItemStack itemStack = user.getStackInHand(hand);
-        user.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, 100, 1); //placeholder
+        user.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, 100, 1); // placeholder
         if (!world.isClient) {
             FireSaltProjectileEntity FireSaltEnt = new FireSaltProjectileEntity(world, user);
             FireSaltEnt.setItem(itemStack);

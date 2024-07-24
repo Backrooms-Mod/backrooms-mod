@@ -16,7 +16,7 @@ public class TaskController {
     private Task idleTask;
 
     public TaskController(final Task idleTask) {
-        if(idleTask == null) {
+        if (idleTask == null) {
             throw new IllegalArgumentException("firstTask argument must be not null");
         }
         tasksStack = new Stack<>();
@@ -28,19 +28,20 @@ public class TaskController {
     public Task getIdleTask() {
         return this.idleTask;
     }
+
     public void setIdleTask(Task newIdleTask) {
         this.idleTask = newIdleTask;
     }
 
     public void popState() {
         tasksStack.pop();
-        if(tasksStack.empty()) {
+        if (tasksStack.empty()) {
             tasksStack.push(idleTask);
         }
     }
 
     public void pushState(Task task) {
-        if(tasksStack.empty() || !tasksStack.peek().equals(task)) {
+        if (tasksStack.empty() || !tasksStack.peek().equals(task)) {
             task.setTaskController(this);
             tasksStack.push(task);
         }

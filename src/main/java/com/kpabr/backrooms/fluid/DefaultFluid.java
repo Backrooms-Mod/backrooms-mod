@@ -23,10 +23,6 @@ public abstract class DefaultFluid extends FlowableFluid {
     public boolean matchesType(Fluid fluid) {
         return fluid == getStill() || fluid == getFlowing();
     }
-    @Override
-    protected boolean isInfinite() {
-        return false;
-    }
 
     /**
      * Perform actions when the fluid flows into a replaceable block. Water drops
@@ -39,7 +35,8 @@ public abstract class DefaultFluid extends FlowableFluid {
     }
 
     @Override
-    protected boolean canBeReplacedWith(FluidState fluidState, BlockView blockView, BlockPos blockPos, Fluid fluid, Direction direction) {
+    protected boolean canBeReplacedWith(FluidState fluidState, BlockView blockView, BlockPos blockPos, Fluid fluid,
+            Direction direction) {
         return false;
     }
 

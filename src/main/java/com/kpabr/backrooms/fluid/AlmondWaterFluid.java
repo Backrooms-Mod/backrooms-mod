@@ -9,6 +9,7 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
+import net.minecraft.world.World;
 
 public abstract class AlmondWaterFluid extends DefaultFluid {
 
@@ -48,6 +49,11 @@ public abstract class AlmondWaterFluid extends DefaultFluid {
         public boolean isStill(FluidState fluidState) {
             return false;
         }
+
+        @Override
+        protected boolean isInfinite(World world) {
+            return false;
+        }
     }
 
     public static class Still extends AlmondWaterFluid {
@@ -59,6 +65,11 @@ public abstract class AlmondWaterFluid extends DefaultFluid {
         @Override
         public boolean isStill(FluidState state) {
             return true;
+        }
+
+        @Override
+        protected boolean isInfinite(World world) {
+            return false;
         }
     }
 }

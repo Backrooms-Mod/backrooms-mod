@@ -30,7 +30,8 @@ public class PlayerWretchedComponent implements WretchedComponent {
 
     @Override
     public void decrement() {
-        if(wretched != 0) --this.wretched;
+        if (wretched != 0)
+            --this.wretched;
     }
 
     @Override

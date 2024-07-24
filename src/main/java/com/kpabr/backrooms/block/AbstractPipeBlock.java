@@ -16,11 +16,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.WorldAccess;
-import com.kpabr.backrooms.block.PipeBlock;
 
 import java.util.Map;
 
-public class AbstractPipeBlock extends Block implements Waterloggable{
+public class AbstractPipeBlock extends Block implements Waterloggable {
 	public static final BooleanProperty NORTH = ConnectingBlock.NORTH;
 	public static final BooleanProperty EAST = ConnectingBlock.EAST;
 	public static final BooleanProperty SOUTH = ConnectingBlock.SOUTH;
@@ -32,7 +31,8 @@ public class AbstractPipeBlock extends Block implements Waterloggable{
 
 	public AbstractPipeBlock(Settings settings) {
 		super(settings);
-		this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, true).with(EAST, true).with(SOUTH, true).with(WEST, true).with(UP, true).with(DOWN, true).with(WATERLOGGED, false));
+		this.setDefaultState(this.stateManager.getDefaultState().with(NORTH, true).with(EAST, true).with(SOUTH, true)
+				.with(WEST, true).with(UP, true).with(DOWN, true).with(WATERLOGGED, false));
 	}
 
 	public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -49,15 +49,16 @@ public class AbstractPipeBlock extends Block implements Waterloggable{
 	}
 
 	@SuppressWarnings("deprecation")
-	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+	public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState,
+			WorldAccess world, BlockPos pos, BlockPos neighborPos) {
 		if (state.get(WATERLOGGED)) {
-			world. createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+			world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
 		}
-		if(shouldConnect(neighborState)) return state.with(FACING_PROPERTIES.get(direction), true);
+		if (shouldConnect(neighborState))
+			return state.with(FACING_PROPERTIES.get(direction), true);
 		return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
 	}
 
-	@SuppressWarnings("deprecation")
 	public BlockState rotate(BlockState state, BlockRotation rotation) {
 		return state
 				.with(FACING_PROPERTIES.get(rotation.rotate(Direction.NORTH)), state.get(NORTH))
@@ -68,7 +69,6 @@ public class AbstractPipeBlock extends Block implements Waterloggable{
 				.with(FACING_PROPERTIES.get(rotation.rotate(Direction.UP)), state.get(UP));
 	}
 
-	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState state, BlockMirror mirror) {
 		return state
 				.with(FACING_PROPERTIES.get(mirror.apply(Direction.NORTH)), state.get(NORTH))
@@ -79,32 +79,41 @@ public class AbstractPipeBlock extends Block implements Waterloggable{
 				.with(FACING_PROPERTIES.get(mirror.apply(Direction.UP)), state.get(UP));
 	}
 
-	protected boolean shouldConnect(BlockState blockState){
+	protected boolean shouldConnect(BlockState blockState) {
 		return false;
 	}
+
 	protected void appendProperties(Builder<Block, BlockState> builder) {
 		builder.add(UP, DOWN, NORTH, EAST, SOUTH, WEST, WATERLOGGED);
 	}
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public FluidState getFluidState(BlockState state) {
 		return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
 	}
-	@SuppressWarnings("deprecation")
+
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {
 		VoxelShape finalShape = VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f);
 		if (state.get(NORTH))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.0f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.0f, 0.75f, 0.75f, 0.75f),
+					BooleanBiFunction.OR);
 		if (state.get(SOUTH))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 1.0f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 0.75f, 1.0f),
+					BooleanBiFunction.OR);
 		if (state.get(EAST))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 1.0f, 0.75f, 0.75f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 1.0f, 0.75f, 0.75f),
+					BooleanBiFunction.OR);
 		if (state.get(WEST))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.0f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.0f, 0.25f, 0.25f, 0.75f, 0.75f, 0.75f),
+					BooleanBiFunction.OR);
 		if (state.get(DOWN))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.0f, 0.25f, 0.75f, 0.75f, 0.75f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.0f, 0.25f, 0.75f, 0.75f, 0.75f),
+					BooleanBiFunction.OR);
 		if (state.get(UP))
-			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 1.0f, 0.75f), BooleanBiFunction.OR);
+			finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.25f, 0.25f, 0.25f, 0.75f, 1.0f, 0.75f),
+					BooleanBiFunction.OR);
 
 		return finalShape;
 	}

@@ -6,7 +6,8 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 public class BackroomsProjectiles {
 
@@ -19,7 +20,7 @@ public class BackroomsProjectiles {
 
     public static void init() {
         Registry.register(
-                Registry.ENTITY_TYPE,
+                Registries.ENTITY_TYPE,
                 BackroomsMod.id("fire_salt_projectile"),
                 FIRE_SALT_PROJECTILE_ENTITY_TYPE);
     }

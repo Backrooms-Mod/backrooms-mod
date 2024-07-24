@@ -14,5 +14,7 @@
     "piglin_safe" : false,
     "height": 128,
     "min_y": 0,
-    "effects": "minecraft:overworld"
+    "effects": "minecraft:overworld",
+    "monster_spawn_block_light_limit": 0,
+    "monster_spawn_light_level": 0
   }

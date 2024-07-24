@@ -10,7 +10,9 @@ import net.minecraft.client.render.VertexFormat;
 public interface RenderLayerAccessor {
 
 	@Invoker
-	static RenderLayer.MultiPhase callOf(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize, boolean hasCrumbling, boolean translucent, RenderLayer.MultiPhaseParameters phases) {
+	static RenderLayer.MultiPhase callOf(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode,
+			int expectedBufferSize, boolean hasCrumbling, boolean translucent,
+			RenderLayer.MultiPhaseParameters phases) {
 		throw new UnsupportedOperationException();
 	}
 

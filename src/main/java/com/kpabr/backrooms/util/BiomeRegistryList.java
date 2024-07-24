@@ -1,7 +1,7 @@
 package com.kpabr.backrooms.util;
 
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class BiomeRegistryList {
     }
 
     public RegistryEntry<Biome> findNearest(LevelParameters params) {
-        
+
         LevelParameters mostSimilarKey = null;
         double smallestDistance = Float.MAX_VALUE;
 
@@ -43,12 +43,10 @@ public class BiomeRegistryList {
         return (double) Math.sqrt(sum);
     }
 
-    public static BiomeRegistryList from(Registry<Biome> biomeRegistry, BiomeListBuilder biomeList) {
+    public static BiomeRegistryList from(BiomeListBuilder biomeList, RegistryEntryLookup<Biome> biomeRegistry) {
         final BiomeRegistryList list = new BiomeRegistryList();
 
-        biomeList.getBiomeList().forEach((key, value) ->
-            list.biomeList.put(key, biomeRegistry.getOrCreateEntry(value))
-        );
+        biomeList.getBiomeList().forEach((key, value) -> list.biomeList.put(key, biomeRegistry.getOrThrow(value)));
         return list;
     }
 }

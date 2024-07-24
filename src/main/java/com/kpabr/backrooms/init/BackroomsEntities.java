@@ -10,31 +10,35 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 import java.util.ArrayList;
 
 public class BackroomsEntities {
     private static final ArrayList<EntityEntry> ENTITIES = new ArrayList<>();
     public static final EntityType<HoundEntity> HOUND = add("hound",
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundEntity::new).dimensions(EntityDimensions.fixed(0.76f, 1.0f)).build());
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, HoundEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.76f, 1.0f)).build());
 
     public static final EntityType<WretchEntity> WRETCH = add("wretch",
-            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.85f)).build());
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, WretchEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.75f, 1.85f)).build());
 
-    private static<E extends LivingEntity> EntityType<E> add(String name, EntityType<E> entity) {
+    private static <E extends LivingEntity> EntityType<E> add(String name, EntityType<E> entity) {
         ENTITIES.add(new EntityEntry(BackroomsMod.id(name), entity));
         return entity;
     }
 
     public static void init() {
         for (EntityEntry entry : ENTITIES) {
-            Registry.register(Registry.ENTITY_TYPE, entry.identifier, entry.entity);
+            Registry.register(Registries.ENTITY_TYPE, entry.identifier, entry.entity);
         }
 
         FabricDefaultAttributeRegistry.register(WRETCH, WretchEntity.createWretchAttributes());
         FabricDefaultAttributeRegistry.register(HOUND, HoundEntity.createHoundAttributes());
     }
 
-    private record EntityEntry(Identifier identifier, EntityType<? extends LivingEntity> entity) {}
+    private record EntityEntry(Identifier identifier, EntityType<? extends LivingEntity> entity) {
+    }
 }

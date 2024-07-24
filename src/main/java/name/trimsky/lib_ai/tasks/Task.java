@@ -10,5 +10,6 @@ public interface Task {
      * a function that is called every tick
      */
     void tick();
+
     void setTaskController(TaskController controller);
 }

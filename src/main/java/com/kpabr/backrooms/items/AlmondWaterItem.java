@@ -45,21 +45,21 @@ public class AlmondWaterItem extends Item {
 
 			player.getHungerManager().add(8, 8.0f);
 
-			if(wretched.getValue() < 24 && wretched.getValue() + almondMilkRestoring >= 24) {
+			if (wretched.getValue() < 24 && wretched.getValue() + almondMilkRestoring >= 24) {
 				user.removeStatusEffect(BackroomStatusEffects.RAGGED);
-			} else if(wretched.getValue() < 50 && wretched.getValue() + almondMilkRestoring >= 50) {
+			} else if (wretched.getValue() < 50 && wretched.getValue() + almondMilkRestoring >= 50) {
 				user.removeStatusEffect(BackroomStatusEffects.ROTTEN);
-			} else if(wretched.getValue() < 75 && wretched.getValue() + almondMilkRestoring >= 75) {
+			} else if (wretched.getValue() < 75 && wretched.getValue() + almondMilkRestoring >= 75) {
 				user.removeStatusEffect(BackroomStatusEffects.WRETCHED);
 			}
 
-			// add 1 to almondMilkRestoring because we're calling applyWretchedCycle and it's decrementing wretched parameter immediately
+			// add 1 to almondMilkRestoring because we're calling applyWretchedCycle and
+			// it's decrementing wretched parameter immediately
 			wretched.remove(almondMilkRestoring + 1);
 			BackroomsMod.applyWretchedCycle(player);
 		} else if (stack.isEmpty()) {
 			return new ItemStack(Items.GLASS_BOTTLE);
-		}
-		else if (user instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
+		} else if (user instanceof PlayerEntity player && !player.getAbilities().creativeMode) {
 			final ItemStack itemStack = new ItemStack(Items.GLASS_BOTTLE);
 			if (!player.getInventory().insertStack(itemStack)) {
 				player.dropItem(itemStack, false);

@@ -21,11 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class MaskItem extends BlockItem implements Wearable {
+public class MaskItem extends BlockItem implements Equipment {
     private static final UUID HEAD_UUID = UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B");
-    private static final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers = ImmutableMultimap.<EntityAttribute, EntityAttributeModifier>builder()
+    private static final Multimap<EntityAttribute, EntityAttributeModifier> attributeModifiers = ImmutableMultimap
+            .<EntityAttribute, EntityAttributeModifier>builder()
             .put(EntityAttributes.GENERIC_ATTACK_DAMAGE,
-                    new EntityAttributeModifier(HEAD_UUID, "Mask damage boost", 4, EntityAttributeModifier.Operation.ADDITION))
+                    new EntityAttributeModifier(HEAD_UUID, "Mask damage boost", 4,
+                            EntityAttributeModifier.Operation.ADDITION))
             .build();
 
     public MaskItem(Block wallBlock, Settings settings) {
@@ -66,7 +68,7 @@ public class MaskItem extends BlockItem implements Wearable {
         return blockState != null && world.canPlace(blockState, blockPos, ShapeContext.absent()) ? blockState : null;
     }
 
-    public static EquipmentSlot getSlotType() {
+    public EquipmentSlot getSlotType() {
         return EquipmentSlot.HEAD;
     }
 

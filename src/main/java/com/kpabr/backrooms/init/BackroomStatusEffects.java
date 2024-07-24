@@ -5,7 +5,8 @@ import com.kpabr.backrooms.effect.RaggedStatusEffect;
 import com.kpabr.backrooms.effect.RottenStatusEffect;
 import com.kpabr.backrooms.effect.WretchedStatusEffect;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 
 public class BackroomStatusEffects {
     public static final StatusEffect RAGGED = new RaggedStatusEffect();
@@ -13,8 +14,8 @@ public class BackroomStatusEffects {
     public static final StatusEffect WRETCHED = new WretchedStatusEffect();
 
     public static void init() {
-        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("ragged"), RAGGED);
-        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("rotten"), ROTTEN);
-        Registry.register(Registry.STATUS_EFFECT, BackroomsMod.id("wretched"), WRETCHED);
+        Registry.register(Registries.STATUS_EFFECT, BackroomsMod.id("ragged"), RAGGED);
+        Registry.register(Registries.STATUS_EFFECT, BackroomsMod.id("rotten"), ROTTEN);
+        Registry.register(Registries.STATUS_EFFECT, BackroomsMod.id("wretched"), WRETCHED);
     }
 }

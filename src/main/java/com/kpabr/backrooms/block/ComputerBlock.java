@@ -38,7 +38,7 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(Properties.HORIZONTAL_FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Nullable
@@ -49,8 +49,9 @@ public class ComputerBlock extends HorizontalFacingBlock implements BlockEntityP
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        if(type == BackroomsBlocks.COMPUTER_BLOCK_ENTITY) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state,
+            BlockEntityType<T> type) {
+        if (type == BackroomsBlocks.COMPUTER_BLOCK_ENTITY) {
             return (theWorld, blockPos, blockState, entity) -> ComputerBlockEntity.tick(theWorld, blockPos, blockState);
         }
         return null;

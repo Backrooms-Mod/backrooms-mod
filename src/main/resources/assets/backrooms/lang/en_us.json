@@ -125,7 +125,7 @@
       "text.autoconfig.backrooms.category.Gameplay": "Gameplay",
       "text.autoconfig.backrooms.category.default": "Default",
       "text.autoconfig.backrooms.category.Render": "Client",
-      "text.autoconfig.backrooms.category.Miscellaneous": "Miscellaneous",
+      "text.autoconfig.backrooms.category.Entities/AI": "Entities/AI",
 
       "gamerule.category.backrooms_category": "Backrooms",
       

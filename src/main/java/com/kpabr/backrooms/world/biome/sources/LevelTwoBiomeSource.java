@@ -4,31 +4,26 @@ import com.kpabr.backrooms.init.BackroomsLevels;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.util.dynamic.RegistryOps;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.registry.RegistryEntryLookup;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryOps;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.BiomeSource;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil.MultiNoiseSampler;
 
 import java.util.stream.Stream;
 
-public class LevelTwoBiomeSource extends BiomeSource{
+public class LevelTwoBiomeSource extends BiomeSource {
 
-    public static final Codec<LevelTwoBiomeSource> CODEC = RecordCodecBuilder.create((instance) ->
-            instance.group(
-                    RegistryOps.createRegistryCodec(Registry.BIOME_KEY)
-                            .forGetter((biomeSource) -> biomeSource.BIOME_REGISTRY)
-            ).apply(instance, instance.stable(LevelTwoBiomeSource::new)));
-    
-    private Registry<Biome> BIOME_REGISTRY;
+    public static final Codec<LevelTwoBiomeSource> CODEC = RecordCodecBuilder
+            .create((instance) -> instance.group(RegistryOps.getEntryLookupCodec(RegistryKeys.BIOME))
+                    .apply(instance, instance.stable(LevelTwoBiomeSource::new)));
     private final RegistryEntry<Biome> PIPES_BIOME;
 
-    public LevelTwoBiomeSource(Registry<Biome> biomeRegistry) {
-        super(Stream.of(
-                biomeRegistry.getOrCreateEntry(BackroomsLevels.PIPES_BIOME)));
-        PIPES_BIOME = biomeRegistry.getOrCreateEntry(BackroomsLevels.PIPES_BIOME);
-        this.BIOME_REGISTRY = biomeRegistry;
+    public LevelTwoBiomeSource(RegistryEntryLookup<Biome> biomeRegistry) {
+        super();
+        PIPES_BIOME = biomeRegistry.getOrThrow(BackroomsLevels.PIPES_BIOME);
     }
 
     @Override
@@ -37,13 +32,12 @@ public class LevelTwoBiomeSource extends BiomeSource{
     }
 
     @Override
-    protected Codec<? extends BiomeSource> getCodec() {
+    protected Codec<LevelTwoBiomeSource> getCodec() {
         return CODEC;
     }
 
     @Override
-    public BiomeSource withSeed(long seed) {
-        return this;
+    protected Stream<RegistryEntry<Biome>> biomeStream() {
+        return Stream.of(PIPES_BIOME);
     }
-    
 }

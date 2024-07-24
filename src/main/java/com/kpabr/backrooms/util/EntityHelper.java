@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 public class EntityHelper {
     public static void teleportToLevel(ServerPlayerEntity entity, World world) {
@@ -24,6 +24,7 @@ public class EntityHelper {
             }
         }
 
-        entity.teleport((ServerWorld) world, mutBlockPos.getX() + 0.5, mutBlockPos.getY(), mutBlockPos.getZ() + 0.5, entity.getYaw(), entity.getPitch());
+        entity.teleport((ServerWorld) world, mutBlockPos.getX() + 0.5, mutBlockPos.getY(), mutBlockPos.getZ() + 0.5,
+                entity.getYaw(), entity.getPitch());
     }
 }

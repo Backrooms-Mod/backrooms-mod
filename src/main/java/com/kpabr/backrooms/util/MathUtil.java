@@ -8,7 +8,7 @@ public class MathUtil {
         double d = targetEntity.getX() - ownerEntity.getX();
         double e = targetEntity.getZ() - ownerEntity.getZ();
 
-        float yawAngleBetween = (float)(MathHelper.atan2(e, d) * 57.2957763671875) - 90.0F;
+        float yawAngleBetween = (float) (MathHelper.atan2(e, d) * 57.2957763671875) - 90.0F;
         return yawAngleBetween;
     }
 }
