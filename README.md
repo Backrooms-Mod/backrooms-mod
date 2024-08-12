@@ -9,15 +9,18 @@ This mod, by itself will add Levels 0-TBD of the Backrooms to Minecraft. These w
 
 ### Levels
 
-In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT):
+In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases):
 - Level 0
 - Level 1
+- Level 2
+- Level 3 (almost empty, WIP)
 
 ### Entities
 
 There are Entities lurking around, so better watch out! They are also primarily based on the Wikidot.
-In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT): 
+In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases): 
 - Hound
+- Wretch
 
 ### Items
 
@@ -38,7 +41,7 @@ This mod will have a system for addon mods to integrate with this mod and add ne
 
 ## Install & Play
 
-Since the mod is not ready for release yet, there is no Curseforge or Modrinth release. However, if you want to play the mod right now (with bugs and instability), you can download [Actions Artifacts](https://github.com/Backrooms-Mod/backrooms-mod/actions) or the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT).
+Since the mod is not ready for release yet, there is no Curseforge or Modrinth release. However, if you want to play the mod right now (with bugs and instability), you can download [Actions Artifacts](https://github.com/Backrooms-Mod/backrooms-mod/actions) or the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases).
 
 ### Get the .jar
 
@@ -49,7 +52,7 @@ To download an Artifact, you must be logged in with your Github account. Go to t
 
 #### Snapshots
 
-Snapshots are still work-in-progress builds, but they are considered as more stable than Artifacts. You can download the .jar in the [release tab](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT):
+Snapshots are still work-in-progress builds, but they are considered as more stable than Artifacts. You can download the .jar in the [release tab](https://github.com/Backrooms-Mod/backrooms-mod/releases):
 
 
 ### Install the mod
