@@ -9,14 +9,14 @@ This mod, by itself will add Levels 0-TBD of the Backrooms to Minecraft. These w
 
 ### Levels
 
-In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/WIP):
+In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT):
 - Level 0
 - Level 1
 
 ### Entities
 
 There are Entities lurking around, so better watch out! They are also primarily based on the Wikidot.
-In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/WIP): 
+In the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT): 
 - Hound
 
 ### Items
@@ -38,7 +38,7 @@ This mod will have a system for addon mods to integrate with this mod and add ne
 
 ## Install & Play
 
-Since the mod is not ready for release yet, there is no Curseforge or Modrinth release. However, if you want to play the mod right now (with bugs and instability), you can download [Actions Artifacts](https://github.com/Backrooms-Mod/backrooms-mod/actions) or the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/WIP).
+Since the mod is not ready for release yet, there is no Curseforge or Modrinth release. However, if you want to play the mod right now (with bugs and instability), you can download [Actions Artifacts](https://github.com/Backrooms-Mod/backrooms-mod/actions) or the latest [snapshot](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT).
 
 ### Get the .jar
 
@@ -49,7 +49,7 @@ To download an Artifact, you must be logged in with your Github account. Go to t
 
 #### Snapshots
 
-Snapshots are still work-in-progress builds, but they are considered as more stable than Artifacts. You can download the .jar in the [release tab](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/WIP):
+Snapshots are still work-in-progress builds, but they are considered as more stable than Artifacts. You can download the .jar in the [release tab](https://github.com/Backrooms-Mod/backrooms-mod/releases/tag/SNAPSHOT):
 
 
 ### Install the mod
