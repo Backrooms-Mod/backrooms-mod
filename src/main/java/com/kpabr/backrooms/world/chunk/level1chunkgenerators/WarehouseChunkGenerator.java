@@ -24,7 +24,7 @@ import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 
 import net.minecraft.block.WallMountedBlock;
-
+import net.minecraft.block.entity.BarrelBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
@@ -324,6 +324,16 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
                 region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
             } else {
                 region.setBlockState(pos, state, true);
+                if (state.isOf(Blocks.BARREL)) {
+                    BarrelBlockEntity barrelBlockEntity = new BarrelBlockEntity(pos, state);
+                    region.setBlockEntity(barrelBlockEntity);
+                    barrelBlockEntity.setLootTable(this.getBarrelLootTable(), worldSeed + pos.hashCode());
+                } else if (state.isOf(BackroomsBlocks.CRATE)) {
+                    CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, state);
+                    region.setBlockEntity(crateBlockEntity);
+                    crateBlockEntity.setLootTable(this.getBarrelLootTable(),
+                            worldSeed + pos.hashCode());
+                }
             }
         }
     }

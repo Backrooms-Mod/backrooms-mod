@@ -1,8 +1,10 @@
 package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 
 import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
+import com.kpabr.backrooms.init.BackroomsLootTables;
 import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.chunk.LevelOneChunkGenerator;
 import com.mojang.serialization.Codec;
@@ -11,6 +13,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BarrelBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
@@ -225,14 +228,28 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
                 (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
     }
 
-    private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
+   private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
         if (!state.isAir()) {
             if (state.isOf(Blocks.BARRIER)) {
                 region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
             } else {
                 region.setBlockState(pos, state, true);
+                if (state.isOf(Blocks.BARREL)) {
+                    BarrelBlockEntity barrelBlockEntity = new BarrelBlockEntity(pos, state);
+                    region.setBlockEntity(barrelBlockEntity);
+                    barrelBlockEntity.setLootTable(this.getBarrelLootTable(), worldSeed + pos.hashCode());
+                } else if (state.isOf(BackroomsBlocks.CRATE)) {
+                    CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, state);
+                    region.setBlockEntity(crateBlockEntity);
+                    crateBlockEntity.setLootTable(this.getBarrelLootTable(),
+                            worldSeed + pos.hashCode());
+                }
             }
         }
+    }
+
+    protected Identifier getBarrelLootTable() {
+        return BackroomsLootTables.CRATE;
     }
 
     @Override

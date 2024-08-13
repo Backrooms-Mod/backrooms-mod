@@ -4,14 +4,17 @@ import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.FiresaltCrystalBlock;
 import com.kpabr.backrooms.block.FluorescentLightBlock;
 import com.kpabr.backrooms.block.PipeBlock;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
+import com.kpabr.backrooms.init.BackroomsLootTables;
 import com.kpabr.backrooms.util.ChunkType;
 import com.kpabr.backrooms.util.NbtPlacerUtil;
 import com.kpabr.backrooms.world.biome.sources.LevelTwoBiomeSource;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BarrelBlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.BlockRotation;
@@ -551,8 +554,23 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
                 region.setBlockState(pos, Blocks.AIR.getDefaultState(), true);
             } else {
                 region.setBlockState(pos, state, true);
+                if (state.isOf(Blocks.BARREL)) {
+                    BarrelBlockEntity barrelBlockEntity = new BarrelBlockEntity(pos, state);
+                    region.setBlockEntity(barrelBlockEntity);
+                    barrelBlockEntity.setLootTable(this.getBarrelLootTable(),
+                            BackroomsLevels.LEVEL_2_WORLD.getSeed() + pos.hashCode());
+                } else if (state.isOf(BackroomsBlocks.CRATE)) {
+                    CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, state);
+                    region.setBlockEntity(crateBlockEntity);
+                    crateBlockEntity.setLootTable(this.getBarrelLootTable(),
+                            BackroomsLevels.LEVEL_2_WORLD.getSeed() + pos.hashCode());
+                }
             }
         }
+    }
+
+    protected Identifier getBarrelLootTable() {
+        return BackroomsLootTables.CRATE;
     }
 
     @Override
