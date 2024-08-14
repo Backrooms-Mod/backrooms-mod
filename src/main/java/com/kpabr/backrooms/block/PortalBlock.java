@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.text.Text;
@@ -39,7 +40,7 @@ public class PortalBlock extends Block {
         }
 
         if (entity.isPlayer()) {
-            World portalBlockWorld = entity.getServer().getWorld(
+            ServerWorld portalBlockWorld = entity.getServer().getWorld(
                     RegistryKey.of(
                             RegistryKeys.WORLD,
                             new Identifier("backrooms:level_" + state.get(LEVEL))));

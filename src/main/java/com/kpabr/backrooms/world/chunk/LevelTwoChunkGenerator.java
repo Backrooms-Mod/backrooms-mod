@@ -52,7 +52,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
     private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
     private Identifier nbtId = BackroomsMod.id("level_2");
 
-    private final static int ROOF_Y = 15;
+    private final static int ROOF_Y = 9;
     private final static int FLOOR_Y = 1;
     private SimplexNoiseSampler xPlaneNoise;
     private SimplexNoiseSampler zPlaneNoise;
@@ -390,6 +390,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
             }
         }
         fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y, BackroomsBlocks.BEDROCK_BRICKS);
+        fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, ROOF_Y, BackroomsBlocks.BEDROCK_BRICKS);
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -409,7 +410,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getHeight(int x, int z, Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
-        return ROOF_Y + 5;
+        return ROOF_Y;
     }
 
     private final static int chunksToCheckBeforeCurrentChunk = 3;
@@ -576,7 +577,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getWorldHeight() {
-        return 128;
+        return ROOF_Y;
     }
 
     @Override

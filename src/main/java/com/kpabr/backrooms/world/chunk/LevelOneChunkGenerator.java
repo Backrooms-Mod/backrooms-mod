@@ -98,7 +98,7 @@ public class LevelOneChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getWorldHeight() {
-        return 128;
+        return ROOF_BEGIN_Y;
     }
 
     @Override
@@ -178,7 +178,7 @@ public class LevelOneChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getHeight(int x, int z, Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
-        return 128;
+        return ROOF_BEGIN_Y;
     }
 
     @Override

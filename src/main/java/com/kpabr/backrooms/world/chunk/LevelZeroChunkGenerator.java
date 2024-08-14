@@ -525,7 +525,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getHeight(int x, int z, Type heightmap, HeightLimitView world, NoiseConfig noiseConfig) {
-        return 128;
+        return ROOF_BEGIN_Y;
     }
 
     @Override

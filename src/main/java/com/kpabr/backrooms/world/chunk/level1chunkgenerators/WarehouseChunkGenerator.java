@@ -330,7 +330,7 @@ public class WarehouseChunkGenerator extends ChunkGenerator {
 
     @Override
     public int getWorldHeight() {
-        return 128;
+        return ROOF_BEGIN_Y;
     }
 
     @Override
