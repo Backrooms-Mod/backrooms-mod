@@ -9,12 +9,12 @@ import net.minecraft.world.World;
 import net.minecraft.util.math.random.Random;
 
 public class EntityHelper {
-    public static void teleportToLevel(ServerPlayerEntity entity, World world) {
+    public static void teleportToLevel(ServerPlayerEntity entity, World world, int y) {
         Random rand = world.getRandom();
 
         int newX = (rand.nextInt(25) * 16) + rand.nextInt(16);
         int newZ = (rand.nextInt(25) * 16) + rand.nextInt(16);
-        int newY = 30;
+        int newY = y;
 
         BlockPos.Mutable mutBlockPos = new BlockPos(newX, newY, newZ).mutableCopy().move(Direction.DOWN);
         while (!world.isAir(mutBlockPos) && world.getBlockState(mutBlockPos) != null) {

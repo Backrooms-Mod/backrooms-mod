@@ -33,7 +33,7 @@ public class NoclipBlock extends Block {
                     )
             );
 
-            EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld);
+            EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld, 30);
         }
     }
 

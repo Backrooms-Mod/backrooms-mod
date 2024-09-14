@@ -41,10 +41,10 @@ public abstract class EntityMixin {
 
                     RegistryKey<World> worldKey = world.getRegistryKey();
                     if (worldKey == World.OVERWORLD) {
-                        teleportToLevel((ServerPlayerEntity) entity, levelZero);
+                        teleportToLevel((ServerPlayerEntity) entity, levelZero, 30);
                     } else if (worldKey == levelZero.getRegistryKey()) {
                         teleportToLevel((ServerPlayerEntity) entity,
-                                getServer().getWorld(BackroomsLevels.LEVEL_1_WORLD_KEY));
+                                getServer().getWorld(BackroomsLevels.LEVEL_1_WORLD_KEY), 30);
                     }
                 }
             }

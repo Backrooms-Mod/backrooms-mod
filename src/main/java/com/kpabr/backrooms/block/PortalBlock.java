@@ -44,7 +44,12 @@ public class PortalBlock extends Block {
                             RegistryKeys.WORLD,
                             new Identifier("backrooms:level_" + state.get(LEVEL))));
 
-            EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld);
+            int y = 30;
+            if(state.get(LEVEL) == 2) {
+                y = 10;
+            }
+
+            EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld, y);
         }
     }
 
