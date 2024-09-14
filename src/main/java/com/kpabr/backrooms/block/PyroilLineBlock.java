@@ -39,7 +39,7 @@ public class PyroilLineBlock extends BlockWithEntity {
                     Direction.SOUTH, WIRE_CONNECTION_SOUTH, Direction.WEST, WIRE_CONNECTION_WEST));
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
-    // Idk what does that means, TODO:
+    // Idk what does that mean, TODO:
     private static final Map<Direction, VoxelShape> field_24414 = Maps.newEnumMap(ImmutableMap.of(
             Direction.NORTH, Block.createCuboidShape(3.0, 0.0, 0.0, 13.0, 1.0, 13.0),
             Direction.SOUTH, Block.createCuboidShape(3.0, 0.0, 3.0, 13.0, 1.0, 16.0),

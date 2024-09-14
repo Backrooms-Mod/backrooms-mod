@@ -109,11 +109,10 @@ public class CrateBlockEntity extends LootableContainerBlockEntity {
         if (!this.removed) {
             this.stateManager.updateViewerCount(this.getWorld(), this.getPos(), this.getCachedState());
         }
-
     }
 
     void setOpen(BlockState state, boolean open) {
-        this.world.setBlockState(this.getPos(), (BlockState) state.with(CrateBlock.OPEN, open), 3);
+        this.world.setBlockState(this.getPos(), state.with(CrateBlock.OPEN, open), 3);
     }
 
     void playSound(BlockState state, SoundEvent soundEvent) {
