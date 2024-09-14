@@ -25,6 +25,13 @@ public class BackroomsConfig implements ConfigData {
     @ConfigEntry.Category("Entities/AI")
     public boolean aiDebug = false;
 
+    @ConfigEntry.Category("Gameplay")
+    public double noclipCarpetingSpawnChance = 0.001;
+
+    @ConfigEntry.Category("Gameplay")
+    public double noclipWallSpawnChance = 0.005;
+
+
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);
     }

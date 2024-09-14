@@ -3,8 +3,6 @@ package com.kpabr.backrooms.init;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo.Map;
-
 import com.kpabr.backrooms.block.entity.MaskBlockEntity;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
@@ -34,7 +32,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 
 @SuppressWarnings("unused")
 public class BackroomsBlocks {
@@ -314,6 +311,12 @@ public class BackroomsBlocks {
 	public static final Block RED_CARPETING = add("red_carpeting", new CarpetingBlock(DyeColor.RED),
 			ItemGroups.BUILDING_BLOCKS);
 	public static final Block PORTAL_BLOCK = add("portal_block", new PortalBlock(), ItemGroups.BUILDING_BLOCKS);
+	public static final Block NOCLIP_CARPETING = add("noclip_carpeting",
+			new NoclipBlock(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).noCollision()),
+			ItemGroups.FUNCTIONAL);
+	public static final Block NOCLIP_WALL = add("noclip_wall",
+			new NoclipBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).noCollision()),
+			ItemGroups.FUNCTIONAL);
 
 	private static <T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);

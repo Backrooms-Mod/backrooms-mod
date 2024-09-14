@@ -55,9 +55,11 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
 
     private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
-    private Identifier nbtId = BackroomsMod.id("level_zero");
+    private final Identifier nbtId = BackroomsMod.id("level_zero");
 
     private Random moldPlacementRandom;
+    // Random object controlling generation of walls.
+    private Random random;
     private RegistryEntryLookup<Block> blockLookup;
 
     public LevelZeroChunkGenerator(RegistryEntryLookup<Biome> biomeRegistry, RegistryEntryLookup<Block> blockLookup) {
@@ -77,7 +79,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
 
     @Override
     public void buildSurface(ChunkRegion region, StructureAccessor structures, NoiseConfig noiseConfig, Chunk chunk) {
-
         if (this.moldPlacementRandom == null) {
             this.moldPlacementRandom = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed());
         }
@@ -104,6 +105,10 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                                         .nextDouble() < BackroomsConfig.getInstance().moldyCorkTileChance) {
 
                             replace(BackroomsBlocks.MOLDY_CORK_TILE, chunk, pos);
+                        } else if(block == BackroomsBlocks.NOCLIP_CARPETING.getDefaultState()) {
+                            replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
+                        } else if(block == BackroomsBlocks.NOCLIP_WALL.getDefaultState()) {
+                            replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
                         }
                     } else if (isBiomeEquals(BackroomsLevels.DECREPIT_BIOME, chunk, biomePos)) {
                         final BlockPos pos = chunkPos.getBlockPos(x, y, z);
@@ -113,6 +118,8 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                             replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
                         } else if (block == BackroomsBlocks.FLUORESCENT_LIGHT.getDefaultState()) {
                             replace(BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT, chunk, pos);
+                        } else if(block == BackroomsBlocks.NOCLIP_CARPETING.getDefaultState()) {
+                            replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
                         }
                     }
                 }
@@ -133,6 +140,10 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     @Override
     public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, NoiseConfig noiseConfig,
             StructureAccessor structureAccessor, Chunk chunk) {
+        if (this.random == null) {
+            this.random = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed());
+        }
+
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace
         // them later with blocks we actually need in biomes.
@@ -164,7 +175,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
         }
 
         if (isBiomeEquals(BackroomsLevels.MEGALOPHOBIA_BIOME, chunk, biomePos)) {
-
             // Create 3 floors, top to bottom, because one Megalophobia floor equals 2
             // normal floors.
             for (int y = 2; y >= 0; y--) {
@@ -174,11 +184,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                 // southeasternmost space.
                 for (int x = 1; x >= 0; x--) {
                     for (int z = 1; z >= 0; z--) {
-                        // Make a Random object controlling the generation of the section.
-                        final Random random = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed()
-                                + BlockPos.asLong(startX, startZ, x + 4 * z + 20 * y));
-                        // Decide the arrangement of the walls of the section. The two numbers with an F
-                        // directly after them denote the probability of an eastern wall and a southern
                         // wall generating, respectively.
                         final int wallType = (random.nextFloat() < 0.4F ? 1 : 0) + (random.nextFloat() < 0.4F ? 2 : 0);
 
@@ -202,6 +207,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                         if ((wallType & 2) == 2) {
                             for (int i = 0; i < 7; i++) {
                                 for (int j = 0; j < 10; j++) {
+
                                     for (int k = 0; k < 2; k++) {
                                         chunk.setBlockState(
                                                 new BlockPos(startX + x * 8 + i, 2 + 12 * y + j,
@@ -275,14 +281,12 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
 
             // Mold placement code; will be subject to heavy revisions, so ignore for now.
             for (int y = getFloorCount(); y >= 0; y--) {
-                final Random fullFloorRandom = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed()
-                        + BlockPos.asLong(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
 
                 for (int i = 0; i < 300; i++) {
-                    final int x = fullFloorRandom.nextInt(16);
-                    final int z = fullFloorRandom.nextInt(16);
-                    int x2 = x + fullFloorRandom.nextInt(3) - 1;
-                    int z2 = fullFloorRandom.nextInt(3) - 1;
+                    final int x = random.nextInt(16);
+                    final int z = random.nextInt(16);
+                    int x2 = x + random.nextInt(3) - 1;
+                    int z2 = random.nextInt(3) - 1;
                     if (chunk.getBlockState(new BlockPos(startX + x, 1 + 12 * y,
                             startZ + z)) == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                         if (x2 < 0)
@@ -293,7 +297,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                             z2 = 0;
                         else if (z2 > 15)
                             z2 = 15;
-                        if (fullFloorRandom.nextFloat() < 0.1F || chunk.getBlockState(new BlockPos(startX + x2,
+                        if (random.nextFloat() < 0.1F || chunk.getBlockState(new BlockPos(startX + x2,
                                 1 + 12 * y, startZ + z2)) == BackroomsBlocks.CORK_TILE.getDefaultState()) {
                             chunk.setBlockState(
                                     new BlockPos(startX + x, 1 + 12 * y, startZ + z),
@@ -320,9 +324,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                 // southeasternmost space.
                 for (int x = 3; x >= 0; x--) {
                     for (int z = 3; z >= 0; z--) {
-                        // Make a Random object controlling the generation of the section.
-                        final Random random = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed()
-                                + BlockPos.asLong(startX, startZ, x + 4 * z + 20 * y));
                         // Decide the arrangement of the walls of the section. The two numbers with an F
                         // directly after them denote the probability of an eastern wall and a southern
                         // wall generating, respectively.
@@ -331,12 +332,22 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                         // Check if the arrangement includes the eastern wall.
                         // and create eastern wall if true
                         if ((wallType & 1) == 1) {
+                            double noclipWallChance = random.nextDouble(0, 1);
                             for (int i = 0; i < 3; i++) {
                                 for (int j = 0; j < 4; j++) {
                                     chunk.setBlockState(
                                             new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + i),
                                             BackroomsBlocks.PATTERNED_WALLPAPER.getDefaultState(),
                                             false);
+
+                                    if(noclipWallChance <= BackroomsConfig.getInstance().noclipWallSpawnChance) {
+                                        if(j <= 2) {
+                                            chunk.setBlockState(
+                                                    new BlockPos(startX + x * 4 + 3, 2 + 6 * y + j, startZ + z * 4 + i),
+                                                    BackroomsBlocks.NOCLIP_WALL.getDefaultState(),
+                                                    false);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -388,8 +399,15 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                         // Generate the carpeting and the ceiling.
                         for (int i = 0; i < 4; i++) {
                             for (int j = 0; j < 4; j++) {
-                                chunk.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j),
-                                        BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), false);
+                                double noclipCarpetingChance = random.nextDouble(0, 1);
+
+                                if(noclipCarpetingChance < BackroomsConfig.getInstance().noclipCarpetingSpawnChance) {
+                                    chunk.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j),
+                                            BackroomsBlocks.NOCLIP_CARPETING.getDefaultState(), false);
+                                } else {
+                                    chunk.setBlockState(new BlockPos(startX + x * 4 + i, 1 + 6 * y, startZ + z * 4 + j),
+                                            BackroomsBlocks.WOOLEN_CARPET.getDefaultState(), false);
+                                }
                                 chunk.setBlockState(new BlockPos(startX + x * 4 + i, 6 + 6 * y, startZ + z * 4 + j),
                                         BackroomsBlocks.CORK_TILE.getDefaultState(), false);
                             }
@@ -400,24 +418,22 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                     }
                 }
 
-                // Create an unique random Object for the current floor.
-                final Random fullFloorRandom = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed()
-                        + BlockPos.asLong(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
+
                 // Check whether a random number between zero and one is less than the number
                 // with an F directly after it. Currently, for debugging reasons, a "|| true"
                 // has been placed, which means that the following code will be excecuted
                 // anyways.
                 // Place a large (7x7 or bigger) room in the current chunk at the current floor.
                 // Both dimensions of the base of the room must be of the form 4x-1.
-                if (fullFloorRandom.nextFloat() < 0.1F || true) {
+                if (random.nextFloat() < 0.1F || true) {
                     // Define the amounts of regular and nofill rooms.
                     final int regularRooms = 14;
                     final int nofillRooms = 4;
                     // Choose the room that will be placed.
-                    int roomNumber = (fullFloorRandom.nextInt(regularRooms + nofillRooms) + 1);
+                    int roomNumber = (random.nextInt(regularRooms + nofillRooms) + 1);
                     // The number with an F directly after it denotes the probability of an empty
                     // room being generated regardless.
-                    if (fullFloorRandom.nextFloat() < 0.6F) {
+                    if (random.nextFloat() < 0.6F) {
                         roomNumber = 0;
                     }
                     String roomName = "backrooms_large_" + roomNumber;
@@ -425,7 +441,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                         roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
                     }
                     // Choose the rotation for the room.
-                    Direction dir = Direction.fromHorizontal(fullFloorRandom.nextInt(4));
+                    Direction dir = Direction.fromHorizontal(random.nextInt(4));
                     BlockRotation rotation = switch (dir) {
                         case NORTH -> BlockRotation.COUNTERCLOCKWISE_90;
                         case EAST -> BlockRotation.NONE;
@@ -448,8 +464,8 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                     // Place a structure only if it fits before the bedrock
                     if (6 * y + sizeY < ROOF_BEGIN_Y) {
                         // Choose a spot in the chunk.
-                        final int x = fullFloorRandom.nextInt(5 - (sizeX + 1) / 4);
-                        final int z = fullFloorRandom.nextInt(5 - (sizeZ + 1) / 4);
+                        final int x = random.nextInt(5 - (sizeX + 1) / 4);
+                        final int z = random.nextInt(5 - (sizeZ + 1) / 4);
                         // Fill the area the room will be placed in with air.
                         if (roomNumber <= regularRooms) {
                             for (int i = 0; i < sizeX; i++) {
@@ -473,14 +489,12 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
 
             // Mold placement code; will be subject to heavy revisions, so ignore for now.
             for (int y = getFloorCount(); y >= 0; y--) {
-                final Random fullFloorRandom = new Random(BackroomsLevels.LEVEL_0_WORLD.getSeed()
-                        + BlockPos.asLong(chunk.getPos().getStartX(), chunk.getPos().getStartZ(), y));
 
                 for (int i = 0; i < 300; i++) {
-                    final int x = fullFloorRandom.nextInt(16);
-                    final int z = fullFloorRandom.nextInt(16);
-                    int x2 = x + fullFloorRandom.nextInt(3) - 1;
-                    int z2 = fullFloorRandom.nextInt(3) - 1;
+                    final int x = random.nextInt(16);
+                    final int z = random.nextInt(16);
+                    int x2 = x + random.nextInt(3) - 1;
+                    int z2 = random.nextInt(3) - 1;
                     if (chunk.getBlockState(new BlockPos(startX + x, 1 + 6 * y,
                             startZ + z)) == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                         if (x2 < 0)
@@ -491,7 +505,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                             z2 = 0;
                         else if (z2 > 15)
                             z2 = 15;
-                        if (fullFloorRandom.nextFloat() < 0.1F || chunk.getBlockState(new BlockPos(startX + x2,
+                        if (random.nextFloat() < 0.1F || chunk.getBlockState(new BlockPos(startX + x2,
                                 1 + 6 * y, startZ + z2)) == BackroomsBlocks.CORK_TILE.getDefaultState()) {
                             chunk.setBlockState(
                                     new BlockPos(startX + x, 1 + 6 * y, startZ + z),
