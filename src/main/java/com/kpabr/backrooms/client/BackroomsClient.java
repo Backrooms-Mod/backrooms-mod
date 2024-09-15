@@ -45,6 +45,10 @@ public class BackroomsClient implements ClientModInitializer {
 				BackroomsFluids.STILL_ALMOND_WATER,
 				BackroomsFluids.FLOWING_ALMOND_WATER);
 
+		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.PLATE_DOOR, RenderLayer.getCutout());
+		BlockRenderLayerMap.INSTANCE.putBlock(BackroomsBlocks.OFFICE_DOOR, RenderLayer.getCutout());
+
+
 		EntityRendererRegistry.register(BackroomsEntities.HOUND, HoundEntityRenderer::new);
 		EntityRendererRegistry.register(BackroomsEntities.WRETCH, WretchEntityRenderer::new);
 	}

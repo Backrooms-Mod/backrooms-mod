@@ -46,7 +46,7 @@ public class PortalBlock extends Block {
 
             int y = 30;
             if(state.get(LEVEL) == 2) {
-                y = 10;
+                y = 5;
             }
 
             EntityHelper.teleportToLevel((ServerPlayerEntity) entity, portalBlockWorld, y);

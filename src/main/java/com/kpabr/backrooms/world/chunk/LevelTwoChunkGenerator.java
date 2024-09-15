@@ -190,6 +190,7 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
                 fillRectZX(chunk, chunk, pos, 3, 1, 11, 7, FLOOR_Y + 7,
                         random.nextBoolean() ? fluorescentLightOn : fluorescentLightOff);
 
+
                 // Generate hot and cold pipes biomes features(magma and ice)
                 if (isCold) {
                     // Generate on floor
@@ -389,6 +390,8 @@ public class LevelTwoChunkGenerator extends ChunkGenerator {
                 fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y + i, Blocks.LIGHT_GRAY_TERRACOTTA);
             }
         }
+        // generate roof and floor of the 2nd level.
+        fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y+8, BackroomsBlocks.BEDROCK_BRICKS);
         fillRectZX(chunk, chunk, pos, 16, 16, 0, 0, FLOOR_Y, BackroomsBlocks.BEDROCK_BRICKS);
         return CompletableFuture.completedFuture(chunk);
     }
