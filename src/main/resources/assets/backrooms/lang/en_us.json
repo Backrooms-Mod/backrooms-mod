@@ -125,11 +125,14 @@
       "text.autoconfig.backrooms.option.noclipCarpetingSpawnChance": "Chance to spawn a noclip carpeting",
       "text.autoconfig.backrooms.option.noclipWallSpawnChance": "Chance to spawn a noclip wallpaper",
       "text.autoconfig.backrooms.option.aiDebug": "Enable ai debugging",
+      "text.autoconfig.backrooms.option.noclipIntoLevelOneChance" : "Chance to noclip to level one from the overworld",
+      "text.autoconfig.backrooms.option.noclipIntoLevelTwoChance" : "Chance to noclip to level two from the overworld",
 
       "text.autoconfig.backrooms.category.Gameplay": "Gameplay",
       "text.autoconfig.backrooms.category.default": "Default",
       "text.autoconfig.backrooms.category.Render": "Client",
       "text.autoconfig.backrooms.category.Entities/AI": "Entities/AI",
+      "text.autoconfig.backrooms.category.Generation": "Generation",
 
       "gamerule.category.backrooms_category": "Backrooms",
       

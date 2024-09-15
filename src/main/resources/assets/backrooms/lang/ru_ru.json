@@ -100,12 +100,17 @@
       "text.autoconfig.backrooms.option.disableStrongShaders": "Отключить сильные шейдеры",
       "text.autoconfig.backrooms.option.suffocationChance": "Шанс задохнуться",
       "text.autoconfig.backrooms.option.almondMilkRestoring": "Восстановление миндальным молоком",
-      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "",
+      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Время в секундах до увеличения уровня цикла убогих",
       "text.autoconfig.backrooms.option.moldyCorkTileChance": "Шанс спавна плесневелой плитки в багровых корридорах",
+      "text.autoconfig.backrooms.option.noclipIntoLevelOneChance" : "Шанс оказаться на первом уровне при выпадении из реальности.",
+      "text.autoconfig.backrooms.option.noclipIntoLevelTwoChance" : "Шанс оказаться на втором уровне при выпадении из реальности.",
+
 
       "text.autoconfig.backrooms.category.Gameplay": "Геймплей",
       "text.autoconfig.backrooms.category.default": "Обычные опции",
       "text.autoconfig.backrooms.category.Render": "Клиент",
+      "text.autoconfig.backrooms.category.Entities/AI": "Мобы/ИИ",
+      "text.autoconfig.backrooms.category.Generation": "Генерация",
 
       "subtitles.entity.hound.idle": "Гончая воет",
       "subtitles.entity.hound.attack": "Гончая атакует",
