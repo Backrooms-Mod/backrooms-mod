@@ -29,6 +29,9 @@
         "backrooms:fancy_pillar",
         "backrooms:pipe",
         "backrooms:parking_cement_pillar",
-        "backrooms:cement_pillar"
+        "backrooms:cement_pillar",
+        "backrooms:plate_door",
+        "backrooms:repaired_fluorescent_light",
+        "backrooms:machinery"
     ]
 }

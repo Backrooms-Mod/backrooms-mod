@@ -17,13 +17,26 @@ public class BackroomsConfig implements ConfigData {
     public int almondMilkRestoring = 2;
 
     @ConfigEntry.Category("Gameplay")
-    public int wretchedCycleStepTime = 20; // by default every 20 seconds we increment player's wretched parameter
+    public int wretchedCycleStepTime = 65;
     
-    @ConfigEntry.Category("Gameplay")
+    @ConfigEntry.Category("Generation")
     public double moldyCorkTileChance = 0.05;
 
     @ConfigEntry.Category("Entities/AI")
     public boolean aiDebug = false;
+
+    @ConfigEntry.Category("Generation")
+    public double noclipCarpetingSpawnChance = 0.001;
+
+    @ConfigEntry.Category("Generation")
+    public double noclipWallSpawnChance = 0.005;
+
+    @ConfigEntry.Category("Gameplay")
+    public double noclipIntoLevelOneChance = 0.05;
+
+    @ConfigEntry.Category("Gameplay")
+    public double noclipIntoLevelTwoChance = 0.01;
+
 
     public static void init() {
         AutoConfig.register(BackroomsConfig.class, GsonConfigSerializer::new);

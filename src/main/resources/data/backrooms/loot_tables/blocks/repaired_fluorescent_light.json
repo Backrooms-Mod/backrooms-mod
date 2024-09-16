@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "backrooms:magenta_carpeting"
+          "name": "backrooms:repaired_fluorescent_light"
         }
       ],
       "conditions": [

@@ -52,7 +52,7 @@ public class LevelOneChunkGenerator extends ChunkGenerator {
     private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
 
     private static final int ROOF_BEGIN_Y = 8 * (getFloorCount() + 1) + 1;
-    private RegistryEntryLookup<Block> blockLookup;
+    private final RegistryEntryLookup<Block> blockLookup;
 
     public LevelOneChunkGenerator(RegistryEntryLookup<Biome> biomeRegistry, RegistryEntryLookup<Block> blockLookup) {
         super(new LevelOneBiomeSource(biomeRegistry));

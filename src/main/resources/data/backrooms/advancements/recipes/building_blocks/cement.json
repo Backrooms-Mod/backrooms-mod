@@ -20,18 +20,11 @@
           }
         ]
       }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "minecraft:acacia_planks"
-      }
     }
   },
   "requirements": [
     [
-      "has_cement",
-      "has_the_recipe"
+      "has_cement"
     ]
   ]
 }

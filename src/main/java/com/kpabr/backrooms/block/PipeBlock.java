@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +16,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.world.World;
 
-public class PipeBlock extends AbstractPipeBlock {
+public class PipeBlock extends AbstractPipeBlock implements Waterloggable {
 	public final Block crackedPipe;
 
 	public PipeBlock(Settings settings, Block crackedPipe) {

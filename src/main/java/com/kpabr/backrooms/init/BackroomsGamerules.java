@@ -57,7 +57,6 @@ public class BackroomsGamerules {
                     setPlayerSpawnpoint((ServerPlayerEntity) LivingEntity);
                 }
             }
-
         });
     }
 
@@ -82,8 +81,7 @@ public class BackroomsGamerules {
         if (player.getWorld().getRegistryKey().getValue().toString().contains("backrooms")
                 && respawnPolicy == Respawn.in_current_level) {
             setSpawnpointToCurrentLevel(player);
-        } else if (player.getWorld().getRegistryKey().getValue().toString().contains("backrooms")
-                && respawnPolicy == Respawn.in_level_zero) {
+        } else if (respawnPolicy == Respawn.in_level_zero) {
             setSpawnpointToLevel0(player);
         }
     }

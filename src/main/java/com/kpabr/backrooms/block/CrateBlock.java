@@ -1,8 +1,8 @@
 package com.kpabr.backrooms.block;
 
-import net.minecraft.util.math.random.Random;
-import net.minecraft.block.*;
+import com.kpabr.backrooms.BackroomsMod;
 import com.kpabr.backrooms.block.entity.CrateBlockEntity;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PiglinBrain;
@@ -15,18 +15,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
-import net.minecraft.state.StateManager.Builder;
+import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-
 import org.jetbrains.annotations.Nullable;
 
 public class CrateBlock extends BlockWithEntity implements Waterloggable {
@@ -57,6 +61,15 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
 
     @SuppressWarnings("deprecation")
     @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {
+        VoxelShape finalShape = VoxelShapes.cuboid(0f, 0.875f, 0f, 1f, 1, 1f);
+        finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0.0625, 0.125f, 0.0625, 0.9375, 0.875f, 0.9375), BooleanBiFunction.OR);
+        finalShape = VoxelShapes.combine(finalShape, VoxelShapes.cuboid(0f, 0f, 0f, 1f, 0.125f, 1f), BooleanBiFunction.OR);
+        return finalShape;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.isOf(newState.getBlock())) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
@@ -74,6 +87,8 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
         if (blockEntity instanceof CrateBlockEntity crateBlockEntity) {
             crateBlockEntity.tick();
         }
+
+        super.scheduledTick(state, world, pos, random);
     }
 
     @Override
@@ -84,9 +99,8 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        return (BlockState) this.getDefaultState()
+        return this.getDefaultState()
                 .with(OPEN, false)
                 .with(WATERLOGGED, fluidState.getFluid() == Fluids.WATER);
     }
@@ -94,7 +108,9 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     @SuppressWarnings("deprecation")
     @Override
     public FluidState getFluidState(BlockState state) {
-        return state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        FluidState fs = state.get(WATERLOGGED) ? Fluids.WATER.getStill(false) : super.getFluidState(state);
+        BackroomsMod.LOGGER.info(fs.toString());
+        return fs;
     }
 
     @SuppressWarnings("deprecation")
@@ -132,8 +148,8 @@ public class CrateBlock extends BlockWithEntity implements Waterloggable {
     }
 
     @Override
-    protected void appendProperties(Builder<Block, BlockState> builder) {
-        builder.add(OPEN, WATERLOGGED);
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        builder.add(OPEN).add(WATERLOGGED);
     }
 
     static {

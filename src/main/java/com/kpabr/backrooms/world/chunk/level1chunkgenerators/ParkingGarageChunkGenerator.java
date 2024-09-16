@@ -56,6 +56,7 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
             .apply(instance, instance.stable(ParkingGarageChunkGenerator::new)));
 
     private final long worldSeed;
+    private Random fullFloorRandom;
     private static final int ROOF_BEGIN_Y = 8 * (LevelOneChunkGenerator.getFloorCount() + 1) + 1;
 
     private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
@@ -77,6 +78,9 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
     @Override
     public CompletableFuture<Chunk> populateNoise(Executor executor, Blender blender, NoiseConfig noiseConfig,
             StructureAccessor structureAccessor, Chunk chunk) {
+        if(fullFloorRandom == null) {
+            fullFloorRandom = new Random(worldSeed);
+        }
         // IMPORTANT NOTE:
         // For biomes generation we're using various "placeholder" blocks to replace
         // them later with blocks we actually need in biomes.
@@ -137,12 +141,8 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
                 }
             }
             // Create an unique Random object for the current floor.
-            final Random fullFloorRandom = new Random(worldSeed + BlockPos.asLong(startX, startZ, y));
 
-            if (fullFloorRandom.nextFloat() < 0.1F) { // Check whether a random number between zero and one is less than
-                                                      // the number with an F directly after it. Currently, for
-                                                      // debugging reasons, a "|| true" has been placed, which means
-                                                      // that the following code will be excecuted anyways.
+            if (fullFloorRandom.nextFloat() < 0.1) {
                 final int regularRooms = 1;
                 final int noFillRooms = 0;
                 // Choose the room that will be placed.

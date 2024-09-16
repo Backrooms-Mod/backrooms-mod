@@ -20,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Random;
+
 import static com.kpabr.backrooms.util.EntityHelper.teleportToLevel;
 
 @Mixin(Entity.class)
@@ -38,13 +40,27 @@ public abstract class EntityMixin {
                         && !((ServerPlayerEntity) entity).isCreative()
                         && world.random.nextDouble() < BackroomsConfig.getInstance().suffocationChance) {
                     World levelZero = getServer().getWorld(BackroomsLevels.LEVEL_0_WORLD_KEY);
+                    World levelOne = getServer().getWorld(BackroomsLevels.LEVEL_1_WORLD_KEY);
+                    World levelTwo = getServer().getWorld(BackroomsLevels.LEVEL_2_WORLD_KEY);
 
                     RegistryKey<World> worldKey = world.getRegistryKey();
                     if (worldKey == World.OVERWORLD) {
-                        teleportToLevel((ServerPlayerEntity) entity, levelZero);
+                        double chance = world.random.nextDouble();
+                        int y = 30;
+                        World teleportWorld = levelZero;
+
+                        if(chance <= BackroomsConfig.getInstance().noclipIntoLevelTwoChance) {
+                            teleportWorld = levelTwo;
+                            y = 5;
+                        } else if(chance <= BackroomsConfig.getInstance().noclipIntoLevelOneChance) {
+                            teleportWorld = levelOne;
+                        }
+
+                        teleportToLevel((ServerPlayerEntity) entity, teleportWorld, y);
+
                     } else if (worldKey == levelZero.getRegistryKey()) {
                         teleportToLevel((ServerPlayerEntity) entity,
-                                getServer().getWorld(BackroomsLevels.LEVEL_1_WORLD_KEY));
+                                getServer().getWorld(BackroomsLevels.LEVEL_1_WORLD_KEY), 30);
                     }
                 }
             }

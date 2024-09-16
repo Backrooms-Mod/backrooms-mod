@@ -3,8 +3,6 @@ package com.kpabr.backrooms.init;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo.Map;
-
 import com.kpabr.backrooms.block.entity.MaskBlockEntity;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
@@ -34,7 +32,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
 
 @SuppressWarnings("unused")
 public class BackroomsBlocks {
@@ -161,7 +158,7 @@ public class BackroomsBlocks {
 
 	public static final Block MACHINERY_BLOCK = add("machinery",
 			new MachineryBlock(
-					FabricBlockSettings.copyOf(Blocks.STONE).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)),
+					FabricBlockSettings.copyOf(Blocks.SHROOMLIGHT).mapColor(DyeColor.GRAY).sounds(BlockSoundGroup.TUFF)),
 			ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block ROOF_WIRING = add(
@@ -169,7 +166,7 @@ public class BackroomsBlocks {
 					.strength(0F).noCollision().sounds(BlockSoundGroup.SMALL_DRIPLEAF).nonOpaque()),
 			ItemGroups.BUILDING_BLOCKS);
 
-	public static final Block CRATE = add("crate", new CrateBlock(FabricBlockSettings.copyOf(CEMENT).nonOpaque()),
+	public static final Block CRATE = add("crate", new CrateBlock(FabricBlockSettings.copyOf(Blocks.CHEST).nonOpaque()),
 			ItemGroups.FUNCTIONAL);
 
 	public static final BlockEntityType<CrateBlockEntity> CRATE_BLOCK_ENTITY = add("crate",
@@ -223,19 +220,19 @@ public class BackroomsBlocks {
 
 
 	public static final Block RED_PATTERNED_WALLPAPER = add("red_patterned_wallpaper",
-			new WallpaperBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).mapColor(DyeColor.YELLOW)
+			new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).mapColor(DyeColor.RED)
 					.sounds(BlockSoundGroup.STEM)),
 			ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block RED_STRIPED_WALLPAPER = add("red_striped_wallpaper",
-			new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER).sounds(BlockSoundGroup.STEM)),
+			new WallpaperBlock(FabricBlockSettings.copyOf(RED_PATTERNED_WALLPAPER)),
 			ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block RED_DOTTED_WALLPAPER = add("red_dotted_wallpaper",
-			new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroups.BUILDING_BLOCKS);
+			new WallpaperBlock(FabricBlockSettings.copyOf(RED_PATTERNED_WALLPAPER)), ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block RED_BLANK_WALLPAPER = add("red_blank_wallpaper",
-			new WallpaperBlock(FabricBlockSettings.copyOf(PATTERNED_WALLPAPER)), ItemGroups.BUILDING_BLOCKS);
+			new WallpaperBlock(FabricBlockSettings.copyOf(RED_PATTERNED_WALLPAPER)), ItemGroups.BUILDING_BLOCKS);
 
 
 	public static final Block FANCY_PILLAR = add("fancy_pillar", new PillarBlock(
@@ -258,16 +255,15 @@ public class BackroomsBlocks {
 
 
 	public static final Block OFFICE_DOOR = add("office_door",
-			new BackroomsDoorBlock(FabricBlockSettings.copyOf(Blocks.DARK_OAK_DOOR).nonOpaque(), BlockSetType.DARK_OAK),
+			new DoorBlock(FabricBlockSettings.copyOf(Blocks.DARK_OAK_DOOR), BlockSetType.DARK_OAK),
 			ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block PLATE_DOOR = add("plate_door",
-			new PlateDoor(FabricBlockSettings.copyOf(Blocks.IRON_DOOR)), ItemGroups.BUILDING_BLOCKS);
+			new DoorBlock(FabricBlockSettings.copyOf(Blocks.IRON_DOOR), BlockSetType.IRON), ItemGroups.BUILDING_BLOCKS);
 
 
 	public static final Block FIRESALT_BLOCK = add("firesalt_block",
-			new Block(FabricBlockSettings.copyOf(Blocks.COBBLESTONE).mapColor(DyeColor.ORANGE).collidable(true)
-					.sounds(BlockSoundGroup.DRIPSTONE_BLOCK)),
+			new Block(FabricBlockSettings.copyOf(Blocks.AMETHYST_BLOCK).mapColor(DyeColor.ORANGE)),
 			ItemGroups.BUILDING_BLOCKS);
 
 	public static final Block FIRESALT_CRYSTAL = add("firesalt_crystal",
@@ -314,6 +310,12 @@ public class BackroomsBlocks {
 	public static final Block RED_CARPETING = add("red_carpeting", new CarpetingBlock(DyeColor.RED),
 			ItemGroups.BUILDING_BLOCKS);
 	public static final Block PORTAL_BLOCK = add("portal_block", new PortalBlock(), ItemGroups.BUILDING_BLOCKS);
+	public static final Block NOCLIP_CARPETING = add("noclip_carpeting",
+			new NoclipBlock(FabricBlockSettings.copyOf(Blocks.WHITE_WOOL).noCollision().dropsNothing()),
+			ItemGroups.FUNCTIONAL);
+	public static final Block NOCLIP_WALL = add("noclip_wall",
+			new NoclipBlock(FabricBlockSettings.copyOf(Blocks.OAK_PLANKS).noCollision().dropsNothing()),
+			ItemGroups.FUNCTIONAL);
 
 	private static <T extends BlockEntity> BlockEntityType<T> add(String name, BlockEntityType<T> blockEntity) {
 		Identifier id = BackroomsMod.id(name);
