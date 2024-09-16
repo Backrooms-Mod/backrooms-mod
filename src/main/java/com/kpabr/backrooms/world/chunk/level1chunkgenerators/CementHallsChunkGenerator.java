@@ -1,6 +1,7 @@
 package com.kpabr.backrooms.world.chunk.level1chunkgenerators;
 
 import com.kpabr.backrooms.BackroomsMod;
+import com.kpabr.backrooms.block.entity.CrateBlockEntity;
 import com.kpabr.backrooms.init.BackroomsBlocks;
 import com.kpabr.backrooms.init.BackroomsLevels;
 import com.kpabr.backrooms.init.BackroomsLootTables;
@@ -342,6 +343,7 @@ public class CementHallsChunkGenerator extends ChunkGenerator {
                 (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
     }
 
+    // TODO this code is in every chunk generator almost the same, so it should be reused
     private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
         if (!state.isAir()) {
             if (state.isOf(Blocks.BARRIER)) {
@@ -352,6 +354,11 @@ public class CementHallsChunkGenerator extends ChunkGenerator {
                     BarrelBlockEntity barrelBlockEntity = new BarrelBlockEntity(pos, state);
                     region.setBlockEntity(barrelBlockEntity);
                     barrelBlockEntity.setLootTable(this.getBarrelLootTable(), worldSeed + pos.hashCode());
+                } else if (state.isOf(BackroomsBlocks.CRATE)) {
+                    CrateBlockEntity crateBlockEntity = new CrateBlockEntity(pos, state);
+                    region.setBlockEntity(crateBlockEntity);
+                    crateBlockEntity.setLootTable(this.getBarrelLootTable(),
+                            worldSeed + pos.hashCode());
                 }
             }
         }
