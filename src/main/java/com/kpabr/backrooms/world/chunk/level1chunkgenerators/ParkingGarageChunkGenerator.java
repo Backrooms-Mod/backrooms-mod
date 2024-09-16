@@ -228,6 +228,7 @@ public class ParkingGarageChunkGenerator extends ChunkGenerator {
                 (pos, state, nbt) -> this.modifyStructure(region, pos, state, nbt));
     }
 
+   // TODO this code is in every chunk generator almost the same, so it should be reused
    private void modifyStructure(Chunk region, BlockPos pos, BlockState state, NbtCompound nbt) {
         if (!state.isAir()) {
             if (state.isOf(Blocks.BARRIER)) {
