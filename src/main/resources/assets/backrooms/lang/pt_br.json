@@ -112,28 +112,45 @@
 
       "effect.backrooms.rotten": "Apodrecido",
       "effect.backrooms.ragged": "Esfarrapado",
-      "effect.backrooms.wretched": "Infeliz",
-
-      "text.autoconfig.backrooms.option.disableStrongShaders": "Desative shaders fortes.",
-      "text.autoconfig.backrooms.option.suffocationChance": "Chance da Sufocação",
-      "text.autoconfig.backrooms.option.almondMilkRestoring": "A Leite de Amêndoa abaixar a medição de Infeliz",
-      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Segundos entre abaixar o ciclo de Infeliz",
-      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance de spawnar chão mofado nos Salões de Carmesin",
-      "text.autoconfig.backrooms.option.aiDebug": "Ativar depuração de IA",
+      "effect.backrooms.wretched": "Angústia",
 
       "text.autoconfig.backrooms.category.Gameplay": "Jogabilidade",
       "text.autoconfig.backrooms.category.default": "Padrão",
       "text.autoconfig.backrooms.category.Render": "Cliente",
       "text.autoconfig.backrooms.category.Miscellaneous": "Variado",
+      "text.autoconfig.backrooms.title": "Configuar O Backrooms",
+      "text.autoconfig.backrooms.option.disableStrongShaders": "Desativar shaders fortes",
+      "text.autoconfig.backrooms.option.suffocationChance": "Chance Durante o Sufocamento",
+      "text.autoconfig.backrooms.option.almondMilkRestoring": "Leite de Amêndoas Reduzindo o Medidor de Angústia",
+      "text.autoconfig.backrooms.option.wretchedCycleStepTime": "Segundos Entre o Aumento do Ciclo de Angústia",
+      "text.autoconfig.backrooms.option.moldyCorkTileChance": "Chance de Spawnar Cortiça Mofado nos Salões de Carmesin",
+      "text.autoconfig.backrooms.option.noclipCarpetingSpawnChance": "Chance de Aparecer um Carpete de Noclip",
+      "text.autoconfig.backrooms.option.noclipWallSpawnChance": "Chance de Aparecer um Papel de Parede de Noclip",
+      "text.autoconfig.backrooms.option.aiDebug": "Ativar depuração de IA",
+      "text.autoconfig.backrooms.option.noclipIntoLevelOneChance" : "Chance de No-Clipar do Nível Um para Mundo Normal",
+      "text.autoconfig.backrooms.option.noclipIntoLevelTwoChance" : "Chance de No-Clipar do Nível Dois para Mundo Normal",
 
+      "text.autoconfig.backrooms.category.Gameplay": "Gameplay",
+      "text.autoconfig.backrooms.category.default": "Padrão",
+      "text.autoconfig.backrooms.category.Render": "Cliente",
+      "text.autoconfig.backrooms.category.Entities/AI": "Entidades/IA",
+      "text.autoconfig.backrooms.category.Generation": "Geração",
+
+      "gamerule.category.backrooms_category": "Backrooms",
+      
+      "gamerule.respawn": "Respawn",
+      "gamerule.respawn.natural": "Natural",
+      "gamerule.respawn.in_current_level": "No Nível Atual",
+      "gamerule.respawn.in_level_zero": "No Nível 0",
+      
       "subtitles.entity.hound.idle": "Hound Rosna",
       "subtitles.entity.hound.attack": "Hound Ataca",
-      "subtitles.entity.hound.hurt": "Hound se Fere",
+      "subtitles.entity.hound.hurt": "Hound Machucado",
       "subtitles.entity.hound.death": "Hound Morre",
 
       "subtitles.entity.skin_stealer.idle": "Skin stealer Grunhe",
       "subtitles.entity.skin_stealer.attack": "Skin stealer Ataca",
       "subtitles.entity.skin_stealer.kill": "Skin stealer Mata",
-      "subtitles.entity.skin_stealer.hurt": "Skin stealer se Fere",
+      "subtitles.entity.skin_stealer.hurt": "Skin stealer Machucado",
       "subtitles.entity.skin_stealer.death": "Skin stealer Morre"
 }
