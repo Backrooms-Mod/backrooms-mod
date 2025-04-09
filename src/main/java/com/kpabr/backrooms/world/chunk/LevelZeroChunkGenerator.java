@@ -54,7 +54,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     private static final int ROOF_BEGIN_Y = 6 * (getFloorCount() + 1) + 1;
     private static final BlockState ROOF_BLOCK = BackroomsBlocks.BEDROCK_BRICKS.getDefaultState();
 
-    private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(100);
+    private final HashMap<String, NbtPlacerUtil> loadedStructures = new HashMap<String, NbtPlacerUtil>(30);
     private final Identifier nbtId = BackroomsMod.id("level_zero");
 
     private Random moldPlacementRandom;
@@ -109,10 +109,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                             replace(BackroomsBlocks.RED_CARPETING, chunk, pos);
                         } else if(block == BackroomsBlocks.NOCLIP_WALL.getDefaultState()) {
                             replace(BackroomsBlocks.RED_PATTERNED_WALLPAPER, chunk, pos);
-                        } else if(block == BackroomsBlocks.STRIPED_WALLPAPER.getDefaultState()) {
-                            replace(BackroomsBlocks.RED_STRIPED_WALLPAPER, chunk, pos);
-                        } else if(block == BackroomsBlocks.DOTTED_WALLPAPER.getDefaultState()) {
-                            replace(BackroomsBlocks.RED_DOTTED_WALLPAPER, chunk, pos);
                         }
                     } else if (isBiomeEquals(BackroomsLevels.DECREPIT_BIOME, chunk, biomePos)) {
                         final BlockPos pos = chunkPos.getBlockPos(x, y, z);
@@ -124,8 +120,6 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                             replace(BackroomsBlocks.REPAIRED_FLUORESCENT_LIGHT, chunk, pos);
                         } else if(block == BackroomsBlocks.NOCLIP_CARPETING.getDefaultState()) {
                             replace(BackroomsBlocks.MOLDY_WOOLEN_CARPET, chunk, pos);
-                        } else if(block == Blocks.BIRCH_DOOR.getDefaultState()) {
-                            replace(Blocks.DARK_OAK_DOOR, chunk, pos);
                         }
                     }
                 }
@@ -292,7 +286,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                     final int x = random.nextInt(16);
                     final int z = random.nextInt(16);
                     int x2 = x + random.nextInt(3) - 1;
-                    int z2 = z + random.nextInt(3) - 1;
+                    int z2 = random.nextInt(3) - 1;
                     if (chunk.getBlockState(new BlockPos(startX + x, 1 + 12 * y,
                             startZ + z)) == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                         if (x2 < 0)
@@ -431,15 +425,21 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                 // anyways.
                 // Place a large (7x7 or bigger) room in the current chunk at the current floor.
                 // Both dimensions of the base of the room must be of the form 4x-1.
-                if (random.nextFloat() < 0.1f) {
-                    // Define the amounts of r.egular and nofill rooms.
-                    final int rooms = 58;
+                if (random.nextFloat() < 0.1F || true) {
+                    // Define the amounts of regular and nofill rooms.
+                    final int regularRooms = 14;
+                    final int nofillRooms = 4;
                     // Choose the room that will be placed.
-                    int roomNumber = (random.nextInt(1, rooms + 1));
+                    int roomNumber = (random.nextInt(regularRooms + nofillRooms) + 1);
                     // The number with an F directly after it denotes the probability of an empty
-                    // room being generated regardless;
-                    String roomName = "room_" + roomNumber;
-
+                    // room being generated regardless.
+                    if (random.nextFloat() < 0.6F) {
+                        roomNumber = 0;
+                    }
+                    String roomName = "backrooms_large_" + roomNumber;
+                    if (roomNumber > regularRooms) {
+                        roomName = "backrooms_large_nofill_" + (roomNumber - regularRooms);
+                    }
                     // Choose the rotation for the room.
                     Direction dir = Direction.fromHorizontal(random.nextInt(4));
                     BlockRotation rotation = switch (dir) {
@@ -450,10 +450,7 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                     };
 
                     // Calculate size of current room
-
-
                     final var currentRoom = this.loadedStructures.get(roomName);
-
 
                     int sizeY = currentRoom.sizeY, sizeX, sizeZ;
                     final boolean isEastOrWestDirection = dir.equals(Direction.EAST) || dir.equals(Direction.WEST);
@@ -467,31 +464,37 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
                     // Place a structure only if it fits before the bedrock
                     if (6 * y + sizeY < ROOF_BEGIN_Y) {
                         // Choose a spot in the chunk.
-                        final int x = random.nextInt(5);
-                        final int z = random.nextInt(5);
+                        final int x = random.nextInt(5 - (sizeX + 1) / 4);
+                        final int z = random.nextInt(5 - (sizeZ + 1) / 4);
                         // Fill the area the room will be placed in with air.
-                        for (int i = 0; i < sizeX; i++) {
-                            for (int j = 0; j < sizeY; j++) {
-                                for (int k = 0; k < sizeZ; k++) {
-                                    chunk.setBlockState(
-                                            new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k),
-                                            Blocks.AIR.getDefaultState(),
-                                            false);
+                        if (roomNumber <= regularRooms) {
+                            for (int i = 0; i < sizeX; i++) {
+                                for (int j = 0; j < sizeY; j++) {
+                                    for (int k = 0; k < sizeZ; k++) {
+                                        chunk.setBlockState(
+                                                new BlockPos(startX + x * 4 + i, 2 + 6 * y + j, startZ + z * 4 + k),
+                                                Blocks.AIR.getDefaultState(),
+                                                false);
+                                    }
                                 }
                             }
                         }
-                        generateNbt(chunk, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation);
+                        generateNbt(chunk, new BlockPos(startX + x * 4, 2 + 6 * y, startZ + z * 4), roomName, rotation); // Actually
+                                                                                                                         // generate
+                                                                                                                         // the
+                                                                                                                         // room.
                     }
                 }
             }
 
             // Mold placement code; will be subject to heavy revisions, so ignore for now.
             for (int y = getFloorCount(); y >= 0; y--) {
+
                 for (int i = 0; i < 300; i++) {
                     final int x = random.nextInt(16);
                     final int z = random.nextInt(16);
                     int x2 = x + random.nextInt(3) - 1;
-                    int z2 = z + random.nextInt(3) - 1;
+                    int z2 = random.nextInt(3) - 1;
                     if (chunk.getBlockState(new BlockPos(startX + x, 1 + 6 * y,
                             startZ + z)) == BackroomsBlocks.WOOLEN_CARPET.getDefaultState()) {
                         if (x2 < 0)
@@ -553,7 +556,9 @@ public class LevelZeroChunkGenerator extends ChunkGenerator {
     }
 
     public void storeStructures(ServerWorld world) {
-        store("room", world, 1, 58);
+        store("backrooms_large", world, 0, 14); // Makes it so the large regular rooms can be used while generating.
+        store("backrooms_large_nofill", world, 1, 4); // Makes it so the large nofill rooms can be used while
+                                                      // generating.
     }
 
     private void store(String id, ServerWorld world) {
