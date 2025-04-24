@@ -8,6 +8,7 @@
 		"JRRT (Lead developer, coder)",
 		"JS (Coder, translator)",
 		"Proff (Coder)",
+		"epicelias (Coder, translator)",
 		"Trimsky (Coder)",
 		"Maselek (Coder, translator)",
 		"ShiShi (Coder, translator)",
@@ -17,11 +18,11 @@
 	],
 	"contact": {
 		"homepage": "https://www.curseforge.com/minecraft/mc-mods/the-backrooms",
-		"sources": "https://github.com/Synchlabs/The-Backrooms",
-		"issues": "https://github.com/Synchlabs/The-Backrooms/issues"
+		"sources": "https://github.com/Backrooms-Mod/backrooms-mod",
+		"issues": "https://github.com/Backrooms-Mod/backrooms-mod/issues"
 	},
 	"license": "LGPLv3",
-	"icon": "assets/backrooms/icon.png",
+	"icon": "assets/backrooms/textures/block/patterned_wallpaper.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
